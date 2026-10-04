@@ -2,10 +2,10 @@ import { createClient } from '@supabase/supabase-js'
 
 const supabaseUrl =
   (import.meta.env.VITE_SUPABASE_URL as string) ||
-  'https://dgbemibfisneieiiexzg.supabase.co'
+  'https://ixistkrftmebvefnqqkq.supabase.co'
 const supabaseAnonKey =
   (import.meta.env.VITE_SUPABASE_ANON_KEY as string) ||
-  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRnYmVtaWJmaXNuZWllaWlleHpnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODc3MDI5OTgsImV4cCI6MjEwMzI3ODk5OH0.eSyZ2kf8Sla4GeUt6w55o8kqeHrwCdMNUqh0Wy7DE8o'
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Iml4aXN0a3JmdG1lYnZlZm5xcWtxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzczNjY4NzUsImV4cCI6MjA5Mjk0Mjg3NX0.I_yF_7X-MgjXftSmI-yb62fpl6JysLP4zwaHckEg5fw'
 
 export const supabase = createClient(supabaseUrl, supabaseAnonKey)
 
@@ -139,7 +139,10 @@ export async function fetchAvgTipologias(indicadorId: string): Promise<AvgTipolo
     .eq('indicador_censo_id', indicadorId)
     .order('avg_tipologia')
   if (error) throw error
-  return data ?? []
+  return (data ?? []).map((r: any) => ({
+    ...r,
+    avg_construccion_m2: r.avg_construccion_m2 ?? r['avg_construcción_m2_original'] ?? r.construccion_m2_original ?? null,
+  }))
 }
 
 export function getLatestPerProject(indicadores: IndicadorFull[]): IndicadorFull[] {
@@ -161,7 +164,11 @@ export async function fetchAllAvgTipologias(): Promise<AvgTipologia[]> {
     .select('*')
     .order('avg_tipologia')
   if (error) throw error
-  _tiposCache = data ?? []
+  const mapped = (data ?? []).map((r: any) => ({
+    ...r,
+    avg_construccion_m2: r.avg_construccion_m2 ?? r['avg_construcción_m2_original'] ?? r.construccion_m2_original ?? null,
+  }))
+  _tiposCache = mapped
   _tiposTime = Date.now()
   return _tiposCache
 }
