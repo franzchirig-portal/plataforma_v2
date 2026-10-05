@@ -5,6 +5,8 @@ import ChatPanel from './components/ChatPanel'
 import AnalysisPanel from './components/AnalysisPanel'
 import WorkspacePanel from './components/WorkspacePanel'
 import TipologiasPanel from './components/TipologiasPanel'
+import AnalisisProductoPanel from './components/AnalisisProductoPanel'
+import ComparacionProyectosPanel from './components/ComparacionProyectosPanel'
 import GeoespacialPanel from './components/GeoespacialPanel'
 import WorkspaceOSPanel from './components/WorkspaceOSPanel'
 import AuthScreen from './components/AuthScreen'
@@ -189,6 +191,7 @@ export default function App() {
         'ritmo_ventas',
         'meses_stock',
         'analisis_producto',
+        'comparacion_proyectos',
       ]
       if (!chapter1Tabs.includes(activeTab)) {
         setActiveTab('resumen_general')
@@ -210,7 +213,8 @@ export default function App() {
       t === 'stock_usd' ||
       t === 'ritmo_ventas' ||
       t === 'meses_stock' ||
-      t === 'analisis_producto'
+      t === 'analisis_producto' ||
+      t === 'comparacion_proyectos'
     ) {
       setActiveChapter('1.1')
     } else if (t === 'tipologias') {
@@ -635,7 +639,7 @@ export default function App() {
                 )}
 
                 {activeTab === 'analisis_producto' && (
-                  <TipologiasPanel
+                  <AnalisisProductoPanel
                     ciudad={ciudad}
                     zonaFilter={zonaFilter}
                     subzonaFilter={subzonaFilter}
@@ -646,6 +650,23 @@ export default function App() {
                     moneda={moneda}
                     selectedIndicador={selectedIndicador}
                     onSelectIndicador={setSelectedIndicador}
+                    theme={theme}
+                  />
+                )}
+
+                {activeTab === 'comparacion_proyectos' && (
+                  <ComparacionProyectosPanel
+                    ciudad={ciudad}
+                    zonaFilter={zonaFilter}
+                    subzonaFilter={subzonaFilter}
+                    tipoInmuebleFilter={tipoInmuebleFilter}
+                    etapaFilter={etapaFilterArr}
+                    periodoFilter={periodoFilter}
+                    tipologiaFilter={tipologiaFilter}
+                    moneda={moneda}
+                    selectedIndicador={selectedIndicador}
+                    onSelectIndicador={setSelectedIndicador}
+                    theme={theme}
                   />
                 )}
 

@@ -18,7 +18,10 @@ export interface Proyecto {
   SUBZONAS: string | null
   tipo_inmueble: string | null
   calidad: string | null
+  pisos: number | null
   desarrollador: string | null
+  constructor?: string | null
+  comercializador?: string | null
   lanzamiento: string | null
   entrega: string | null
   latitud: number | null
@@ -41,6 +44,8 @@ export interface IndicadorCenso {
   ritmo_venta: number | null
   meses_stock: number | null
   stock_total: number | null
+  parqueo_sus?: number | null
+  baulera_sus?: number | null
 }
 
 export interface AvgTipologia {
@@ -56,6 +61,36 @@ export interface AvgTipologia {
   avg_sus_m2: number | null
 }
 
+export interface CondicionFinanciera {
+  condicion_financiera_id: string
+  indicador_censo_id: string
+  modalidad_pago: string | null
+  forma_de_pago: string | null
+  aporte_inicial: number | null
+  cuota_mensual: number | null
+  meses: number | null
+  incremento: number | null
+  gravamen: number | null
+  banco: string | null
+}
+
+export interface TipologiaDetalle {
+  tipologia_id: string
+  indicador_censo_id: string
+  tipologia: string
+  dormitorios: number | null
+  banos: number | null
+  construccion_m2_original: number | null
+  sus_m2: number | null
+  precio: number | null
+  bs_m2: number | null
+  usd_m2: number | null
+  estado: string | null
+  tipo_operación?: string | null
+  tc_oficial: number | null
+  tc: number | null
+}
+
 export type IndicadorFull = IndicadorCenso & {
   proyecto: string
   ciudad: string
@@ -64,9 +99,15 @@ export type IndicadorFull = IndicadorCenso & {
   ZONAS: string | null
   SUBZONAS: string | null
   tipo_inmueble: string | null
+  calidad: string | null
+  pisos: number | null
   desarrollador: string | null
+  constructor?: string | null
+  comercializador?: string | null
   lanzamiento: string | null
   entrega: string | null
+  parqueo_sus: number | null
+  baulera_sus: number | null
 }
 
 // ─── Helpers ─────────────────────────────────────────────────────────────
@@ -87,19 +128,39 @@ export function matchCiudad(itemCity: string | null | undefined, filterCity?: st
   return c === f
 }
 
-// ─── Core: Fetch everything, join in JS ───────────────────────────────────
+// ─── Core: Fetch everything (Full 100% Pagination), join in JS ───────────
 let _proyCache: Proyecto[] | null = null
 let _proyTime = 0
 
+async function fetchAllFromTable<T>(
+  table: string,
+  orderBy?: string,
+  ascending: boolean = true
+): Promise<T[]> {
+  const all: T[] = []
+  let from = 0
+  const pageSize = 1000
+  while (true) {
+    let q = supabase
+      .from(table)
+      .select('*')
+      .range(from, from + pageSize - 1)
+    if (orderBy) {
+      q = q.order(orderBy, { ascending })
+    }
+    const { data, error } = await q
+    if (error) throw error
+    if (!data || data.length === 0) break
+    all.push(...(data as T[]))
+    if (data.length < pageSize) break
+    from += pageSize
+  }
+  return all
+}
+
 async function getAllProyectos(): Promise<Proyecto[]> {
   if (_proyCache && Date.now() - _proyTime < 60_000) return _proyCache
-  const { data, error } = await supabase
-    .from('oferta_proyectos')
-    .select('*')
-    .range(0, 4999)
-    .order('proyecto')
-  if (error) throw error
-  _proyCache = data ?? []
+  _proyCache = await fetchAllFromTable<Proyecto>('oferta_proyectos', 'proyecto', true)
   _proyTime = Date.now()
   return _proyCache
 }
@@ -109,13 +170,7 @@ let _indTime = 0
 
 async function getAllIndicadores(): Promise<IndicadorCenso[]> {
   if (_indCache && Date.now() - _indTime < 60_000) return _indCache
-  const { data, error } = await supabase
-    .from('oferta_indicadores_censo')
-    .select('*')
-    .range(0, 4999)
-    .order('fecha_snapshot', { ascending: false })
-  if (error) throw error
-  _indCache = data ?? []
+  _indCache = await fetchAllFromTable<IndicadorCenso>('oferta_indicadores_censo', 'fecha_snapshot', false)
   _indTime = Date.now()
   return _indCache
 }
@@ -135,21 +190,72 @@ export async function fetchIndicadores(ciudad?: string): Promise<IndicadorFull[]
     const p = proyMap.get(i.proyecto_id)
     return {
       ...i,
-      proyecto:      p?.proyecto ?? '',
-      ciudad:        p?.ciudad ?? '',
-      latitud:       p?.latitud ?? null,
-      longitud:      p?.longitud ?? null,
-      ZONAS:         p?.ZONAS ?? null,
-      SUBZONAS:      p?.SUBZONAS ?? null,
-      tipo_inmueble: p?.tipo_inmueble ?? null,
-      desarrollador: p?.desarrollador ?? null,
-      lanzamiento:   p?.lanzamiento ?? null,
-      entrega:       p?.entrega ?? null,
+      proyecto:        p?.proyecto ?? '',
+      ciudad:          p?.ciudad ?? '',
+      latitud:         p?.latitud ?? null,
+      longitud:        p?.longitud ?? null,
+      ZONAS:           p?.ZONAS ?? null,
+      SUBZONAS:        p?.SUBZONAS ?? null,
+      tipo_inmueble:   p?.tipo_inmueble ?? null,
+      calidad:         p?.calidad ?? null,
+      pisos:           p?.pisos ?? null,
+      desarrollador:   p?.desarrollador ?? null,
+      constructor:     p?.constructor ?? null,
+      comercializador: p?.comercializador ?? null,
+      lanzamiento:     p?.lanzamiento ?? null,
+      entrega:         p?.entrega ?? null,
+      parqueo_sus:     i.parqueo_sus ?? null,
+      baulera_sus:     i.baulera_sus ?? null,
     }
   })
 
   if (!ciudad || ciudad === 'ALL') return joined
   return joined.filter((i) => matchCiudad(i.ciudad, ciudad))
+}
+
+export async function fetchAmenidadesForProject(proyectoId: string): Promise<string[]> {
+  const { data, error } = await supabase
+    .from('oferta_amenidades')
+    .select('areas_comunes')
+    .eq('proyecto_id', proyectoId)
+  if (error) {
+    console.warn('Error fetching amenidades:', error)
+    return []
+  }
+  const set = new Set<string>()
+  ;(data ?? []).forEach((r: any) => {
+    if (r.areas_comunes) set.add(r.areas_comunes.trim())
+  })
+  return Array.from(set)
+}
+
+export async function fetchCondicionForIndicador(indicadorId: string): Promise<CondicionFinanciera | null> {
+  const { data, error } = await supabase
+    .from('oferta_condiciones_financieras')
+    .select('*')
+    .eq('indicador_censo_id', indicadorId)
+    .limit(1)
+  if (error) {
+    console.warn('Error fetching condiciones financieras:', error)
+    return null
+  }
+  return data?.[0] ?? null
+}
+
+export async function fetchDetalleTipologias(indicadorId: string): Promise<TipologiaDetalle[]> {
+  const { data, error } = await supabase
+    .from('oferta_tipologias')
+    .select('*')
+    .eq('indicador_censo_id', indicadorId)
+    .order('precio', { ascending: true })
+  if (error) {
+    console.warn('Error fetching detalle tipologias:', error)
+    return []
+  }
+  return (data ?? []).map((r: any) => ({
+    ...r,
+    construccion_m2_original: r.construccion_m2_original ?? r.construccion_m2 ?? null,
+  }))
 }
 
 export async function fetchAvgTipologias(indicadorId: string): Promise<AvgTipologia[]> {
@@ -179,13 +285,8 @@ let _tiposTime = 0
 
 export async function fetchAllAvgTipologias(): Promise<AvgTipologia[]> {
   if (_tiposCache && Date.now() - _tiposTime < 60_000) return _tiposCache
-  const { data, error } = await supabase
-    .from('oferta_avg_tipologias')
-    .select('*')
-    .range(0, 4999)
-    .order('avg_tipologia')
-  if (error) throw error
-  const mapped = (data ?? []).map((r: any) => ({
+  const raw = await fetchAllFromTable<any>('oferta_avg_tipologias', 'avg_tipologia', true)
+  const mapped = raw.map((r: any) => ({
     ...r,
     avg_construccion_m2: r.avg_construccion_m2 ?? r['avg_construcción_m2_original'] ?? r.construccion_m2_original ?? null,
   }))

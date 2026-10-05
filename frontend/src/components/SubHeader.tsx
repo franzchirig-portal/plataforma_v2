@@ -11,6 +11,7 @@ export type Tab =
   | 'ritmo_ventas'
   | 'meses_stock'
   | 'analisis_producto'
+  | 'comparacion_proyectos'
   | 'mercado'
   | 'hipotecario'
   | 'chapter_dossier'
@@ -22,13 +23,14 @@ export interface SubTab {
 }
 
 export const SUB_TABS: SubTab[] = [
-  { id: 'resumen_general',   label: 'Resumen General' },
-  { id: 'stock_unidades',    label: 'Stock en Ventas' },
-  { id: 'ritmo_ventas',      label: 'Ritmo de Ventas' },
-  { id: 'analisis_producto', label: 'Análisis de Producto' },
-  { id: 'proyectos',         label: 'Proyectos' },
-  { id: 'tipologias',        label: 'Tipologías' },
-  { id: 'geoespacial',       label: 'Mapa' },
+  { id: 'resumen_general',        label: 'Resumen General' },
+  { id: 'stock_unidades',         label: 'Stock en Ventas' },
+  { id: 'ritmo_ventas',           label: 'Ritmo de Ventas' },
+  { id: 'analisis_producto',      label: 'Análisis de Producto' },
+  { id: 'comparacion_proyectos',  label: 'Comparación de Proyecto' },
+  { id: 'proyectos',              label: 'Proyectos' },
+  { id: 'tipologias',             label: 'Tipologías' },
+  { id: 'geoespacial',            label: 'Mapa' },
 ]
 
 interface SubHeaderProps {
