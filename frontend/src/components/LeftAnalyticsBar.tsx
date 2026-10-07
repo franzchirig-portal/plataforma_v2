@@ -61,8 +61,8 @@ export const ANALYSIS_SECTIONS: AnalysisSection[] = [
     chapters: [
       { id: '1.1', title: 'Cuantificación de la Oferta Nueva', isAvailable: true },
       { id: '1.2', title: 'Evolución de la Oferta Nueva', isAvailable: true },
-      { id: '1.3', title: 'Cuantificación de la Oferta de Particulares', isAvailable: false },
-      { id: '1.4', title: 'Bienes Adjudicados', isAvailable: false },
+      { id: '1.3', title: 'Oferta de Particulares (Marketplace)', isAvailable: true },
+      { id: '1.4', title: 'Bienes Adjudicados y Remates', isAvailable: true },
     ],
   },
   {
@@ -71,9 +71,9 @@ export const ANALYSIS_SECTIONS: AnalysisSection[] = [
     title: 'Análisis de la Demanda',
     icon: <IconDemanda />,
     chapters: [
-      { id: '2.1', title: 'Composición Económica y Voluntad de Compra', isAvailable: false },
-      { id: '2.2', title: 'Compra como Inversión', isAvailable: false },
-      { id: '2.3', title: 'Compra de Vivienda/Uso Propio', isAvailable: false },
+      { id: '2.1', title: 'Composición Económica y Voluntad de Compra', isAvailable: true },
+      { id: '2.2', title: 'Compra como Inversión (n=459)', isAvailable: true },
+      { id: '2.3', title: 'Compra Vivienda Propia (n=441)', isAvailable: true },
     ],
   },
   {
@@ -82,19 +82,19 @@ export const ANALYSIS_SECTIONS: AnalysisSection[] = [
     title: 'Análisis Financiero',
     icon: <IconFinanciero />,
     chapters: [
-      { id: '3.1', title: 'Evolución del Financiamiento al Sector Inmobiliario', isAvailable: false },
-      { id: '3.2', title: 'Evolución de la Mora del Inmobiliario', isAvailable: false },
+      { id: '3.1', title: 'Financiamiento al Sector Inmobiliario', isAvailable: true },
+      { id: '3.2', title: 'Evolución de la Mora del Inmobiliario', isAvailable: true },
     ],
   },
   {
     id: 'hipotecario',
     num: 4,
-    title: 'Análisis del Endeudamiento Hipotecario',
+    title: 'Endeudamiento Hipotecario y Sentimiento',
     icon: <IconHipotecario />,
     chapters: [
-      { id: '4.1', title: 'Perfil del Consumidor de Créditos Hipotecarios', isAvailable: false },
-      { id: '4.2', title: 'Estado de la Cartera Hipotecaria', isAvailable: false },
-      { id: '4.3', title: 'Perspectivas del Comprador', isAvailable: false },
+      { id: '4.1', title: 'Perfil del Consumidor de Crédito', isAvailable: true },
+      { id: '4.2', title: 'Estado de la Cartera Hipotecaria', isAvailable: true },
+      { id: '4.3', title: 'Perspectivas del Comprador', isAvailable: true },
     ],
   },
   {
@@ -103,7 +103,7 @@ export const ANALYSIS_SECTIONS: AnalysisSection[] = [
     title: 'Indicadores Inmobiliarios',
     icon: <IconIndicadores />,
     chapters: [
-      { id: '5.1', title: 'Ciclo Inmobiliario', isAvailable: true },
+      { id: '5.1', title: 'Ciclo Inmobiliario Físico (2002-2026)', isAvailable: true },
     ],
   },
 ]

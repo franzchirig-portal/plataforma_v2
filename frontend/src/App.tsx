@@ -15,6 +15,13 @@ import SubHeader, { type Tab } from './components/SubHeader'
 import FilterBar from './components/FilterBar'
 import HipotecarioPanel from './components/HipotecarioPanel'
 import ChapterDossierPanel from './components/ChapterDossierPanel'
+import EvolutivoOfertaPanel from './components/EvolutivoOfertaPanel'
+import MarketplaceParticularesPanel from './components/MarketplaceParticularesPanel'
+import BienesAdjudicadosPanel from './components/BienesAdjudicadosPanel'
+import AnalisisDemandaPanel from './components/AnalisisDemandaPanel'
+import SistemaFinancieroPanel from './components/SistemaFinancieroPanel'
+import CicloInmobiliarioPanel from './components/CicloInmobiliarioPanel'
+import EndeudamientoHipotecarioPanel from './components/EndeudamientoHipotecarioPanel'
 import { supabase } from './lib/supabase'
 import { fetchPeriodos } from './lib/supabase'
 import type { IndicadorFull } from './lib/supabase'
@@ -180,7 +187,7 @@ export default function App() {
   const handleSelectChapter = (chapterId: string, _sectionId: string) => {
     setActiveChapter(chapterId)
     setMobileSheet('none')
-    if (chapterId === '1.1' || chapterId === '1.2') {
+    if (chapterId === '1.1') {
       const chapter1Tabs: Tab[] = [
         'proyectos',
         'tipologias',
@@ -196,32 +203,13 @@ export default function App() {
       if (!chapter1Tabs.includes(activeTab)) {
         setActiveTab('resumen_general')
       }
-    } else if (chapterId === '5.1') {
-      setActiveTab('geoespacial')
-    } else {
-      setActiveTab('chapter_dossier')
     }
   }
 
   const handleSubTabChange = (t: Tab) => {
     setActiveTab(t)
     setMobileSheet('none')
-    if (
-      t === 'proyectos' ||
-      t === 'resumen_general' ||
-      t === 'stock_unidades' ||
-      t === 'stock_usd' ||
-      t === 'ritmo_ventas' ||
-      t === 'meses_stock' ||
-      t === 'analisis_producto' ||
-      t === 'comparacion_proyectos'
-    ) {
-      setActiveChapter('1.1')
-    } else if (t === 'tipologias') {
-      setActiveChapter('3.1')
-    } else if (t === 'geoespacial') {
-      setActiveChapter('5.1')
-    }
+    setActiveChapter('1.1')
   }
 
   // Format a raw fecha_snapshot (YYYY-MM-DD) for display (DD/MM/YYYY)
@@ -523,12 +511,15 @@ export default function App() {
 
             {/* Main workspace area */}
             <div className="app-main">
-              {/* ── Header 2: Sub-header Azul (Módulos en el panel central) ─── */}
-              <SubHeader activeTab={activeTab} onTabChange={handleSubTabChange} />
+              {/* ── Header 2: Sub-header Azul (Módulos de Cuantificación de la Oferta Nueva) ─── */}
+              {activeChapter === '1.1' && (
+                <SubHeader activeTab={activeTab} onTabChange={handleSubTabChange} />
+              )}
 
               {/* Panel content */}
               <div className="workspace">
-                {activeTab === 'proyectos' && (
+                {/* ── CAPÍTULO 1.1: CUANTIFICACIÓN OFERTA NUEVA (100% BLINDADA E INTOCABLE) ── */}
+                {activeChapter === '1.1' && activeTab === 'proyectos' && (
                   <WorkspacePanel
                     ciudad={ciudad}
                     zonaFilter={zonaFilter}
@@ -544,7 +535,7 @@ export default function App() {
                   />
                 )}
 
-                {activeTab === 'resumen_general' && (
+                {activeChapter === '1.1' && activeTab === 'resumen_general' && (
                   <WorkspacePanel
                     key="resumen_general"
                     ciudad={ciudad}
@@ -563,7 +554,7 @@ export default function App() {
                   />
                 )}
 
-                {activeTab === 'stock_unidades' && (
+                {activeChapter === '1.1' && activeTab === 'stock_unidades' && (
                   <WorkspacePanel
                     key="stock_unidades"
                     ciudad={ciudad}
@@ -582,7 +573,7 @@ export default function App() {
                   />
                 )}
 
-                {activeTab === 'stock_usd' && (
+                {activeChapter === '1.1' && activeTab === 'stock_usd' && (
                   <WorkspacePanel
                     key="stock_usd"
                     ciudad={ciudad}
@@ -601,7 +592,7 @@ export default function App() {
                   />
                 )}
 
-                {activeTab === 'ritmo_ventas' && (
+                {activeChapter === '1.1' && activeTab === 'ritmo_ventas' && (
                   <WorkspacePanel
                     key="ritmo_ventas"
                     ciudad={ciudad}
@@ -620,7 +611,7 @@ export default function App() {
                   />
                 )}
 
-                {activeTab === 'meses_stock' && (
+                {activeChapter === '1.1' && activeTab === 'meses_stock' && (
                   <WorkspacePanel
                     key="meses_stock"
                     ciudad={ciudad}
@@ -638,7 +629,7 @@ export default function App() {
                   />
                 )}
 
-                {activeTab === 'analisis_producto' && (
+                {activeChapter === '1.1' && activeTab === 'analisis_producto' && (
                   <AnalisisProductoPanel
                     ciudad={ciudad}
                     zonaFilter={zonaFilter}
@@ -654,7 +645,7 @@ export default function App() {
                   />
                 )}
 
-                {activeTab === 'comparacion_proyectos' && (
+                {activeChapter === '1.1' && activeTab === 'comparacion_proyectos' && (
                   <ComparacionProyectosPanel
                     ciudad={ciudad}
                     zonaFilter={zonaFilter}
@@ -670,7 +661,7 @@ export default function App() {
                   />
                 )}
 
-                {activeTab === 'tipologias' && (
+                {activeChapter === '1.1' && activeTab === 'tipologias' && (
                   <TipologiasPanel
                     ciudad={ciudad}
                     zonaFilter={zonaFilter}
@@ -685,7 +676,7 @@ export default function App() {
                   />
                 )}
 
-                {activeTab === 'geoespacial' && (
+                {activeChapter === '1.1' && activeTab === 'geoespacial' && (
                   <GeoespacialPanel
                     ciudad={ciudad}
                     zonaFilter={zonaFilter}
@@ -701,7 +692,7 @@ export default function App() {
                   />
                 )}
 
-                {activeTab === 'mercado' && (
+                {activeChapter === '1.1' && activeTab === 'mercado' && (
                   <WorkspacePanel
                     ciudad={ciudad}
                     zonaFilter={zonaFilter}
@@ -715,6 +706,33 @@ export default function App() {
                     onSelectIndicador={setSelectedIndicador}
                   />
                 )}
+
+                {/* ── CAPÍTULO 1.2: EVOLUTIVO DE LA OFERTA NUEVA ── */}
+                {activeChapter === '1.2' && <EvolutivoOfertaPanel />}
+
+                {/* ── CAPÍTULO 1.3: OFERTA DE PARTICULARES (MARKETPLACE) ── */}
+                {activeChapter === '1.3' && <MarketplaceParticularesPanel />}
+
+                {/* ── CAPÍTULO 1.4: BIENES ADJUDICADOS Y REMATES JUDICIALES ── */}
+                {activeChapter === '1.4' && <BienesAdjudicadosPanel />}
+
+                {/* ── CAPÍTULOS 2.1, 2.2, 2.3: ANÁLISIS DE LA DEMANDA ── */}
+                {(activeChapter === '2.1' || activeChapter === '2.2' || activeChapter === '2.3') && (
+                  <AnalisisDemandaPanel key={activeChapter} initialChapter={activeChapter as '2.1' | '2.2' | '2.3'} />
+                )}
+
+                {/* ── CAPÍTULOS 3.1, 3.2: ANÁLISIS FINANCIERO Y MORA ── */}
+                {(activeChapter === '3.1' || activeChapter === '3.2') && (
+                  <SistemaFinancieroPanel key={activeChapter} initialChapter={activeChapter as '3.1' | '3.2'} />
+                )}
+
+                {/* ── CAPÍTULOS 4.1, 4.2, 4.3: ENDEUDAMIENTO HIPOTECARIO Y SENTIMIENTO ── */}
+                {(activeChapter === '4.1' || activeChapter === '4.2' || activeChapter === '4.3') && (
+                  <EndeudamientoHipotecarioPanel key={activeChapter} initialChapter={activeChapter as '4.1' | '4.2' | '4.3'} />
+                )}
+
+                {/* ── CAPÍTULO 5.1: CICLO INMOBILIARIO FÍSICO RESIDENCIAL ── */}
+                {activeChapter === '5.1' && <CicloInmobiliarioPanel />}
 
                 {activeTab === 'hipotecario' && (
                   <HipotecarioPanel />
@@ -731,7 +749,16 @@ export default function App() {
               <AnalysisPanel
                 selectedIndicador={selectedIndicador}
                 ciudad={ciudad}
+                activeTab={activeTab}
+                periodoFilter={periodoFilter}
+                zonaFilter={zonaFilter}
+                subzonaFilter={subzonaFilter}
+                tipoInmuebleFilter={tipoInmuebleFilter}
+                etapaFilter={etapaFilterArr}
+                tipologiaFilter={tipologiaFilter}
+                moneda={moneda}
                 onClearSelection={() => setSelectedIndicador(null)}
+                onSelectIndicador={setSelectedIndicador}
               />
             )}
           </div>
