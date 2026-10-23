@@ -964,7 +964,15 @@ export default function AnalysisPanel({
                       {topStockProjects.map((p, idx) => (
                         <div
                           key={p.proyecto_id}
+                          role="button"
+                          tabIndex={0}
                           onClick={() => onSelectIndicador?.(p)}
+                          onKeyDown={(e) => {
+                            if (e.key === 'Enter' || e.key === ' ') {
+                              if (e.key === ' ') e.preventDefault()
+                              onSelectIndicador?.(p)
+                            }
+                          }}
                           style={{
                             background: 'rgba(255, 255, 255, 0.05)',
                             border: '1px solid rgba(255, 255, 255, 0.1)',
@@ -1046,7 +1054,15 @@ export default function AnalysisPanel({
                       {topUSDProjects.map((p) => (
                         <div
                           key={p.proyecto_id}
+                          role="button"
+                          tabIndex={0}
                           onClick={() => onSelectIndicador?.(p)}
+                          onKeyDown={(e) => {
+                            if (e.key === 'Enter' || e.key === ' ') {
+                              if (e.key === ' ') e.preventDefault()
+                              onSelectIndicador?.(p)
+                            }
+                          }}
                           style={{
                             background: 'rgba(255, 255, 255, 0.05)',
                             border: '1px solid rgba(255, 255, 255, 0.1)',
@@ -1128,7 +1144,15 @@ export default function AnalysisPanel({
                       {topPerformers.map((p, idx) => (
                         <div
                           key={p.proyecto_id}
+                          role="button"
+                          tabIndex={0}
                           onClick={() => onSelectIndicador?.(p)}
+                          onKeyDown={(e) => {
+                            if (e.key === 'Enter' || e.key === ' ') {
+                              if (e.key === ' ') e.preventDefault()
+                              onSelectIndicador?.(p)
+                            }
+                          }}
                           style={{
                             background: 'rgba(255, 255, 255, 0.05)',
                             border: '1px solid rgba(255, 255, 255, 0.1)',

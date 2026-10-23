@@ -213,11 +213,14 @@ export default function AuthScreen({ onSuccess }: AuthScreenProps) {
         <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
           {mode === 'register' && (
             <div>
-              <label style={{ display: 'block', fontSize: 11, fontWeight: 500, color: 'var(--text-secondary, #9d9d9d)', marginBottom: 5 }}>
+              <label htmlFor="auth-full-name" style={{ display: 'block', fontSize: 11, fontWeight: 500, color: 'var(--text-secondary, #9d9d9d)', marginBottom: 5 }}>
                 Nombre Completo
               </label>
               <input
+                id="auth-full-name"
+                name="name"
                 type="text"
+                autoComplete="name"
                 required
                 value={fullName}
                 onChange={(e) => setFullName(e.target.value)}
@@ -230,7 +233,6 @@ export default function AuthScreen({ onSuccess }: AuthScreenProps) {
                   borderRadius: 6,
                   color: 'var(--text-primary, #f3f3f3)',
                   fontSize: 12,
-                  outline: 'none',
                   boxSizing: 'border-box',
                   transition: 'border-color 0.15s ease',
                 }}
@@ -241,11 +243,14 @@ export default function AuthScreen({ onSuccess }: AuthScreenProps) {
           )}
 
           <div>
-            <label style={{ display: 'block', fontSize: 11, fontWeight: 500, color: 'var(--text-secondary, #9d9d9d)', marginBottom: 5 }}>
+            <label htmlFor="auth-email" style={{ display: 'block', fontSize: 11, fontWeight: 500, color: 'var(--text-secondary, #9d9d9d)', marginBottom: 5 }}>
               Correo Electrónico
             </label>
             <input
+              id="auth-email"
+              name="email"
               type="email"
+              autoComplete="email"
               required
               value={email}
               onChange={(e) => setEmail(e.target.value)}
@@ -258,7 +263,6 @@ export default function AuthScreen({ onSuccess }: AuthScreenProps) {
                 borderRadius: 6,
                 color: 'var(--text-primary, #f3f3f3)',
                 fontSize: 12,
-                outline: 'none',
                 boxSizing: 'border-box',
                 transition: 'border-color 0.15s ease',
               }}
@@ -268,11 +272,14 @@ export default function AuthScreen({ onSuccess }: AuthScreenProps) {
           </div>
 
           <div>
-            <label style={{ display: 'block', fontSize: 11, fontWeight: 500, color: 'var(--text-secondary, #9d9d9d)', marginBottom: 5 }}>
+            <label htmlFor="auth-password" style={{ display: 'block', fontSize: 11, fontWeight: 500, color: 'var(--text-secondary, #9d9d9d)', marginBottom: 5 }}>
               Contraseña
             </label>
             <input
+              id="auth-password"
+              name="password"
               type="password"
+              autoComplete={mode === 'login' ? 'current-password' : 'new-password'}
               required
               minLength={6}
               value={password}
@@ -286,7 +293,6 @@ export default function AuthScreen({ onSuccess }: AuthScreenProps) {
                 borderRadius: 6,
                 color: 'var(--text-primary, #f3f3f3)',
                 fontSize: 12,
-                outline: 'none',
                 boxSizing: 'border-box',
                 transition: 'border-color 0.15s ease',
               }}

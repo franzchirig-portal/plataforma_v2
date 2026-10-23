@@ -72,6 +72,8 @@ export default function MultiSelectDropdown({
       {/* Trigger Pill Button */}
       <button
         type="button"
+        aria-haspopup="true"
+        aria-expanded={isOpen}
         onClick={() => setIsOpen(!isOpen)}
         style={{
           background: 'var(--bg-card)',
@@ -87,7 +89,6 @@ export default function MultiSelectDropdown({
           gap: 6,
           cursor: 'pointer',
           transition: 'all 0.15s ease',
-          outline: 'none',
           whiteSpace: 'nowrap',
         }}>
         <span style={{ maxWidth: 150, overflow: 'hidden', textOverflow: 'ellipsis' }}>{buttonText}</span>
@@ -96,7 +97,7 @@ export default function MultiSelectDropdown({
 
       {/* Popover Dropdown */}
       {isOpen && (
-        <div style={{
+        <div role="group" aria-label={`Filtrar por ${label}`} style={{
           position: 'absolute',
           top: 'calc(100% + 6px)',
           right: 0,
