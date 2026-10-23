@@ -317,8 +317,8 @@ export default function EvolutivoOfertaPanel() {
                         <td className="num">{s.undPromedio}</td>
                         <td className="num">${s.stockTotalUsd} M</td>
                         <td className="num">${s.stockPromedioUsd} M</td>
-                        <td className="num" style={{ color: '#10b981' }}>{s.pctVendido}%</td>
-                        <td className="num" style={{ color: '#ff6b00' }}>{s.pctPorVender}%</td>
+                        <td className="num" style={{ color: 'var(--text-success)' }}>{s.pctVendido}%</td>
+                        <td className="num" style={{ color: 'var(--citrino-orange)' }}>{s.pctPorVender}%</td>
                         <td className="num">{s.mesesStockPromedio} m</td>
                       </tr>
                     ))}
@@ -566,7 +566,7 @@ export default function EvolutivoOfertaPanel() {
                     <td>{p.zona}</td>
                     <td className="num">{p.cuotaIni}</td>
                     <td>{p.financiamiento}</td>
-                    <td className="num" style={{ color: '#10b981' }}>{p.dctoContado}</td>
+                    <td className="num" style={{ color: 'var(--text-success)' }}>{p.dctoContado}</td>
                     <td className="num">{p.velocidad}</td>
                   </tr>
                 ))}

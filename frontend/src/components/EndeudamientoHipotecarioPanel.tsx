@@ -314,7 +314,7 @@ export default function EndeudamientoHipotecarioPanel({ initialChapter = '4.1' }
                         <td><b>{r.rango}</b></td>
                         <td className="num">{r.y2024}%</td>
                         <td className="num">{r.y2025}%</td>
-                        <td className="num" style={{ color: r.rango.includes('0%') ? '#10b981' : '#ff6b00' }}>
+                        <td className="num" style={{ color: r.rango.includes('0%') ? 'var(--text-success)' : 'var(--citrino-orange)' }}>
                           <b>{r.y2026}%</b>
                         </td>
                       </tr>
@@ -482,7 +482,7 @@ export default function EndeudamientoHipotecarioPanel({ initialChapter = '4.1' }
                     {estadoPrestatarioReprogramacion.map((r) => (
                       <tr key={r.ano}>
                         <td><b>{r.ano}</b></td>
-                        <td className="num" style={{ color: '#10b981' }}>{r.no}%</td>
+                        <td className="num" style={{ color: 'var(--text-success)' }}>{r.no}%</td>
                         <td className="num" style={{ color: '#ef4444' }}><b>{r.si}%</b></td>
                         <td>{r.ano === '2023' ? 'Pico pos-pandemia' : r.ano === '2026' ? 'Reactivación leve de reprogramaciones' : 'Baja morosidad declarada'}</td>
                       </tr>
@@ -561,8 +561,8 @@ export default function EndeudamientoHipotecarioPanel({ initialChapter = '4.1' }
                       <tr key={p.ano}>
                         <td><b>{p.ano}</b></td>
                         <td className="num" style={{ color: '#ef4444' }}>{p.bajo}%</td>
-                        <td className="num" style={{ color: '#38bdf8' }}>{p.igual}%</td>
-                        <td className="num" style={{ color: '#10b981' }}><b>{p.subio}%</b></td>
+                        <td className="num" style={{ color: 'var(--citrino-sky)' }}>{p.igual}%</td>
+                        <td className="num" style={{ color: 'var(--text-success)' }}><b>{p.subio}%</b></td>
                       </tr>
                     ))}
                   </tbody>
@@ -620,8 +620,8 @@ export default function EndeudamientoHipotecarioPanel({ initialChapter = '4.1' }
                           <tr key={p.ano}>
                             <td><b>{p.ano}</b></td>
                             <td className="num" style={{ color: '#ef4444' }}>{p.bajara}%</td>
-                            <td className="num" style={{ color: '#38bdf8' }}>{p.igual}%</td>
-                            <td className="num" style={{ color: '#10b981' }}><b>{p.subira}%</b></td>
+                            <td className="num" style={{ color: 'var(--citrino-sky)' }}>{p.igual}%</td>
+                            <td className="num" style={{ color: 'var(--text-success)' }}><b>{p.subira}%</b></td>
                           </tr>
                         ))}
                       </tbody>

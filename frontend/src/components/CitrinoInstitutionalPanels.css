@@ -312,3 +312,9 @@
     grid-template-columns: 1fr 1fr;
   }
 }
+
+/* ─── Contraste AA en tema claro ─────────────────────────────────────────── */
+[data-theme="light"] .citrino-badge { color: var(--citrino-orange); }
+[data-theme="light"] .citrino-sample-badge,
+[data-theme="light"] .citrino-subpill-btn.active { color: var(--citrino-sky); }
+[data-theme="light"] .citrino-nav-pill-btn.active { background: var(--citrino-orange); }

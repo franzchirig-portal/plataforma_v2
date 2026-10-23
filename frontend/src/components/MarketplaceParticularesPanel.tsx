@@ -176,7 +176,7 @@ export default function MarketplaceParticularesPanel() {
                     <td className="num"><b>{t.supAvg} m²</b></td>
                     <td className="num">${t.precioM2Min}</td>
                     <td className="num">${t.precioM2Max}</td>
-                    <td className="num" style={{ color: '#38bdf8' }}><b>${t.precioM2Avg}</b></td>
+                    <td className="num" style={{ color: 'var(--citrino-sky)' }}><b>${t.precioM2Avg}</b></td>
                   </tr>
                 ))}
               </tbody>
@@ -213,7 +213,7 @@ export default function MarketplaceParticularesPanel() {
                   {zonas.map((z) => (
                     <tr key={z.zona}>
                       <td><b>{z.zona}</b></td>
-                      <td className="num" style={{ color: '#38bdf8' }}>{z.pct}%</td>
+                      <td className="num" style={{ color: 'var(--citrino-sky)' }}>{z.pct}%</td>
                       <td className="num">{z.unds}</td>
                       <td className="num">${z.volumenUsd} M</td>
                     </tr>

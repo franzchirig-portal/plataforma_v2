@@ -993,10 +993,10 @@ export default function GeoespacialPanel({
 
         {/* Loading Overlay */}
         {loading && (
-          <div style={{
+          <div role="status" aria-live="polite" aria-busy="true" style={{
             position: 'absolute',
             inset: 0,
-            background: 'rgba(24, 24, 24, 0.8)',
+            background: 'color-mix(in srgb, var(--bg-base) 80%, transparent)',
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
