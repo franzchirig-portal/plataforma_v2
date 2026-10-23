@@ -1,7 +1,7 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
-
 /* ─── Design Tokens — Antigravity Neutral Dark Palette (Charcoal / Pure Dark & Neutral) ─── */
 :root {
+  color-scheme: dark;
+  --focus-ring: #ff7a00;
   /* Antigravity Neutral Monochrome Tokens (Zero Blue, Zero Purple) */
   --citrino-petrol:     #252526;
   --citrino-teal:       #737373;
@@ -69,6 +69,7 @@
 
 /* ─── Light Theme — Antigravity Crisp Light ─────────────────────────────── */
 [data-theme="light"] {
+  color-scheme: light;
   --citrino-petrol:     #f4f4f5;
   --citrino-teal:       #64748b;
   --citrino-teal-light: #334155;
@@ -280,7 +281,7 @@ html, body, #root {
   font-size: 11px;
   border-radius: 4px;
   cursor: pointer;
-  transition: all 0.12s;
+  transition: background-color 0.12s, border-color 0.12s, color 0.12s, opacity 0.12s, transform 0.12s, box-shadow 0.12s;
   background: transparent;
   border: none;
 }
@@ -317,7 +318,7 @@ html, body, #root {
   color: #ffffff;
   border-radius: 50%;
   cursor: pointer;
-  transition: all 0.15s ease;
+  transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease, opacity 0.15s ease, transform 0.15s ease, box-shadow 0.15s ease;
   padding: 0;
   outline: none;
 }
@@ -410,7 +411,7 @@ html, body, #root {
   border: none;
   cursor: pointer;
   text-align: left;
-  transition: all 0.12s ease;
+  transition: background-color 0.12s ease, border-color 0.12s ease, color 0.12s ease, opacity 0.12s ease, transform 0.12s ease, box-shadow 0.12s ease;
   outline: none;
 }
 .profile-dropdown-item:hover {
@@ -465,7 +466,7 @@ html, body, #root {
 }
 
 .topbar-city-link:focus-visible {
-  outline: 2px solid #ff7a00;
+  outline: 2px solid var(--focus-ring);
   outline-offset: 2px;
 }
 
@@ -549,8 +550,7 @@ html, body, #root {
   padding: 2px 22px 2px 8px;
   height: 24px;
   cursor: pointer;
-  outline: none;
-  transition: all 0.15s ease;
+  transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease, opacity 0.15s ease, transform 0.15s ease, box-shadow 0.15s ease;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='9' height='9' viewBox='0 0 24 24' fill='none' stroke='%23ffffff' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
   background-repeat: no-repeat;
   background-position: right 6px center;
@@ -598,7 +598,7 @@ html, body, #root {
   font-size: 11.5px;
   font-weight: 500;
   cursor: pointer;
-  transition: all 0.15s ease;
+  transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease, opacity 0.15s ease, transform 0.15s ease, box-shadow 0.15s ease;
   outline: none;
 }
 
@@ -635,7 +635,7 @@ html, body, #root {
 }
 
 .topbar-moneda-btn:focus-visible {
-  outline: 2px solid #ff7a00;
+  outline: 2px solid var(--focus-ring);
   outline-offset: 2px;
 }
 
@@ -676,7 +676,7 @@ html, body, #root {
 }
 
 .topbar-text-btn:focus-visible {
-  outline: 2px solid #ff7a00;
+  outline: 2px solid var(--focus-ring);
   outline-offset: 2px;
 }
 
@@ -692,7 +692,7 @@ html, body, #root {
   border-radius: 4px;
   color: var(--text-secondary);
   cursor: pointer;
-  transition: all 0.14s;
+  transition: background-color 0.14s, border-color 0.14s, color 0.14s, opacity 0.14s, transform 0.14s, box-shadow 0.14s;
   padding: 0;
   outline: none;
 }
@@ -723,7 +723,7 @@ html, body, #root {
   border-radius: 4px;
   color: var(--text-secondary);
   cursor: pointer;
-  transition: all 0.14s;
+  transition: background-color 0.14s, border-color 0.14s, color 0.14s, opacity 0.14s, transform 0.14s, box-shadow 0.14s;
   padding: 0;
   outline: none;
 }
@@ -917,7 +917,7 @@ html, body, #root {
   color: var(--text-secondary);
   font-size: 10px;
   cursor: pointer;
-  transition: all 0.15s;
+  transition: background-color 0.15s, border-color 0.15s, color 0.15s, opacity 0.15s, transform 0.15s, box-shadow 0.15s;
 }
 .suggested-chip:hover {
   border-color: var(--accent-blue);
@@ -941,7 +941,6 @@ html, body, #root {
   font-size: 12px;
   font-family: 'Inter', sans-serif;
   resize: none;
-  outline: none;
   transition: border-color 0.15s;
   line-height: 1.4;
   min-height: 34px;
@@ -960,7 +959,7 @@ html, body, #root {
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: all 0.15s;
+  transition: background-color 0.15s, border-color 0.15s, color 0.15s, opacity 0.15s, transform 0.15s, box-shadow 0.15s;
   flex-shrink: 0;
 }
 .btn-send:hover { background: #ffffff; color: #181a1f; box-shadow: none; }
@@ -1310,12 +1309,15 @@ html, body, #root {
   font-size: 11px;
   font-family: 'Inter', sans-serif;
   padding: 4px 8px;
-  outline: none;
   cursor: pointer;
   transition: border-color 0.15s;
 }
 .select-input:hover { border-color: var(--border-bright); }
-.select-input:focus { border-color: var(--accent-blue); }
+.select-input:focus-visible {
+  border-color: var(--accent-blue);
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 2px;
+}
 .select-input option { background: var(--bg-panel); }
 
 .status-dot {
@@ -1341,7 +1343,7 @@ html, body, #root {
   align-items: center;
   gap: 6px;
   cursor: pointer;
-  transition: all 0.15s ease;
+  transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease, opacity 0.15s ease, transform 0.15s ease, box-shadow 0.15s ease;
 }
 .citrino-filter-pill:hover,
 .citrino-filter-pill.active {
@@ -1369,7 +1371,7 @@ html, body, #root {
   display: flex;
   align-items: center;
   gap: 5px;
-  transition: all 0.12s;
+  transition: background-color 0.12s, border-color 0.12s, color 0.12s, opacity 0.12s, transform 0.12s, box-shadow 0.12s;
 }
 .citrino-subtab-btn:hover {
   color: var(--text-primary);
@@ -1429,7 +1431,7 @@ html, body, #root {
   background-color: var(--bg-card) !important;
   border-bottom: 1px solid var(--border-subtle) !important;
   color: var(--text-primary) !important;
-  transition: all 0.15s;
+  transition: background-color 0.15s, border-color 0.15s, color 0.15s, opacity 0.15s, transform 0.15s, box-shadow 0.15s;
 }
 
 .leaflet-bar a:hover {
@@ -1534,7 +1536,7 @@ html, body, #root {
   font-size: 11px;
   font-weight: 600;
   cursor: pointer;
-  transition: all 0.15s;
+  transition: background-color 0.15s, border-color 0.15s, color 0.15s, opacity 0.15s, transform 0.15s, box-shadow 0.15s;
 }
 .os-dock-item:hover {
   color: var(--text-primary);
@@ -1605,7 +1607,7 @@ html, body, #root {
   padding: 4px 10px;
   cursor: pointer;
   color: var(--text-secondary);
-  transition: all 0.2s;
+  transition: background-color 0.2s, border-color 0.2s, color 0.2s, opacity 0.2s, transform 0.2s, box-shadow 0.2s;
 }
 .os-cmd-trigger:hover {
   border-color: var(--citrino-accent);
@@ -1667,7 +1669,7 @@ html, body, #root {
   display: flex;
   flex-direction: column;
   gap: 4px;
-  transition: all 0.2s ease;
+  transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease, opacity 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
 }
 .os-kpi-card:hover {
   border-color: var(--border-bright);
@@ -1768,7 +1770,7 @@ html, body, #root {
   font-size: 11px;
   font-weight: 600;
   cursor: pointer;
-  transition: all 0.15s;
+  transition: background-color 0.15s, border-color 0.15s, color 0.15s, opacity 0.15s, transform 0.15s, box-shadow 0.15s;
 }
 .os-btn-sm:hover {
   background: var(--bg-hover);
@@ -1784,7 +1786,7 @@ html, body, #root {
   font-size: 10px;
   font-weight: 600;
   cursor: pointer;
-  transition: all 0.15s;
+  transition: background-color 0.15s, border-color 0.15s, color 0.15s, opacity 0.15s, transform 0.15s, box-shadow 0.15s;
 }
 .os-btn-xs:hover {
   border-color: var(--citrino-accent);
@@ -1799,7 +1801,7 @@ html, body, #root {
   font-size: 11.5px;
   font-weight: 700;
   cursor: pointer;
-  transition: all 0.2s;
+  transition: background-color 0.2s, border-color 0.2s, color 0.2s, opacity 0.2s, transform 0.2s, box-shadow 0.2s;
   box-shadow: 0 2px 8px rgba(0,0,0,0.4);
 }
 .os-btn-primary:hover {
@@ -1815,7 +1817,7 @@ html, body, #root {
   font-size: 11.5px;
   font-weight: 600;
   cursor: pointer;
-  transition: all 0.15s;
+  transition: background-color 0.15s, border-color 0.15s, color 0.15s, opacity 0.15s, transform 0.15s, box-shadow 0.15s;
 }
 .os-btn-secondary:hover {
   border-color: var(--citrino-accent);
@@ -1909,11 +1911,12 @@ html, body, #root {
   border-radius: 6px;
   padding: 5px 10px;
   font-size: 11px;
-  outline: none;
   width: 170px;
 }
-.os-compare-input:focus {
+.os-compare-input:focus-visible {
   border-color: var(--citrino-accent);
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 2px;
 }
 .os-compare-dropdown {
   position: absolute;
@@ -2035,7 +2038,7 @@ html, body, #root {
   font-size: 11px;
   font-weight: 600;
   cursor: pointer;
-  transition: all 0.15s;
+  transition: background-color 0.15s, border-color 0.15s, color 0.15s, opacity 0.15s, transform 0.15s, box-shadow 0.15s;
 }
 .os-btn-scope:hover {
   color: var(--text-primary);
@@ -2335,7 +2338,6 @@ html, body, #root {
   border: none;
   color: #ffffff;
   font-size: 14px;
-  outline: none;
   font-family: inherit;
 }
 .cmd-palette-input::placeholder {
@@ -2373,7 +2375,7 @@ html, body, #root {
   padding: 10px 12px;
   border-radius: 8px;
   cursor: pointer;
-  transition: all 0.1s;
+  transition: background-color 0.1s, border-color 0.1s, color 0.1s, opacity 0.1s, transform 0.1s, box-shadow 0.1s;
   border: 1px solid transparent;
 }
 .cmd-palette-item.selected {
@@ -2468,7 +2470,7 @@ html, body, #root {
   border-radius: 6px;
   padding: 0;
   cursor: pointer;
-  transition: all 0.15s ease;
+  transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease, opacity 0.15s ease, transform 0.15s ease, box-shadow 0.15s ease;
   flex-shrink: 0;
 }
 .theme-toggle-btn:hover {
@@ -2490,7 +2492,7 @@ html, body, #root {
   border-radius: 6px;
   padding: 0;
   cursor: pointer;
-  transition: all 0.15s ease;
+  transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease, opacity 0.15s ease, transform 0.15s ease, box-shadow 0.15s ease;
   flex-shrink: 0;
 }
 .topbar-icon-btn:hover {
@@ -2575,7 +2577,18 @@ html, body, .app-shell, .panel, .topbar, .panel-header, .panel-body, .workspace-
   color: #0f172a !important;
 }
 
+/* ─── Foco visible global (accesibilidad teclado) ───────────────────────── */
+:focus-visible {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 2px;
+}
 
-
-
-
+/* ─── Reducir movimiento (prefers-reduced-motion) ───────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

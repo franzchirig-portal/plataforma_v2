@@ -65,7 +65,7 @@
   border-radius: 4px;
   color: rgba(255, 255, 255, 0.6);
   cursor: pointer;
-  transition: all 0.12s;
+  transition: background-color 0.12s, border-color 0.12s, color 0.12s, opacity 0.12s, transform 0.12s, box-shadow 0.12s;
   margin-left: auto;
 }
 
@@ -253,6 +253,6 @@
 .lab-section-header:focus-visible,
 .lab-chapter-item:focus-visible,
 .lab-collapse-btn:focus-visible {
-  outline: 2px solid #ff7a00;
+  outline: 2px solid var(--focus-ring);
   outline-offset: -1px;
 }
