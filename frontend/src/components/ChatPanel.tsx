@@ -142,6 +142,7 @@ export default function ChatPanel({
       })
 
       const chartOption = {
+        aria: { enabled: true },
         backgroundColor: 'transparent',
         tooltip: {
           trigger: 'axis',
@@ -212,6 +213,7 @@ export default function ChatPanel({
       const topValues = sorted.map((p) => Number(p.ritmo_venta?.toFixed(1))).reverse()
 
       const chartOption = {
+        aria: { enabled: true },
         backgroundColor: 'transparent',
         tooltip: {
           trigger: 'axis',
@@ -302,6 +304,7 @@ export default function ChatPanel({
       }))
 
       const chartOption = {
+        aria: { enabled: true },
         backgroundColor: 'transparent',
         tooltip: {
           trigger: 'item',
@@ -376,6 +379,7 @@ export default function ChatPanel({
         .slice(0, 5)
 
       const chartOption = {
+        aria: { enabled: true },
         backgroundColor: 'transparent',
         tooltip: {
           trigger: 'axis',
@@ -446,6 +450,7 @@ export default function ChatPanel({
         .slice(0, 6)
 
       const chartOption = {
+        aria: { enabled: true },
         backgroundColor: 'transparent',
         tooltip: {
           trigger: 'axis',
@@ -535,6 +540,7 @@ export default function ChatPanel({
       const dispData = cities.map((c) => cityMap[c]?.disp ?? 0)
 
       const chartOption = {
+        aria: { enabled: true },
         backgroundColor: 'transparent',
         tooltip: {
           trigger: 'axis',

@@ -11,6 +11,7 @@ export default function MarketplaceParticularesPanel() {
 
   // Chart Option: Zonificación Barras Horizontales
   const getZonificacionChart = () => ({
+    aria: { enabled: true },
     backgroundColor: 'transparent',
     tooltip: { trigger: 'axis', axisPointer: { type: 'shadow' } },
     grid: { left: '3%', right: '4%', bottom: '3%', top: '3%', containLabel: true },
@@ -37,6 +38,7 @@ export default function MarketplaceParticularesPanel() {
 
   // Chart Option: Evolutivo Mensual (Unidades vs $US M)
   const getEvolutivoChart = () => ({
+    aria: { enabled: true },
     backgroundColor: 'transparent',
     tooltip: { trigger: 'axis' },
     legend: { textStyle: { color: '#94a3b8' }, top: 0 },

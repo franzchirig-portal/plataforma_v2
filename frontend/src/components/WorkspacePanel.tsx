@@ -29,6 +29,7 @@ interface Props {
 export type MetricType = 'stock_zona' | 'stock_subzona' | 'evolucion_temporal' | 'ritmo_zona' | 'usd_zona' | 'meses_zona' | 'stock_und_bar' | 'stock_usd_bar' | 'meses_stock_bar'
 
 const CHART_BASE = {
+  aria: { enabled: true },
   backgroundColor: 'transparent',
   textStyle: { fontFamily: 'Inter, sans-serif', color: '#94a3b8', fontSize: 11 },
   animation: true,

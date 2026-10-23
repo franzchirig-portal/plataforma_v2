@@ -9,6 +9,7 @@ export default function CicloInmobiliarioPanel() {
 
   // Chart Option: Gauge Reloj del Ciclo Inmobiliario
   const getClockGaugeChart = () => ({
+    aria: { enabled: true },
     backgroundColor: 'transparent',
     series: [
       {
@@ -57,6 +58,7 @@ export default function CicloInmobiliarioPanel() {
 
   // Chart Option: Serie Histórica 2002-2026 vs Equilibrio
   const getSerieOcupacionChart = () => ({
+    aria: { enabled: true },
     backgroundColor: 'transparent',
     tooltip: { trigger: 'axis' },
     legend: { textStyle: { color: '#94a3b8' }, top: 0 },
@@ -94,6 +96,7 @@ export default function CicloInmobiliarioPanel() {
 
   // Chart Option: Variación Alquileres a Largo Plazo
   const getAlquileresChart = () => ({
+    aria: { enabled: true },
     backgroundColor: 'transparent',
     tooltip: { trigger: 'axis' },
     grid: { left: '3%', right: '4%', bottom: '3%', containLabel: true },

@@ -35,6 +35,7 @@ interface ProductMatrixRow {
 }
 
 const CHART_BASE = {
+  aria: { enabled: true },
   backgroundColor: 'transparent',
   textStyle: { fontFamily: 'Inter, sans-serif', color: '#94a3b8', fontSize: 11 },
   animation: true,

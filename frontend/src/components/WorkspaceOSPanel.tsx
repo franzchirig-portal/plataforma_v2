@@ -262,6 +262,7 @@ export default function WorkspaceOSPanel({
     const colors = ['#f3f3f3', '#a3a3a3', '#10b981', '#f59e0b', '#737373']
 
     return {
+      aria: { enabled: true },
       backgroundColor: 'transparent',
       legend: {
         data: comparedProjects.map((p) => p.proyecto),
@@ -329,6 +330,7 @@ export default function WorkspaceOSPanel({
   const zoneChartOption = React.useMemo(() => {
     const isLight = theme === 'light'
     return {
+      aria: { enabled: true },
       backgroundColor: 'transparent',
       tooltip: {
         trigger: 'axis',

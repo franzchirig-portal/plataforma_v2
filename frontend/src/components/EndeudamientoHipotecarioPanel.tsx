@@ -41,6 +41,7 @@ export default function EndeudamientoHipotecarioPanel({ initialChapter = '4.1' }
 
   // Charts
   const getBarH = (categories: string[], values: number[], color = '#38bdf8') => ({
+    aria: { enabled: true },
     backgroundColor: 'transparent',
     tooltip: { trigger: 'axis', formatter: '{b}: <b>{c}%</b>' },
     grid: { left: '3%', right: '4%', bottom: '3%', top: '5%', containLabel: true },
@@ -65,6 +66,7 @@ export default function EndeudamientoHipotecarioPanel({ initialChapter = '4.1' }
   })
 
   const getPie = (data: { name: string; value: number }[], colors?: string[]) => ({
+    aria: { enabled: true },
     backgroundColor: 'transparent',
     tooltip: { trigger: 'item', formatter: '{b}: {c}%' },
     legend: { orient: 'vertical', right: '5%', top: 'center', textStyle: { color: '#94a3b8' } },

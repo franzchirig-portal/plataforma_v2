@@ -14,6 +14,7 @@ export default function BienesAdjudicadosPanel() {
 
   // Chart Option: Remates Judiciales (Volumen $US M y Tasa de Descuento %)
   const getRematesChart = () => ({
+    aria: { enabled: true },
     backgroundColor: 'transparent',
     tooltip: { trigger: 'axis' },
     legend: { textStyle: { color: '#94a3b8' }, top: 0 },
@@ -58,6 +59,7 @@ export default function BienesAdjudicadosPanel() {
 
   // Chart Option: Adjudicados Anual ASFI 2003-2026
   const getAdjudicadosAnualChart = () => ({
+    aria: { enabled: true },
     backgroundColor: 'transparent',
     tooltip: {
       trigger: 'axis',
@@ -105,6 +107,7 @@ export default function BienesAdjudicadosPanel() {
 
   // Chart Option: Adjudicados Mensual dic-2022 a mar-2026
   const getAdjudicadosMensualChart = () => ({
+    aria: { enabled: true },
     backgroundColor: 'transparent',
     tooltip: { trigger: 'axis' },
     grid: { left: '3%', right: '4%', bottom: '3%', containLabel: true },

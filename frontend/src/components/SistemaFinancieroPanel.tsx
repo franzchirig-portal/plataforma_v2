@@ -18,6 +18,7 @@ export default function SistemaFinancieroPanel({ initialChapter = '3.1' }: Props
 
   // Chart Option: Cartera Hipotecaria vs VIS (2015 - 2026)
   const getCarteraChart = () => ({
+    aria: { enabled: true },
     backgroundColor: 'transparent',
     tooltip: { trigger: 'axis' },
     legend: { textStyle: { color: '#94a3b8' }, top: 0 },
@@ -55,6 +56,7 @@ export default function SistemaFinancieroPanel({ initialChapter = '3.1' }: Props
 
   // Chart Option: Mora Hipotecaria Monto USD (Reprogramada vs No Reprogramada)
   const getMoraHipotecariaMontoChart = () => ({
+    aria: { enabled: true },
     backgroundColor: 'transparent',
     tooltip: { trigger: 'axis', axisPointer: { type: 'shadow' } },
     legend: { textStyle: { color: '#94a3b8' }, top: 0 },
@@ -90,6 +92,7 @@ export default function SistemaFinancieroPanel({ initialChapter = '3.1' }: Props
 
   // Chart Option: Mora Construcción Porcentajes vs Monto
   const getMoraConstruccionChart = () => ({
+    aria: { enabled: true },
     backgroundColor: 'transparent',
     tooltip: { trigger: 'axis' },
     grid: { left: '3%', right: '4%', bottom: '3%', containLabel: true },

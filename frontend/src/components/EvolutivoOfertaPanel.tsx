@@ -22,6 +22,7 @@ export default function EvolutivoOfertaPanel() {
 
   // Chart Option: Cuantificación Agregada (Barras triples de Unds, Stock USD, m²)
   const getCuantificacionChart = () => ({
+    aria: { enabled: true },
     backgroundColor: 'transparent',
     tooltip: { trigger: 'axis', axisPointer: { type: 'shadow' } },
     legend: { textStyle: { color: '#94a3b8' }, top: 0 },
@@ -67,6 +68,7 @@ export default function EvolutivoOfertaPanel() {
 
   // Chart Option: Ritmo de Venta Mensual Histórico feb-2021 a sep-2026
   const getRitmoChart = () => ({
+    aria: { enabled: true },
     backgroundColor: 'transparent',
     tooltip: {
       trigger: 'axis',
@@ -117,6 +119,7 @@ export default function EvolutivoOfertaPanel() {
 
   // Chart Option: Brecha Cambiaria Oficial vs Paralelo
   const getBrechaChart = () => ({
+    aria: { enabled: true },
     backgroundColor: 'transparent',
     tooltip: { trigger: 'axis' },
     legend: { textStyle: { color: '#94a3b8' }, top: 0 },
@@ -155,6 +158,7 @@ export default function EvolutivoOfertaPanel() {
 
   // Chart Option: Etapas Comerciales Pie
   const getEtapasPieChart = () => ({
+    aria: { enabled: true },
     backgroundColor: 'transparent',
     tooltip: { trigger: 'item', formatter: '{b}: {c} proyectos ({d}%)' },
     legend: { orient: 'vertical', right: '5%', top: 'center', textStyle: { color: '#94a3b8' } },
