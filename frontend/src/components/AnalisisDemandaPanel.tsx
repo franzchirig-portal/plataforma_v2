@@ -2,12 +2,14 @@ import { useState } from 'react'
 import ReactECharts from 'echarts-for-react'
 import './CitrinoInstitutionalPanels.css'
 import { DEMANDA_DATA } from '../data/citrinoDataStudioData'
+import { useChartTheme } from '../lib/chartTheme'
 
 interface Props {
   initialChapter?: '2.1' | '2.2' | '2.3'
 }
 
 export default function AnalisisDemandaPanel({ initialChapter = '2.1' }: Props) {
+  const ct = useChartTheme()
   const [activeChapter, setActiveChapter] = useState<'2.1' | '2.2' | '2.3'>(initialChapter)
 
   // Sub-pills internos auditados para Compra Inversión (2.2)
@@ -30,7 +32,7 @@ export default function AnalisisDemandaPanel({ initialChapter = '2.1' }: Props) 
     aria: { enabled: true },
     backgroundColor: 'transparent',
     tooltip: { trigger: 'item', formatter: '{b}: {c}%' },
-    legend: { orient: 'vertical', right: '5%', top: 'center', textStyle: { color: '#94a3b8' } },
+    legend: { orient: 'vertical', right: '5%', top: 'center', textStyle: { color: ct.muted } },
     series: [
       {
         type: 'pie',
@@ -50,13 +52,13 @@ export default function AnalisisDemandaPanel({ initialChapter = '2.1' }: Props) 
     grid: { left: '3%', right: '4%', bottom: '3%', top: '5%', containLabel: true },
     xAxis: {
       type: 'value',
-      axisLabel: { color: '#94a3b8', formatter: '{value}%' },
-      splitLine: { lineStyle: { color: 'rgba(255,255,255,0.06)' } },
+      axisLabel: { color: ct.muted, formatter: '{value}%' },
+      splitLine: { lineStyle: { color: ct.grid } },
     },
     yAxis: {
       type: 'category',
       data: [...categories].reverse(),
-      axisLabel: { color: '#cbd5e1' },
+      axisLabel: { color: ct.text },
       axisLine: { lineStyle: { color: 'rgba(255,255,255,0.15)' } },
     },
     series: [

@@ -2,10 +2,12 @@ import { useState } from 'react'
 import ReactECharts from 'echarts-for-react'
 import './CitrinoInstitutionalPanels.css'
 import { MARKETPLACE_DATA } from '../data/citrinoDataStudioData'
+import { useChartTheme } from '../lib/chartTheme'
 
 type SubTab = 'stock' | 'zonificacion' | 'evolutivo'
 
 export default function MarketplaceParticularesPanel() {
+  const ct = useChartTheme()
   const [activeSubTab, setActiveSubTab] = useState<SubTab>('stock')
   const { kpis, tipologias, zonas, serieMensual } = MARKETPLACE_DATA
 
@@ -17,13 +19,13 @@ export default function MarketplaceParticularesPanel() {
     grid: { left: '3%', right: '4%', bottom: '3%', top: '3%', containLabel: true },
     xAxis: {
       type: 'value',
-      axisLabel: { color: '#94a3b8', formatter: '{value}%' },
-      splitLine: { lineStyle: { color: 'rgba(255,255,255,0.06)' } },
+      axisLabel: { color: ct.muted, formatter: '{value}%' },
+      splitLine: { lineStyle: { color: ct.grid } },
     },
     yAxis: {
       type: 'category',
       data: [...zonas].reverse().map((z) => z.zona),
-      axisLabel: { color: '#cbd5e1' },
+      axisLabel: { color: ct.text },
       axisLine: { lineStyle: { color: 'rgba(255,255,255,0.15)' } },
     },
     series: [
@@ -41,19 +43,19 @@ export default function MarketplaceParticularesPanel() {
     aria: { enabled: true },
     backgroundColor: 'transparent',
     tooltip: { trigger: 'axis' },
-    legend: { textStyle: { color: '#94a3b8' }, top: 0 },
+    legend: { textStyle: { color: ct.muted }, top: 0 },
     grid: { left: '3%', right: '4%', bottom: '3%', containLabel: true },
     xAxis: {
       type: 'category',
       data: serieMensual.map((p) => p.periodo),
-      axisLabel: { color: '#94a3b8' },
+      axisLabel: { color: ct.muted },
     },
     yAxis: [
       {
         type: 'value',
         name: 'Unidades',
-        axisLabel: { color: '#94a3b8' },
-        splitLine: { lineStyle: { color: 'rgba(255,255,255,0.06)' } },
+        axisLabel: { color: ct.muted },
+        splitLine: { lineStyle: { color: ct.grid } },
       },
       {
         type: 'value',

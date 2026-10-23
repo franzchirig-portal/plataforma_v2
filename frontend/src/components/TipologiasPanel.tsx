@@ -8,6 +8,7 @@ import {
   getLatestPerProject,
 } from '../lib/supabase'
 import type { IndicadorFull, AvgTipologia, TipologiaBenchmark } from '../lib/supabase'
+import { useChartTheme } from '../lib/chartTheme'
 
 interface Props {
   ciudad: string
@@ -34,13 +35,13 @@ interface ProductMatrixRow {
   count: number
 }
 
-const CHART_BASE = {
+const chartBase = (muted: string) => ({
   aria: { enabled: true },
   backgroundColor: 'transparent',
-  textStyle: { fontFamily: 'Inter, sans-serif', color: '#94a3b8', fontSize: 11 },
+  textStyle: { fontFamily: 'Inter, sans-serif', color: muted, fontSize: 11 },
   animation: true,
   animationDuration: 500,
-}
+})
 
 function fmt(n: number | null | undefined, dec = 1): string {
   if (n == null) return '—'
@@ -73,6 +74,7 @@ export default function TipologiasPanel({
   selectedIndicador,
   onSelectIndicador,
 }: Props) {
+  const ct = useChartTheme()
   const [proyectos, setProyectos] = useState<IndicadorFull[]>([])
   const [tipologias, setTipologias] = useState<AvgTipologia[]>([])
   const [marketBenchmarks, setMarketBenchmarks] = useState<Record<string, TipologiaBenchmark>>({})
@@ -204,7 +206,7 @@ export default function TipologiasPanel({
 
   // ─── ECharts Configuration ──────────────────────────────────────────────
   const chartPriceM2 = tipologias.length > 0 ? {
-    ...CHART_BASE,
+    ...chartBase(ct.muted),
     grid: { left: 16, right: 16, top: 28, bottom: 24, containLabel: true },
     tooltip: {
       trigger: 'axis',
@@ -214,26 +216,26 @@ export default function TipologiasPanel({
     },
     legend: {
       data: ['Precio Promedio ($US)', 'Precio $/m²'],
-      textStyle: { color: '#94a3b8', fontSize: 10 },
+      textStyle: { color: ct.muted, fontSize: 10 },
       top: 2,
     },
     xAxis: {
       type: 'category',
       data: tipologias.map((t) => t.avg_tipologia),
-      axisLabel: { fontSize: 10, color: '#94a3b8', interval: 0 },
+      axisLabel: { fontSize: 10, color: ct.muted, interval: 0 },
     },
     yAxis: [
       {
         type: 'value',
         name: 'Precio $US',
-        nameTextStyle: { color: '#64748b', fontSize: 9 },
-        splitLine: { lineStyle: { color: '#182c48' } },
+        nameTextStyle: { color: ct.muted, fontSize: 9 },
+        splitLine: { lineStyle: { color: ct.grid } },
         axisLabel: { fontSize: 9, formatter: (v: number) => `$${(v / 1000).toFixed(0)}k` },
       },
       {
         type: 'value',
         name: '$US/m²',
-        nameTextStyle: { color: '#64748b', fontSize: 9 },
+        nameTextStyle: { color: ct.muted, fontSize: 9 },
         splitLine: { show: false },
         axisLabel: { fontSize: 9, formatter: (v: number) => `$${v}` },
       },
@@ -267,7 +269,7 @@ export default function TipologiasPanel({
   } : null
 
   const chartInventory = tipologias.length > 0 ? {
-    ...CHART_BASE,
+    ...chartBase(ct.muted),
     grid: { left: 16, right: 16, top: 28, bottom: 24, containLabel: true },
     tooltip: {
       trigger: 'axis',
@@ -278,18 +280,18 @@ export default function TipologiasPanel({
     },
     legend: {
       data: ['Vendidas', 'Por Vender'],
-      textStyle: { color: '#94a3b8', fontSize: 10 },
+      textStyle: { color: ct.muted, fontSize: 10 },
       top: 2,
     },
     xAxis: {
       type: 'category',
       data: tipologias.map((t) => t.avg_tipologia),
-      axisLabel: { fontSize: 10, color: '#94a3b8', interval: 0 },
+      axisLabel: { fontSize: 10, color: ct.muted, interval: 0 },
     },
     yAxis: {
       type: 'value',
       name: 'Unidades',
-      nameTextStyle: { color: '#64748b', fontSize: 9 },
+      nameTextStyle: { color: ct.muted, fontSize: 9 },
       splitLine: { lineStyle: { color: '#133340' } },
       axisLabel: { fontSize: 9 },
     },

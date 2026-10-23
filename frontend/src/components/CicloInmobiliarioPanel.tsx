@@ -2,8 +2,10 @@ import { useState } from 'react'
 import ReactECharts from 'echarts-for-react'
 import './CitrinoInstitutionalPanels.css'
 import { CICLO_INMOBILIARIO_DATA } from '../data/citrinoDataStudioData'
+import { useChartTheme } from '../lib/chartTheme'
 
 export default function CicloInmobiliarioPanel() {
+  const ct = useChartTheme()
   const [activeSubTab, setActiveSubTab] = useState<'reloj' | 'alquileres'>('reloj')
   const { tasaEquilibrio, faseActual, fases, serieHistoricaOcupacion } = CICLO_INMOBILIARIO_DATA
 
@@ -41,14 +43,14 @@ export default function CicloInmobiliarioPanel() {
         },
         axisTick: { length: 8, lineStyle: { color: 'auto', width: 1 } },
         splitLine: { length: 14, lineStyle: { color: 'auto', width: 2 } },
-        axisLabel: { color: '#94a3b8', fontSize: 11, distance: -40, formatter: '{value}%' },
-        title: { offsetCenter: [0, '25%'], fontSize: 13, color: '#cbd5e1', fontWeight: 600 },
+        axisLabel: { color: ct.muted, fontSize: 11, distance: -40, formatter: '{value}%' },
+        title: { offsetCenter: [0, '25%'], fontSize: 13, color: ct.text, fontWeight: 600 },
         detail: {
           fontSize: 24,
           offsetCenter: [0, '-15%'],
           valueAnimation: true,
           formatter: '{value}%',
-          color: '#f8fafc',
+          color: ct.text,
           fontWeight: 700,
         },
         data: [{ value: faseActual.ocupacionActual, name: 'Ocupación 2026' }],
@@ -61,20 +63,20 @@ export default function CicloInmobiliarioPanel() {
     aria: { enabled: true },
     backgroundColor: 'transparent',
     tooltip: { trigger: 'axis' },
-    legend: { textStyle: { color: '#94a3b8' }, top: 0 },
+    legend: { textStyle: { color: ct.muted }, top: 0 },
     grid: { left: '3%', right: '4%', bottom: '3%', containLabel: true },
     xAxis: {
       type: 'category',
       data: serieHistoricaOcupacion.map((s) => s.ano),
-      axisLabel: { color: '#94a3b8' },
+      axisLabel: { color: ct.muted },
     },
     yAxis: {
       type: 'value',
       name: 'Tasa de Ocupación (%)',
       min: 90,
       max: 100,
-      axisLabel: { color: '#94a3b8', formatter: '{value}%' },
-      splitLine: { lineStyle: { color: 'rgba(255,255,255,0.06)' } },
+      axisLabel: { color: ct.muted, formatter: '{value}%' },
+      splitLine: { lineStyle: { color: ct.grid } },
     },
     series: [
       {
@@ -103,13 +105,13 @@ export default function CicloInmobiliarioPanel() {
     xAxis: {
       type: 'category',
       data: serieHistoricaOcupacion.map((s) => s.ano),
-      axisLabel: { color: '#94a3b8' },
+      axisLabel: { color: ct.muted },
     },
     yAxis: {
       type: 'value',
       name: 'Variación Anual Alquiler (%)',
-      axisLabel: { color: '#94a3b8', formatter: '{value}%' },
-      splitLine: { lineStyle: { color: 'rgba(255,255,255,0.06)' } },
+      axisLabel: { color: ct.muted, formatter: '{value}%' },
+      splitLine: { lineStyle: { color: ct.grid } },
     },
     series: [
       {
