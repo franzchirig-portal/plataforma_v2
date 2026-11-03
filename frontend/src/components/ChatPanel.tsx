@@ -636,9 +636,9 @@ export default function ChatPanel({
       <div className="panel-header" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
           <div className="panel-title-dot" style={{ background: 'var(--accent-cyan)', boxShadow: '0 0 8px var(--accent-cyan)' }} />
-          <span style={{ fontWeight: 700, fontSize: 11.5 }}>IA Asistente</span>
+          <span style={{ fontWeight: 700, fontSize: 'var(--fs-etiqueta)' }}>IA Asistente</span>
         </div>
-        <span style={{ fontSize: 9.5, color: 'var(--text-muted)', background: 'var(--bg-card)', padding: '2px 6px', borderRadius: 4, border: '1px solid var(--border-subtle)' }}>
+        <span style={{ fontSize: 'var(--fs-etiqueta)', color: 'var(--text-muted)', background: 'var(--bg-card)', padding: '2px 6px', borderRadius: 4, border: '1px solid var(--border-subtle)' }}>
           NLP Analytics
         </span>
       </div>
@@ -657,7 +657,7 @@ export default function ChatPanel({
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
-                  fontSize: 10,
+                  fontSize: 'var(--fs-etiqueta)',
                   fontWeight: 700,
                   flexShrink: 0,
                   background: msg.role === 'ai' ? 'var(--bg-card-hover)' : 'var(--bg-card)',
@@ -681,7 +681,7 @@ export default function ChatPanel({
                   border: `1px solid var(--border-default)`,
                   borderRadius: 8,
                   padding: '10px 12px',
-                  fontSize: 11.5,
+                  fontSize: 'var(--fs-etiqueta)',
                   lineHeight: 1.5,
                   color: 'var(--text-secondary, #cbd5e1)',
                   boxShadow: '0 4px 14px rgba(0, 0, 0, 0.35)',
@@ -700,7 +700,7 @@ export default function ChatPanel({
                   }}>
                     {msg.chartTitle && (
                       <div style={{
-                        fontSize: 10,
+                        fontSize: 'var(--fs-etiqueta)',
                         fontWeight: 700,
                         color: 'var(--accent-cyan)',
                         textTransform: 'uppercase',
@@ -735,7 +735,7 @@ export default function ChatPanel({
                           color: '#ffffff',
                           padding: '4px 9px',
                           borderRadius: 6,
-                          fontSize: 10.5,
+                          fontSize: 'var(--fs-etiqueta)',
                           fontWeight: 600,
                           cursor: 'pointer',
                           display: 'flex',
@@ -762,7 +762,7 @@ export default function ChatPanel({
                           border: '1px solid var(--border-default)',
                           borderRadius: 12,
                           padding: '2px 8px',
-                          fontSize: 10,
+                          fontSize: 'var(--fs-etiqueta)',
                           color: 'var(--text-primary)',
                           cursor: 'pointer',
                           transition: 'background-color 0.12s, border-color 0.12s, color 0.12s, opacity 0.12s, transform 0.12s, box-shadow 0.12s',
@@ -791,7 +791,7 @@ export default function ChatPanel({
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                fontSize: 10,
+                fontSize: 'var(--fs-etiqueta)',
                 color: '#ffffff',
               }}>
               <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
@@ -820,7 +820,7 @@ export default function ChatPanel({
                   }}
                 />
               ))}
-              <span style={{ fontSize: 10.5, color: 'var(--text-muted)', marginLeft: 6 }}>
+              <span style={{ fontSize: 'var(--fs-etiqueta)', color: 'var(--text-muted)', marginLeft: 6 }}>
                 Procesando datos censales...
               </span>
             </div>
@@ -842,7 +842,7 @@ export default function ChatPanel({
                 border: '1px solid var(--border-subtle)',
                 borderRadius: 12,
                 padding: '2px 8px',
-                fontSize: 10,
+                fontSize: 'var(--fs-etiqueta)',
                 color: 'var(--text-secondary)',
                 cursor: 'pointer',
                 whiteSpace: 'nowrap',
@@ -874,7 +874,7 @@ export default function ChatPanel({
               borderRadius: 6,
               color: '#f1f5f9',
               padding: '6px 10px',
-              fontSize: 11,
+              fontSize: 'var(--fs-etiqueta)',
               resize: 'none',
             }}
           />

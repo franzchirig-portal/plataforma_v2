@@ -291,8 +291,8 @@ function NotificationsPanel() {
   return (
     <div style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
       <div style={{ padding: '10px 14px', borderBottom: '1px solid var(--border-subtle)', display: 'flex', alignItems: 'center', gap: 8, background: 'var(--bg-panel-header)' }}>
-        <span style={{ fontSize: 11, fontWeight: 700, color: 'var(--text-secondary)', letterSpacing: '0.06em', textTransform: 'uppercase' }}>Notificaciones</span>
-        <span style={{ marginLeft: 'auto', fontSize: 9.5, fontWeight: 700, background: 'var(--bg-active)', color: 'var(--text-primary)', border: '1px solid var(--border-default)', borderRadius: 4, padding: '1px 6px' }}>{notifications.length}</span>
+        <span style={{ fontSize: 'var(--fs-etiqueta)', fontWeight: 700, color: 'var(--text-secondary)', letterSpacing: '0.06em', textTransform: 'uppercase' }}>Notificaciones</span>
+        <span style={{ marginLeft: 'auto', fontSize: 'var(--fs-etiqueta)', fontWeight: 700, background: 'var(--bg-active)', color: 'var(--text-primary)', border: '1px solid var(--border-default)', borderRadius: 4, padding: '1px 6px' }}>{notifications.length}</span>
       </div>
       <div style={{ flex: 1, overflow: 'auto', padding: 10, display: 'flex', flexDirection: 'column', gap: 6 }}>
         {notifications.map((n) => (
@@ -301,9 +301,9 @@ function NotificationsPanel() {
             onMouseLeave={(e) => (e.currentTarget.style.borderColor = 'var(--border-default)')}
           >
             <div style={{ flex: 1, minWidth: 0 }}>
-              <div style={{ fontSize: 12, fontWeight: 700, color: 'var(--text-primary)', marginBottom: 2 }}>{n.title}</div>
-              <div style={{ fontSize: 11, color: 'var(--text-secondary)', lineHeight: 1.4 }}>{n.desc}</div>
-              <div style={{ fontSize: 10, color: 'var(--text-muted)', marginTop: 4 }}>{n.time}</div>
+              <div style={{ fontSize: 'var(--fs-cuerpo)', fontWeight: 700, color: 'var(--text-primary)', marginBottom: 2 }}>{n.title}</div>
+              <div style={{ fontSize: 'var(--fs-etiqueta)', color: 'var(--text-secondary)', lineHeight: 1.4 }}>{n.desc}</div>
+              <div style={{ fontSize: 'var(--fs-etiqueta)', color: 'var(--text-muted)', marginTop: 4 }}>{n.time}</div>
             </div>
           </div>
         ))}
@@ -317,7 +317,7 @@ function SettingsPanel() {
   return (
     <div style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
       <div style={{ padding: '10px 14px', borderBottom: '1px solid var(--border-subtle)', display: 'flex', alignItems: 'center', gap: 8, background: 'var(--bg-panel-header)' }}>
-        <span style={{ fontSize: 11, fontWeight: 700, color: 'var(--text-secondary)', letterSpacing: '0.06em', textTransform: 'uppercase' }}>Ajustes</span>
+        <span style={{ fontSize: 'var(--fs-etiqueta)', fontWeight: 700, color: 'var(--text-secondary)', letterSpacing: '0.06em', textTransform: 'uppercase' }}>Ajustes</span>
       </div>
       <div style={{ flex: 1, overflow: 'auto', padding: 14, display: 'flex', flexDirection: 'column', gap: 16 }}>
         <Section title="Visualización">
@@ -343,7 +343,7 @@ function SettingsPanel() {
   )
 }
 
-const selStyle: React.CSSProperties = { background: 'var(--bg-base)', color: 'var(--text-primary)', border: '1px solid var(--border-default)', borderRadius: 6, padding: '3px 8px', fontSize: 11, cursor: 'pointer' }
+const selStyle: React.CSSProperties = { background: 'var(--bg-base)', color: 'var(--text-primary)', border: '1px solid var(--border-default)', borderRadius: 6, padding: '3px 8px', fontSize: 'var(--fs-etiqueta)', cursor: 'pointer' }
 
 function Sel({ options }: { options: string[] }) {
   return <select style={selStyle}>{options.map(o => <option key={o}>{o}</option>)}</select>
@@ -352,7 +352,7 @@ function Sel({ options }: { options: string[] }) {
 function Section({ title, children }: { title: string; children: React.ReactNode }) {
   return (
     <div>
-      <div style={{ fontSize: 10, fontWeight: 700, color: 'var(--citrino-teal, #0d9488)', letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: 8, paddingBottom: 6, borderBottom: '1px solid var(--border-subtle)' }}>{title}</div>
+      <div style={{ fontSize: 'var(--fs-etiqueta)', fontWeight: 700, color: 'var(--citrino-teal, #0d9488)', letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: 8, paddingBottom: 6, borderBottom: '1px solid var(--border-subtle)' }}>{title}</div>
       <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>{children}</div>
     </div>
   )
@@ -361,7 +361,7 @@ function Section({ title, children }: { title: string; children: React.ReactNode
 function Row({ label, control }: { label: string; control: React.ReactNode }) {
   return (
     <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 10 }}>
-      <span style={{ fontSize: 11.5, color: 'var(--text-secondary)', flex: 1 }}>{label}</span>
+      <span style={{ fontSize: 'var(--fs-etiqueta)', color: 'var(--text-secondary)', flex: 1 }}>{label}</span>
       {control}
     </div>
   )

@@ -82,7 +82,7 @@ export default function MultiSelectDropdown({
           boxShadow: 'none',
           padding: '4px 10px',
           borderRadius: 4,
-          fontSize: 11,
+          fontSize: 'var(--fs-etiqueta)',
           fontWeight: 600,
           display: 'flex',
           alignItems: 'center',
@@ -92,7 +92,7 @@ export default function MultiSelectDropdown({
           whiteSpace: 'nowrap',
         }}>
         <span style={{ maxWidth: 150, overflow: 'hidden', textOverflow: 'ellipsis' }}>{buttonText}</span>
-        <span style={{ fontSize: 9, opacity: 0.7, transform: isOpen ? 'rotate(180deg)' : 'none', transition: 'transform 0.15s' }}>▼</span>
+        <span style={{ fontSize: 'var(--fs-etiqueta)', opacity: 0.7, transform: isOpen ? 'rotate(180deg)' : 'none', transition: 'transform 0.15s' }}>▼</span>
       </button>
 
       {/* Popover Dropdown */}
@@ -121,7 +121,7 @@ export default function MultiSelectDropdown({
             borderBottom: '1px solid var(--border-subtle, #133340)',
             marginBottom: 6,
           }}>
-            <span style={{ fontSize: 10.5, fontWeight: 700, color: 'var(--text-muted, #94a3b8)', textTransform: 'uppercase', letterSpacing: 0.5 }}>
+            <span style={{ fontSize: 'var(--fs-etiqueta)', fontWeight: 700, color: 'var(--text-muted, #94a3b8)', textTransform: 'uppercase', letterSpacing: 0.5 }}>
               Filtrar por {label}
             </span>
             <div style={{ display: 'flex', gap: 6 }}>
@@ -132,7 +132,7 @@ export default function MultiSelectDropdown({
                   background: 'transparent',
                   border: 'none',
                   color: isAllSelected ? 'var(--text-primary)' : 'var(--text-muted)',
-                  fontSize: 10,
+                  fontSize: 'var(--fs-etiqueta)',
                   fontWeight: 600,
                   cursor: 'pointer',
                   padding: '2px 4px',
@@ -146,7 +146,7 @@ export default function MultiSelectDropdown({
                   background: 'transparent',
                   border: 'none',
                   color: 'var(--text-muted)',
-                  fontSize: 10,
+                  fontSize: 'var(--fs-etiqueta)',
                   fontWeight: 600,
                   cursor: 'pointer',
                   padding: '2px 4px',
@@ -172,7 +172,7 @@ export default function MultiSelectDropdown({
                     padding: '6px 8px',
                     borderRadius: 6,
                     cursor: 'pointer',
-                    fontSize: 11.5,
+                    fontSize: 'var(--fs-etiqueta)',
                     color: checked ? 'var(--text-primary)' : 'var(--text-secondary)',
                     background: checked ? 'var(--bg-active)' : 'transparent',
                     userSelect: 'none',
@@ -192,7 +192,7 @@ export default function MultiSelectDropdown({
                   <span style={{ flex: 1 }}>{opt}</span>
                   {count != null && (
                     <span style={{
-                      fontSize: 10,
+                      fontSize: 'var(--fs-etiqueta)',
                       color: 'var(--text-muted, #64748b)',
                       fontFamily: "'JetBrains Mono', monospace",
                     }}>
@@ -212,7 +212,7 @@ export default function MultiSelectDropdown({
             display: 'flex',
             justifyContent: 'space-between',
             alignItems: 'center',
-            fontSize: 10,
+            fontSize: 'var(--fs-etiqueta)',
             color: 'var(--text-muted, #64748b)',
             paddingLeft: 6,
             paddingRight: 6,
@@ -231,7 +231,7 @@ export default function MultiSelectDropdown({
                 color: '#ffffff',
                 borderRadius: 4,
                 padding: '2px 8px',
-                fontSize: 10,
+                fontSize: 'var(--fs-etiqueta)',
                 fontWeight: 600,
                 cursor: 'pointer',
               }}>

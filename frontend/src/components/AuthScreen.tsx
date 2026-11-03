@@ -114,7 +114,7 @@ export default function AuthScreen({ onSuccess }: AuthScreenProps) {
           </div>
 
           <h1 style={{
-            fontSize: 18,
+            fontSize: 'var(--fs-subtitulo)',
             fontWeight: 700,
             color: 'var(--text-primary, #f3f3f3)',
             margin: 0,
@@ -123,7 +123,7 @@ export default function AuthScreen({ onSuccess }: AuthScreenProps) {
             CITRINO
           </h1>
           <div style={{
-            fontSize: 10,
+            fontSize: 'var(--fs-etiqueta)',
             fontWeight: 600,
             color: 'var(--text-muted, #8e8e8e)',
             letterSpacing: 1.8,
@@ -149,7 +149,7 @@ export default function AuthScreen({ onSuccess }: AuthScreenProps) {
             style={{
               flex: 1,
               padding: '7px 0',
-              fontSize: 11.5,
+              fontSize: 'var(--fs-etiqueta)',
               fontWeight: mode === 'login' ? 600 : 500,
               background: mode === 'login' ? 'var(--bg-card, #252526)' : 'transparent',
               color: mode === 'login' ? 'var(--text-primary, #ffffff)' : 'var(--text-secondary, #9d9d9d)',
@@ -166,7 +166,7 @@ export default function AuthScreen({ onSuccess }: AuthScreenProps) {
             style={{
               flex: 1,
               padding: '7px 0',
-              fontSize: 11.5,
+              fontSize: 'var(--fs-etiqueta)',
               fontWeight: mode === 'register' ? 600 : 500,
               background: mode === 'register' ? 'var(--bg-card, #252526)' : 'transparent',
               color: mode === 'register' ? 'var(--text-primary, #ffffff)' : 'var(--text-secondary, #9d9d9d)',
@@ -187,7 +187,7 @@ export default function AuthScreen({ onSuccess }: AuthScreenProps) {
             color: '#fda4af',
             padding: '9px 12px',
             borderRadius: 6,
-            fontSize: 11.5,
+            fontSize: 'var(--fs-etiqueta)',
             marginBottom: 16,
           }}>
             <span>{errorMsg}</span>
@@ -202,7 +202,7 @@ export default function AuthScreen({ onSuccess }: AuthScreenProps) {
             color: '#86efac',
             padding: '9px 12px',
             borderRadius: 6,
-            fontSize: 11.5,
+            fontSize: 'var(--fs-etiqueta)',
             marginBottom: 16,
           }}>
             <span>{successMsg}</span>
@@ -213,7 +213,7 @@ export default function AuthScreen({ onSuccess }: AuthScreenProps) {
         <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
           {mode === 'register' && (
             <div>
-              <label htmlFor="auth-full-name" style={{ display: 'block', fontSize: 11, fontWeight: 500, color: 'var(--text-secondary, #9d9d9d)', marginBottom: 5 }}>
+              <label htmlFor="auth-full-name" style={{ display: 'block', fontSize: 'var(--fs-etiqueta)', fontWeight: 500, color: 'var(--text-secondary, #9d9d9d)', marginBottom: 5 }}>
                 Nombre Completo
               </label>
               <input
@@ -232,7 +232,7 @@ export default function AuthScreen({ onSuccess }: AuthScreenProps) {
                   border: '1px solid var(--border-subtle, #2b2d30)',
                   borderRadius: 6,
                   color: 'var(--text-primary, #f3f3f3)',
-                  fontSize: 12,
+                  fontSize: 'var(--fs-cuerpo)',
                   boxSizing: 'border-box',
                   transition: 'border-color 0.15s ease',
                 }}
@@ -243,7 +243,7 @@ export default function AuthScreen({ onSuccess }: AuthScreenProps) {
           )}
 
           <div>
-            <label htmlFor="auth-email" style={{ display: 'block', fontSize: 11, fontWeight: 500, color: 'var(--text-secondary, #9d9d9d)', marginBottom: 5 }}>
+            <label htmlFor="auth-email" style={{ display: 'block', fontSize: 'var(--fs-etiqueta)', fontWeight: 500, color: 'var(--text-secondary, #9d9d9d)', marginBottom: 5 }}>
               Correo Electrónico
             </label>
             <input
@@ -262,7 +262,7 @@ export default function AuthScreen({ onSuccess }: AuthScreenProps) {
                 border: '1px solid var(--border-subtle, #2b2d30)',
                 borderRadius: 6,
                 color: 'var(--text-primary, #f3f3f3)',
-                fontSize: 12,
+                fontSize: 'var(--fs-cuerpo)',
                 boxSizing: 'border-box',
                 transition: 'border-color 0.15s ease',
               }}
@@ -272,7 +272,7 @@ export default function AuthScreen({ onSuccess }: AuthScreenProps) {
           </div>
 
           <div>
-            <label htmlFor="auth-password" style={{ display: 'block', fontSize: 11, fontWeight: 500, color: 'var(--text-secondary, #9d9d9d)', marginBottom: 5 }}>
+            <label htmlFor="auth-password" style={{ display: 'block', fontSize: 'var(--fs-etiqueta)', fontWeight: 500, color: 'var(--text-secondary, #9d9d9d)', marginBottom: 5 }}>
               Contraseña
             </label>
             <input
@@ -292,7 +292,7 @@ export default function AuthScreen({ onSuccess }: AuthScreenProps) {
                 border: '1px solid var(--border-subtle, #2b2d30)',
                 borderRadius: 6,
                 color: 'var(--text-primary, #f3f3f3)',
-                fontSize: 12,
+                fontSize: 'var(--fs-cuerpo)',
                 boxSizing: 'border-box',
                 transition: 'border-color 0.15s ease',
               }}
@@ -308,7 +308,7 @@ export default function AuthScreen({ onSuccess }: AuthScreenProps) {
             style={{
               marginTop: 4,
               padding: '10px 16px',
-              fontSize: 12.5,
+              fontSize: 'var(--fs-cuerpo)',
               fontWeight: 600,
               background: '#f3f3f3',
               color: '#181818',
@@ -336,7 +336,7 @@ export default function AuthScreen({ onSuccess }: AuthScreenProps) {
             margin: '4px 0 0',
           }}>
             <div style={{ flex: 1, height: 1, background: 'var(--border-subtle, #2b2d30)' }} />
-            <span style={{ fontSize: 10, color: 'var(--text-muted, #6e6e6e)', textTransform: 'uppercase', letterSpacing: 1 }}>o</span>
+            <span style={{ fontSize: 'var(--fs-etiqueta)', color: 'var(--text-muted, #6e6e6e)', textTransform: 'uppercase', letterSpacing: 1 }}>o</span>
             <div style={{ flex: 1, height: 1, background: 'var(--border-subtle, #2b2d30)' }} />
           </div>
 
@@ -346,7 +346,7 @@ export default function AuthScreen({ onSuccess }: AuthScreenProps) {
             onClick={onSuccess}
             style={{
               padding: '9px 14px',
-              fontSize: 11.5,
+              fontSize: 'var(--fs-etiqueta)',
               fontWeight: 500,
               background: 'var(--bg-card, #252526)',
               color: 'var(--text-primary, #f3f3f3)',
@@ -374,7 +374,7 @@ export default function AuthScreen({ onSuccess }: AuthScreenProps) {
         </form>
 
         {/* Footer info & Supabase Auth note */}
-        <div style={{ marginTop: 20, textAlign: 'center', fontSize: 10.5, color: 'var(--text-muted, #6e6e6e)', lineHeight: 1.5 }}>
+        <div style={{ marginTop: 20, textAlign: 'center', fontSize: 'var(--fs-etiqueta)', color: 'var(--text-muted, #6e6e6e)', lineHeight: 1.5 }}>
           <span>Control de accesos y perfiles empresariales con Supabase Auth.</span>
         </div>
       </div>

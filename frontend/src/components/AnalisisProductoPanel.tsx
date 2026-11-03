@@ -259,7 +259,7 @@ export default function AnalisisProductoPanel({
         <div style={{ display: 'flex', alignItems: 'center', gap: 12, flexWrap: 'wrap' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 8, minWidth: 260, maxWidth: 420 }}>
             <span style={{
-              fontSize: 11.5,
+              fontSize: 'var(--fs-etiqueta)',
               fontWeight: 700,
               color: 'var(--text-secondary)',
               textTransform: 'uppercase',
@@ -276,7 +276,7 @@ export default function AnalisisProductoPanel({
               style={{
                 width: '100%',
                 padding: '6px 12px',
-                fontSize: 12.5,
+                fontSize: 'var(--fs-cuerpo)',
                 fontWeight: 700,
                 background: 'var(--bg-card)',
                 color: 'var(--text-primary)',
@@ -294,7 +294,7 @@ export default function AnalisisProductoPanel({
 
           {proj && (
             <span style={{
-              fontSize: 11,
+              fontSize: 'var(--fs-etiqueta)',
               fontWeight: 600,
               background: 'var(--bg-card)',
               border: '1px solid var(--border-subtle)',
@@ -318,13 +318,13 @@ export default function AnalisisProductoPanel({
           <div className="empty-state" style={{ padding: '50px 0' }}>
             <div className="loading-shimmer" style={{ width: 220, height: 18, marginBottom: 10 }} />
             <div className="loading-shimmer" style={{ width: 340, height: 14 }} />
-            <div style={{ marginTop: 14, fontSize: 11.5, color: 'var(--text-muted)' }}>
+            <div style={{ marginTop: 14, fontSize: 'var(--fs-etiqueta)', color: 'var(--text-muted)' }}>
               Cargando inteligencia de producto, amenidades y modelos…
             </div>
           </div>
         ) : !proj ? (
           <div className="empty-state" style={{ padding: '50px 0', textAlign: 'center' }}>
-            <div style={{ fontSize: 15, fontWeight: 700, color: 'var(--text-secondary)' }}>
+            <div style={{ fontSize: 'var(--fs-subtitulo)', fontWeight: 700, color: 'var(--text-secondary)' }}>
               Selecciona un proyecto para ver su análisis a detalle
             </div>
           </div>
@@ -381,7 +381,7 @@ export default function AnalisisProductoPanel({
                         </div>
                         <h2 style={{
                           margin: 0,
-                          fontSize: 22,
+                          fontSize: 'var(--fs-titulo)',
                           fontWeight: 800,
                           color: 'var(--text-primary)',
                           letterSpacing: -0.5,
@@ -391,7 +391,7 @@ export default function AnalisisProductoPanel({
                         </h2>
                         {/* Etapa Badge */}
                         <span style={{
-                          fontSize: 11,
+                          fontSize: 'var(--fs-etiqueta)',
                           fontWeight: 700,
                           padding: '3px 10px',
                           borderRadius: 12,
@@ -409,7 +409,7 @@ export default function AnalisisProductoPanel({
 
                       <div style={{
                         marginTop: 4,
-                        fontSize: 12.5,
+                        fontSize: 'var(--fs-cuerpo)',
                         color: 'var(--text-secondary)',
                         display: 'flex',
                         alignItems: 'center',
@@ -445,8 +445,8 @@ export default function AnalisisProductoPanel({
                         padding: '6px 12px',
                         textAlign: 'center',
                       }}>
-                        <div style={{ fontSize: 9.5, color: 'var(--text-muted)', fontWeight: 600 }}>CALIDAD</div>
-                        <div style={{ fontSize: 13, fontWeight: 800, color: 'var(--text-primary)' }}>
+                        <div style={{ fontSize: 'var(--fs-etiqueta)', color: 'var(--text-muted)', fontWeight: 600 }}>CALIDAD</div>
+                        <div style={{ fontSize: 'var(--fs-cuerpo)', fontWeight: 800, color: 'var(--text-primary)' }}>
                           {projCalidad}
                         </div>
                       </div>
@@ -459,8 +459,8 @@ export default function AnalisisProductoPanel({
                         padding: '6px 12px',
                         textAlign: 'center',
                       }}>
-                        <div style={{ fontSize: 9.5, color: 'var(--text-muted)', fontWeight: 600 }}>PISOS</div>
-                        <div style={{ fontSize: 13, fontWeight: 800, color: 'var(--text-primary)' }}>
+                        <div style={{ fontSize: 'var(--fs-etiqueta)', color: 'var(--text-muted)', fontWeight: 600 }}>PISOS</div>
+                        <div style={{ fontSize: 'var(--fs-cuerpo)', fontWeight: 800, color: 'var(--text-primary)' }}>
                           {projPisos}
                         </div>
                       </div>
@@ -473,8 +473,8 @@ export default function AnalisisProductoPanel({
                         padding: '6px 12px',
                         textAlign: 'center',
                       }}>
-                        <div style={{ fontSize: 9.5, color: 'var(--text-muted)', fontWeight: 600 }}>UND. TOTALES</div>
-                        <div style={{ fontSize: 13, fontWeight: 800, color: 'var(--text-primary)' }}>
+                        <div style={{ fontSize: 'var(--fs-etiqueta)', color: 'var(--text-muted)', fontWeight: 600 }}>UND. TOTALES</div>
+                        <div style={{ fontSize: 'var(--fs-cuerpo)', fontWeight: 800, color: 'var(--text-primary)' }}>
                           {projUndTotales}
                         </div>
                       </div>
@@ -487,12 +487,12 @@ export default function AnalisisProductoPanel({
                         padding: '6px 12px',
                         textAlign: 'center',
                       }}>
-                        <div style={{ fontSize: 9.5, color: 'var(--text-muted)', fontWeight: 600 }}>RITMO DE VENTA</div>
-                        <div style={{ fontSize: 13, fontWeight: 800, color: (projRitmo ?? 0) > 0 ? '#10b981' : 'var(--text-primary)' }}>
+                        <div style={{ fontSize: 'var(--fs-etiqueta)', color: 'var(--text-muted)', fontWeight: 600 }}>RITMO DE VENTA</div>
+                        <div style={{ fontSize: 'var(--fs-cuerpo)', fontWeight: 800, color: (projRitmo ?? 0) > 0 ? '#10b981' : 'var(--text-primary)' }}>
                           {projRitmo != null ? (
                             <>
                               {fmt(projRitmo, 1)}
-                              <span style={{ fontSize: 10, fontWeight: 600, color: 'var(--text-muted)', marginLeft: 3 }}>und/mes</span>
+                              <span style={{ fontSize: 'var(--fs-etiqueta)', fontWeight: 600, color: 'var(--text-muted)', marginLeft: 3 }}>und/mes</span>
                             </>
                           ) : '—'}
                         </div>
@@ -506,9 +506,9 @@ export default function AnalisisProductoPanel({
                         padding: '6px 12px',
                         textAlign: 'center',
                       }}>
-                        <div style={{ fontSize: 9.5, color: 'var(--text-muted)', fontWeight: 600 }}>MESES DE STOCK</div>
+                        <div style={{ fontSize: 'var(--fs-etiqueta)', color: 'var(--text-muted)', fontWeight: 600 }}>MESES DE STOCK</div>
                         <div style={{
-                          fontSize: 13,
+                          fontSize: 'var(--fs-cuerpo)',
                           fontWeight: 800,
                           color: projMesesStock != null
                             ? (projMesesStock > 18 ? '#f43f5e' : projMesesStock > 12 ? '#f59e0b' : '#10b981')
@@ -517,7 +517,7 @@ export default function AnalisisProductoPanel({
                           {projMesesStock != null ? (
                             <>
                               {fmt(projMesesStock, 1)}
-                              <span style={{ fontSize: 10, fontWeight: 600, color: 'var(--text-muted)', marginLeft: 3 }}>meses</span>
+                              <span style={{ fontSize: 'var(--fs-etiqueta)', fontWeight: 600, color: 'var(--text-muted)', marginLeft: 3 }}>meses</span>
                             </>
                           ) : '—'}
                         </div>
@@ -542,28 +542,28 @@ export default function AnalisisProductoPanel({
                     flexDirection: 'column',
                     gap: 8,
                   }}>
-                    <div style={{ fontSize: 10.5, fontWeight: 700, color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: 0.5 }}>
+                    <div style={{ fontSize: 'var(--fs-etiqueta)', fontWeight: 700, color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: 0.5 }}>
                       Valuación por Metro Cuadrado
                     </div>
                     <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between' }}>
                       <div>
-                        <div style={{ fontSize: 11, color: 'var(--text-secondary)' }}>Precio Lista Promedio</div>
-                        <div style={{ fontSize: 20, fontWeight: 800, color: 'var(--text-primary)', letterSpacing: -0.5 }}>
-                          {avgM2List ? `$${fmt(avgM2List, 0)}` : '—'} <span style={{ fontSize: 12, fontWeight: 500, color: 'var(--text-muted)' }}>USD/m²</span>
+                        <div style={{ fontSize: 'var(--fs-etiqueta)', color: 'var(--text-secondary)' }}>Precio Lista Promedio</div>
+                        <div style={{ fontSize: 'var(--fs-titulo)', fontWeight: 800, color: 'var(--text-primary)', letterSpacing: -0.5 }}>
+                          {avgM2List ? `$${fmt(avgM2List, 0)}` : '—'} <span style={{ fontSize: 'var(--fs-cuerpo)', fontWeight: 500, color: 'var(--text-muted)' }}>USD/m²</span>
                         </div>
                       </div>
 
                       <div style={{ textAlign: 'right' }}>
-                        <div style={{ fontSize: 11, color: 'var(--text-secondary)' }}>Precio Real Estimado</div>
-                        <div style={{ fontSize: 20, fontWeight: 800, color: '#10b981', letterSpacing: -0.5 }}>
-                          {avgM2Real ? `$${fmt(avgM2Real, 0)}` : '—'} <span style={{ fontSize: 12, fontWeight: 500, color: 'var(--text-muted)' }}>USD/m²</span>
+                        <div style={{ fontSize: 'var(--fs-etiqueta)', color: 'var(--text-secondary)' }}>Precio Real Estimado</div>
+                        <div style={{ fontSize: 'var(--fs-titulo)', fontWeight: 800, color: '#10b981', letterSpacing: -0.5 }}>
+                          {avgM2Real ? `$${fmt(avgM2Real, 0)}` : '—'} <span style={{ fontSize: 'var(--fs-cuerpo)', fontWeight: 500, color: 'var(--text-muted)' }}>USD/m²</span>
                         </div>
                       </div>
                     </div>
 
                     {diffPctRealVsLista != null && (
                       <div style={{
-                        fontSize: 10,
+                        fontSize: 'var(--fs-etiqueta)',
                         color: 'var(--text-muted)',
                         background: 'var(--bg-surface)',
                         padding: '4px 8px',
@@ -588,21 +588,21 @@ export default function AnalisisProductoPanel({
                     flexDirection: 'column',
                     gap: 8,
                   }}>
-                    <div style={{ fontSize: 10.5, fontWeight: 700, color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: 0.5 }}>
+                    <div style={{ fontSize: 'var(--fs-etiqueta)', fontWeight: 700, color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: 0.5 }}>
                       Condiciones Comerciales
                     </div>
 
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                      <span style={{ fontSize: 11, color: 'var(--text-secondary)' }}>Condiciones de Venta:</span>
-                      <span style={{ fontSize: 11.5, fontWeight: 700, color: 'var(--text-primary)' }}>
+                      <span style={{ fontSize: 'var(--fs-etiqueta)', color: 'var(--text-secondary)' }}>Condiciones de Venta:</span>
+                      <span style={{ fontSize: 'var(--fs-etiqueta)', fontWeight: 700, color: 'var(--text-primary)' }}>
                         {condicionesVentaText}
                       </span>
                     </div>
 
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                      <span style={{ fontSize: 11, color: 'var(--text-secondary)' }}>Tipo de Cambio (Proyecto):</span>
+                      <span style={{ fontSize: 'var(--fs-etiqueta)', color: 'var(--text-secondary)' }}>Tipo de Cambio (Proyecto):</span>
                       <span style={{
-                        fontSize: 11,
+                        fontSize: 'var(--fs-etiqueta)',
                         fontWeight: 800,
                         color: '#f59e0b',
                         background: 'rgba(245, 158, 11, 0.1)',
@@ -614,8 +614,8 @@ export default function AnalisisProductoPanel({
                     </div>
 
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                      <span style={{ fontSize: 11, color: 'var(--text-secondary)' }}>Precio Parqueo:</span>
-                      <span style={{ fontSize: 11.5, fontWeight: 700, color: 'var(--text-primary)' }}>
+                      <span style={{ fontSize: 'var(--fs-etiqueta)', color: 'var(--text-secondary)' }}>Precio Parqueo:</span>
+                      <span style={{ fontSize: 'var(--fs-etiqueta)', fontWeight: 700, color: 'var(--text-primary)' }}>
                         {parqueoVal}
                       </span>
                     </div>
@@ -631,11 +631,11 @@ export default function AnalisisProductoPanel({
                     flexDirection: 'column',
                     gap: 8,
                   }}>
-                    <div style={{ fontSize: 10.5, fontWeight: 700, color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: 0.5 }}>
+                    <div style={{ fontSize: 'var(--fs-etiqueta)', fontWeight: 700, color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: 0.5 }}>
                       Inventario y Absorción
                     </div>
 
-                    <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 11 }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 'var(--fs-etiqueta)' }}>
                       <span style={{ color: 'var(--text-muted)' }}>Avance Comercial:</span>
                       <span style={{ fontWeight: 700, color: 'var(--text-primary)' }}>
                         {projUndVendidas} vendidas / {projUndTotales} totales
@@ -652,7 +652,7 @@ export default function AnalisisProductoPanel({
                       />
                     </div>
 
-                    <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 11, marginTop: 2 }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 'var(--fs-etiqueta)', marginTop: 2 }}>
                       <span style={{ color: 'var(--text-muted)' }}>Stock por Vender:</span>
                       <strong style={{ color: 'var(--text-primary)' }}>{projUndPorVender} Unidades</strong>
                     </div>
@@ -674,11 +674,11 @@ export default function AnalisisProductoPanel({
                     alignItems: 'center',
                     justifyContent: 'space-between',
                   }}>
-                    <span style={{ fontSize: 12.5, fontWeight: 700, color: 'var(--text-primary)' }}>
+                    <span style={{ fontSize: 'var(--fs-cuerpo)', fontWeight: 700, color: 'var(--text-primary)' }}>
                       Áreas Comunes y Equipamiento del Proyecto
                     </span>
                     <span style={{
-                      fontSize: 10.5,
+                      fontSize: 'var(--fs-etiqueta)',
                       fontWeight: 700,
                       color: '#10b981',
                       background: 'rgba(16, 185, 129, 0.12)',
@@ -691,7 +691,7 @@ export default function AnalisisProductoPanel({
 
                   {/* Solo muestra las áreas comunes que tiene ese proyecto */}
                   {amenidades.length === 0 ? (
-                    <div style={{ fontSize: 11.5, color: 'var(--text-muted)', fontStyle: 'italic', padding: '6px 0' }}>
+                    <div style={{ fontSize: 'var(--fs-etiqueta)', color: 'var(--text-muted)', fontStyle: 'italic', padding: '6px 0' }}>
                       No se registraron áreas comunes específicas para este proyecto.
                     </div>
                   ) : (
@@ -711,7 +711,7 @@ export default function AnalisisProductoPanel({
                             background: theme === 'dark' ? 'rgba(16, 185, 129, 0.08)' : 'rgba(16, 185, 129, 0.05)',
                             border: '1px solid rgba(16, 185, 129, 0.3)',
                             borderRadius: 'var(--radius-sm)',
-                            fontSize: 11.5,
+                            fontSize: 'var(--fs-etiqueta)',
                           }}>
                           <span style={{
                             width: 6,
@@ -746,10 +746,10 @@ export default function AnalisisProductoPanel({
                     gap: 8,
                   }}>
                     <div>
-                      <div style={{ fontSize: 14, fontWeight: 800, color: 'var(--text-primary)', letterSpacing: -0.2 }}>
+                      <div style={{ fontSize: 'var(--fs-cuerpo)', fontWeight: 800, color: 'var(--text-primary)', letterSpacing: -0.2 }}>
                         Modelos Censados y Absorción Comercial en {projNombre}
                       </div>
-                      <div style={{ fontSize: 11, color: 'var(--text-muted)' }}>
+                      <div style={{ fontSize: 'var(--fs-etiqueta)', color: 'var(--text-muted)' }}>
                         {tipologias.length} tipologías registradas con ritmo de absorción, meses de stock y benchmarks de plaza
                       </div>
                     </div>
@@ -758,7 +758,7 @@ export default function AnalisisProductoPanel({
 
                   {tipologias.length === 0 ? (
                     <div className="empty-state" style={{ padding: '30px 16px', textAlign: 'center' }}>
-                      <div style={{ fontSize: 13, fontWeight: 600, color: 'var(--text-secondary)' }}>
+                      <div style={{ fontSize: 'var(--fs-cuerpo)', fontWeight: 600, color: 'var(--text-secondary)' }}>
                         Sin modelos desglosados para este proyecto
                       </div>
                     </div>
@@ -809,17 +809,17 @@ export default function AnalisisProductoPanel({
                                   alignItems: 'center',
                                   justifyContent: 'center',
                                   fontWeight: 800,
-                                  fontSize: 10.5,
+                                  fontSize: 'var(--fs-etiqueta)',
                                   color: 'var(--text-primary)',
                                   flexShrink: 0,
                                 }}>
                                   {getBedIcon(t.avg_tipologia)}
                                 </div>
                                 <div>
-                                  <div style={{ fontSize: 13, fontWeight: 700, color: 'var(--text-primary)' }}>
+                                  <div style={{ fontSize: 'var(--fs-cuerpo)', fontWeight: 700, color: 'var(--text-primary)' }}>
                                     {t.avg_tipologia}
                                   </div>
-                                  <div style={{ fontSize: 10.5, color: 'var(--text-muted)', display: 'flex', gap: 6 }}>
+                                  <div style={{ fontSize: 'var(--fs-etiqueta)', color: 'var(--text-muted)', display: 'flex', gap: 6 }}>
                                     <span>{t.avg_construccion_m2 ? `${fmt(t.avg_construccion_m2)} m² constr.` : 'Área no disp.'}</span>
                                     <span>•</span>
                                     <span>{banosCount} {banosCount === 1 ? 'Baño' : 'Baños'}</span>
@@ -841,13 +841,13 @@ export default function AnalisisProductoPanel({
                               padding: '10px 12px',
                               border: '1px solid var(--border-default)',
                             }}>
-                              <div style={{ fontSize: 9.5, color: 'var(--text-muted)', marginBottom: 2 }}>
+                              <div style={{ fontSize: 'var(--fs-etiqueta)', color: 'var(--text-muted)', marginBottom: 2 }}>
                                 PRECIO PROMEDIO MODELO
                               </div>
-                              <div style={{ fontSize: 20, fontWeight: 800, color: 'var(--text-primary)', letterSpacing: -0.5 }}>
+                              <div style={{ fontSize: 'var(--fs-titulo)', fontWeight: 800, color: 'var(--text-primary)', letterSpacing: -0.5 }}>
                                 {fmtUSD(t.avg_precio)}
                               </div>
-                              <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: 4, fontSize: 11 }}>
+                              <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: 4, fontSize: 'var(--fs-etiqueta)' }}>
                                 <span style={{ color: 'var(--text-secondary)' }}>
                                   $/m² Lista: <strong style={{ color: 'var(--text-primary)' }}>{fmt(t.avg_sus_m2)} $US</strong>
                                 </span>
@@ -858,7 +858,7 @@ export default function AnalisisProductoPanel({
                                 )}
                               </div>
                               {t.avg_bs_m2 && (
-                                <div style={{ fontSize: 10, color: 'var(--text-muted)', marginTop: 2 }}>
+                                <div style={{ fontSize: 'var(--fs-etiqueta)', color: 'var(--text-muted)', marginTop: 2 }}>
                                   {fmt(t.avg_bs_m2, 0)} Bs/m²
                                 </div>
                               )}
@@ -866,7 +866,7 @@ export default function AnalisisProductoPanel({
 
                             {/* Inventory & Progress */}
                             <div>
-                              <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 11, marginBottom: 4 }}>
+                              <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 'var(--fs-etiqueta)', marginBottom: 4 }}>
                                 <span style={{ color: 'var(--text-muted)' }}>Avance Comercial</span>
                                 <span style={{ color: 'var(--text-primary)', fontWeight: 600 }}>
                                   {t.und_vendidas ?? 0} / {t.und_totales ?? 0} und
@@ -881,7 +881,7 @@ export default function AnalisisProductoPanel({
                                   }}
                                 />
                               </div>
-                              <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: 4, fontSize: 10.5, color: 'var(--text-muted)' }}>
+                              <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: 4, fontSize: 'var(--fs-etiqueta)', color: 'var(--text-muted)' }}>
                                 <span>Por vender: <strong style={{ color: 'var(--text-primary)' }}>{t.und_por_vender ?? 0}</strong></span>
                                 {pctVend != null && <span>{pctVend}%</span>}
                               </div>
@@ -894,16 +894,16 @@ export default function AnalisisProductoPanel({
                               gap: 8,
                               paddingTop: 6,
                               borderTop: '1px solid var(--border-subtle)',
-                              fontSize: 11,
+                              fontSize: 'var(--fs-etiqueta)',
                             }}>
                               <div>
-                                <div style={{ fontSize: 9.5, color: 'var(--text-muted)' }}>Ritmo de venta</div>
+                                <div style={{ fontSize: 'var(--fs-etiqueta)', color: 'var(--text-muted)' }}>Ritmo de venta</div>
                                 <div style={{ fontWeight: 700, color: (t.ritmo_venta ?? 0) > 0 ? '#10b981' : 'var(--text-muted)', marginTop: 1 }}>
                                   {t.ritmo_venta != null && t.ritmo_venta > 0 ? `${fmt(t.ritmo_venta)} und/mes` : '—'}
                                 </div>
                               </div>
                               <div>
-                                <div style={{ fontSize: 9.5, color: 'var(--text-muted)' }}>Meses de stock</div>
+                                <div style={{ fontSize: 'var(--fs-etiqueta)', color: 'var(--text-muted)' }}>Meses de stock</div>
                                 <div style={{
                                   fontWeight: 700,
                                   color: (t.meses_stock ?? 0) > 18 ? '#f43f5e' : (t.meses_stock ?? 0) > 12 ? '#f59e0b' : '#10b981',
@@ -917,7 +917,7 @@ export default function AnalisisProductoPanel({
                             {/* Benchmark Comparison Tag (INFORMACIÓN VALIOSA PRESERVADA) */}
                             {bench && t.avg_sus_m2 && bench.avgSusM2 > 0 && (
                               <div style={{
-                                fontSize: 10,
+                                fontSize: 'var(--fs-etiqueta)',
                                 color: 'var(--text-muted)',
                                 background: 'rgba(255,255,255,0.02)',
                                 padding: '4px 8px',
@@ -953,11 +953,11 @@ export default function AnalisisProductoPanel({
                     borderRadius: 'var(--radius-md)',
                     padding: '14px',
                   }}>
-                    <div style={{ fontSize: 12, fontWeight: 700, color: 'var(--text-primary)', marginBottom: 8 }}>
+                    <div style={{ fontSize: 'var(--fs-cuerpo)', fontWeight: 700, color: 'var(--text-primary)', marginBottom: 8 }}>
                       Tabla Resumen de Tipologías en {projNombre}
                     </div>
                     <div className="data-table-wrap">
-                      <table className="data-table" style={{ fontSize: 11 }}>
+                      <table className="data-table" style={{ fontSize: 'var(--fs-etiqueta)' }}>
                         <thead>
                           <tr>
                             <th>Tipología</th>
@@ -991,7 +991,7 @@ export default function AnalisisProductoPanel({
                                     borderRadius: 4,
                                     background: 'var(--bg-surface)',
                                     border: '1px solid var(--border-subtle)',
-                                    fontSize: 10,
+                                    fontSize: 'var(--fs-etiqueta)',
                                     fontWeight: 700,
                                     marginRight: 6,
                                     color: 'var(--text-secondary)',

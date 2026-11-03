@@ -475,7 +475,7 @@ export default function AnalysisPanel({
       {/* ─── Panel Header ─────────────────────────────────────────────────── */}
       <div className="panel-header" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '10px 14px' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-          <span style={{ fontSize: 13, fontWeight: 700, letterSpacing: -0.2 }}>
+          <span style={{ fontSize: 'var(--fs-cuerpo)', fontWeight: 700, letterSpacing: -0.2 }}>
             Análisis y Diagnóstico
           </span>
         </div>
@@ -488,7 +488,7 @@ export default function AnalysisPanel({
               border: '1px solid rgba(255, 255, 255, 0.2)',
               borderRadius: 4,
               color: '#ffffff',
-              fontSize: 10,
+              fontSize: 'var(--fs-etiqueta)',
               fontWeight: 600,
               padding: '3px 8px',
               cursor: 'pointer',
@@ -507,7 +507,7 @@ export default function AnalysisPanel({
         {loading ? (
           <div style={{ padding: '24px 12px', textAlign: 'center', color: 'rgba(255, 255, 255, 0.6)' }}>
             <div className="loading-shimmer" style={{ width: 140, height: 14, margin: '0 auto 8px' }} />
-            <div style={{ fontSize: 11 }}>Calculando diagnóstico contextual…</div>
+            <div style={{ fontSize: 'var(--fs-etiqueta)' }}>Calculando diagnóstico contextual…</div>
           </div>
         ) : ind ? (
           /* =========================================================================
@@ -520,7 +520,7 @@ export default function AnalysisPanel({
                 border: '1px solid rgba(245, 158, 11, 0.3)',
                 borderRadius: 'var(--radius-sm)',
                 padding: '8px 10px',
-                fontSize: 10.5,
+                fontSize: 'var(--fs-etiqueta)',
                 color: '#fef3c7',
                 lineHeight: 1.45,
               }}>
@@ -532,17 +532,17 @@ export default function AnalysisPanel({
             <div className="analysis-section" style={{ padding: 0 }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 8 }}>
                 <div>
-                  <div style={{ fontSize: 14.5, fontWeight: 800, color: '#ffffff', letterSpacing: -0.3 }}>
+                  <div style={{ fontSize: 'var(--fs-subtitulo)', fontWeight: 800, color: '#ffffff', letterSpacing: -0.3 }}>
                     {ind.proyecto}
                   </div>
-                  <div style={{ fontSize: 10, color: 'rgba(255, 255, 255, 0.65)', marginTop: 2 }}>
+                  <div style={{ fontSize: 'var(--fs-etiqueta)', color: 'rgba(255, 255, 255, 0.65)', marginTop: 2 }}>
                     Plaza: <strong style={{ color: '#ffffff' }}>{ind.ciudad}</strong> · Zona: <strong style={{ color: '#ffffff' }}>{ind.ZONAS || '—'}</strong> · Censo: {formatDate(ind.fecha_snapshot)}
                   </div>
                 </div>
                 <div style={{
                   padding: '3px 8px',
                   borderRadius: 4,
-                  fontSize: 10,
+                  fontSize: 'var(--fs-etiqueta)',
                   fontWeight: 700,
                   background: badge.bg,
                   color: badge.color,
@@ -565,22 +565,22 @@ export default function AnalysisPanel({
                 marginBottom: 10,
               }}>
                 <div>
-                  <div style={{ fontSize: 9.5, color: 'rgba(255, 255, 255, 0.6)' }}>Posición en Filtro Actual</div>
-                  <div style={{ fontSize: 13, fontWeight: 700, color: 'var(--accent-cyan)', marginTop: 1 }}>
-                    #{rankingInSample || 1} <span style={{ fontSize: 10, fontWeight: 400, color: 'rgba(255, 255, 255, 0.5)' }}>de {totalSampleProyectos}</span>
+                  <div style={{ fontSize: 'var(--fs-etiqueta)', color: 'rgba(255, 255, 255, 0.6)' }}>Posición en Filtro Actual</div>
+                  <div style={{ fontSize: 'var(--fs-cuerpo)', fontWeight: 700, color: 'var(--accent-cyan)', marginTop: 1 }}>
+                    #{rankingInSample || 1} <span style={{ fontSize: 'var(--fs-etiqueta)', fontWeight: 400, color: 'rgba(255, 255, 255, 0.5)' }}>de {totalSampleProyectos}</span>
                   </div>
                 </div>
                 <div>
-                  <div style={{ fontSize: 9.5, color: 'rgba(255, 255, 255, 0.6)' }}>Ranking en Plaza ({ind.ciudad})</div>
-                  <div style={{ fontSize: 13, fontWeight: 700, color: 'var(--accent-emerald)', marginTop: 1 }}>
-                    #{rankingInCity || 1} <span style={{ fontSize: 10, fontWeight: 400, color: 'rgba(255, 255, 255, 0.5)' }}>de {baseProjects.length}</span>
+                  <div style={{ fontSize: 'var(--fs-etiqueta)', color: 'rgba(255, 255, 255, 0.6)' }}>Ranking en Plaza ({ind.ciudad})</div>
+                  <div style={{ fontSize: 'var(--fs-cuerpo)', fontWeight: 700, color: 'var(--accent-emerald)', marginTop: 1 }}>
+                    #{rankingInCity || 1} <span style={{ fontSize: 'var(--fs-etiqueta)', fontWeight: 400, color: 'rgba(255, 255, 255, 0.5)' }}>de {baseProjects.length}</span>
                   </div>
                 </div>
               </div>
 
               {/* Narrative Interpretation */}
               <div style={{
-                fontSize: 11.5,
+                fontSize: 'var(--fs-etiqueta)',
                 color: 'rgba(255, 255, 255, 0.85)',
                 lineHeight: 1.65,
                 background: 'rgba(255, 255, 255, 0.06)',
@@ -660,7 +660,7 @@ export default function AnalysisPanel({
                     borderRadius: 'var(--radius-sm)',
                     padding: '8px 10px',
                     marginBottom: 8,
-                    fontSize: 11,
+                    fontSize: 'var(--fs-etiqueta)',
                   }}>
                     <div style={{ fontWeight: 700, color: 'var(--accent-emerald)', marginBottom: 2 }}>
                       Tipología Más Comercializada: {starTypology.avg_tipologia}
@@ -686,16 +686,16 @@ export default function AnalysisPanel({
                         padding: '8px 10px',
                       }}>
                         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 3 }}>
-                          <span style={{ fontSize: 11.5, fontWeight: 700, color: '#ffffff' }}>{t.avg_tipologia}</span>
-                          <span style={{ fontSize: 11.5, fontWeight: 700, color: '#ffffff' }}>{fmtMoney(t.avg_precio, moneda)}</span>
+                          <span style={{ fontSize: 'var(--fs-etiqueta)', fontWeight: 700, color: '#ffffff' }}>{t.avg_tipologia}</span>
+                          <span style={{ fontSize: 'var(--fs-etiqueta)', fontWeight: 700, color: '#ffffff' }}>{fmtMoney(t.avg_precio, moneda)}</span>
                         </div>
-                        <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 10, color: 'rgba(255, 255, 255, 0.65)' }}>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 'var(--fs-etiqueta)', color: 'rgba(255, 255, 255, 0.65)' }}>
                           <span>Área: {fmt(t.avg_construccion_m2)} m²</span>
                           <span>$/m²: <strong style={{ color: '#ffffff' }}>{fmt(t.avg_sus_m2)} $US</strong></span>
                           <span>Disp: {fmt(t.und_por_vender, 0)}</span>
                         </div>
                         {diffM2 != null && (
-                          <div style={{ fontSize: 9.5, marginTop: 4, color: diffM2 >= 0 ? '#34d399' : '#f87171', fontWeight: 600 }}>
+                          <div style={{ fontSize: 'var(--fs-etiqueta)', marginTop: 4, color: diffM2 >= 0 ? '#34d399' : '#f87171', fontWeight: 600 }}>
                             {diffM2 >= 0 ? `▲ +${diffM2.toFixed(1)}% vs media de plaza` : `▼ ${diffM2.toFixed(1)}% vs media de plaza`}
                           </div>
                         )}
@@ -730,7 +730,7 @@ export default function AnalysisPanel({
                         display: 'flex',
                         justifyContent: 'space-between',
                         alignItems: 'center',
-                        fontSize: 10.5,
+                        fontSize: 'var(--fs-etiqueta)',
                         borderBottom: i < history.length - 1 ? '1px solid rgba(255, 255, 255, 0.08)' : 'none',
                         paddingBottom: i < history.length - 1 ? 5 : 0,
                       }}>
@@ -738,7 +738,7 @@ export default function AnalysisPanel({
                           <div style={{ fontWeight: 600, color: h.indicador_censo_id === ind.indicador_censo_id ? 'var(--accent-cyan)' : '#ffffff' }}>
                             {formatDate(h.fecha_snapshot)} {h.indicador_censo_id === ind.indicador_censo_id ? '(Activo)' : ''}
                           </div>
-                          <div style={{ fontSize: 9.5, color: 'rgba(255, 255, 255, 0.55)' }}>
+                          <div style={{ fontSize: 'var(--fs-etiqueta)', color: 'rgba(255, 255, 255, 0.55)' }}>
                             {h.und_vendidas ?? 0}/{h.und_totales ?? 0} vendidas
                           </div>
                         </div>
@@ -747,7 +747,7 @@ export default function AnalysisPanel({
                             {fmt(h.ritmo_venta)} und/mes
                           </div>
                           {diffVend != null && (
-                            <div style={{ fontSize: 9, color: diffVend >= 0 ? '#34d399' : '#f87171', fontWeight: 600 }}>
+                            <div style={{ fontSize: 'var(--fs-etiqueta)', color: diffVend >= 0 ? '#34d399' : '#f87171', fontWeight: 600 }}>
                               {diffVend >= 0 ? `▲ +${diffVend} unds` : `▼ ${diffVend} unds`}
                             </div>
                           )}
@@ -771,11 +771,11 @@ export default function AnalysisPanel({
               padding: '16px 14px',
               textAlign: 'center',
             }}>
-              <div style={{ fontSize: 24, marginBottom: 6 }}>🔍</div>
-              <div style={{ fontSize: 13, fontWeight: 700, color: '#fca5a5', marginBottom: 4 }}>
+              <div style={{ fontSize: 'var(--fs-titulo)', marginBottom: 6 }}>🔍</div>
+              <div style={{ fontSize: 'var(--fs-cuerpo)', fontWeight: 700, color: '#fca5a5', marginBottom: 4 }}>
                 Vacío de Oferta Censada (0 Proyectos)
               </div>
-              <div style={{ fontSize: 11, color: 'rgba(255, 255, 255, 0.8)', lineHeight: 1.55 }}>
+              <div style={{ fontSize: 'var(--fs-etiqueta)', color: 'rgba(255, 255, 255, 0.8)', lineHeight: 1.55 }}>
                 No se registraron desarrollos inmobiliarios activos que coincidan simultáneamente con todos los filtros seleccionados para este corte censal.
               </div>
             </div>
@@ -787,7 +787,7 @@ export default function AnalysisPanel({
                 border: '1px solid rgba(255, 255, 255, 0.12)',
                 borderRadius: 'var(--radius-md)',
                 padding: '12px 14px',
-                fontSize: 11.5,
+                fontSize: 'var(--fs-etiqueta)',
                 color: 'rgba(255, 255, 255, 0.85)',
                 lineHeight: 1.65,
               }}>
@@ -818,10 +818,10 @@ export default function AnalysisPanel({
               borderRadius: 'var(--radius-sm)',
               padding: '10px 12px',
             }}>
-              <div style={{ fontSize: 12, fontWeight: 800, color: '#ffffff', letterSpacing: -0.2, marginBottom: 2 }}>
+              <div style={{ fontSize: 'var(--fs-cuerpo)', fontWeight: 800, color: '#ffffff', letterSpacing: -0.2, marginBottom: 2 }}>
                 {tabConfig.title}
               </div>
-              <div style={{ fontSize: 10, color: 'rgba(255, 255, 255, 0.75)', lineHeight: 1.45 }}>
+              <div style={{ fontSize: 'var(--fs-etiqueta)', color: 'rgba(255, 255, 255, 0.75)', lineHeight: 1.45 }}>
                 {tabConfig.subtitle}
               </div>
             </div>
@@ -834,15 +834,15 @@ export default function AnalysisPanel({
                 {/* KPI Strip */}
                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8 }}>
                   <div className="insight-card" style={{ margin: 0 }}>
-                    <div style={{ fontSize: 9.5, color: 'rgba(255, 255, 255, 0.6)' }}>Colocación Acumulada</div>
-                    <div style={{ fontSize: 14, fontWeight: 800, color: 'var(--accent-emerald)', marginTop: 2 }}>
-                      {pctSampleVendido}% <span style={{ fontSize: 10, fontWeight: 400, color: 'rgba(255, 255, 255, 0.6)' }}>vendido</span>
+                    <div style={{ fontSize: 'var(--fs-etiqueta)', color: 'rgba(255, 255, 255, 0.6)' }}>Colocación Acumulada</div>
+                    <div style={{ fontSize: 'var(--fs-cuerpo)', fontWeight: 800, color: 'var(--accent-emerald)', marginTop: 2 }}>
+                      {pctSampleVendido}% <span style={{ fontSize: 'var(--fs-etiqueta)', fontWeight: 400, color: 'rgba(255, 255, 255, 0.6)' }}>vendido</span>
                     </div>
                   </div>
                   <div className="insight-card" style={{ margin: 0 }}>
-                    <div style={{ fontSize: 9.5, color: 'rgba(255, 255, 255, 0.6)' }}>Plazo de Absorción</div>
-                    <div style={{ fontSize: 14, fontWeight: 800, color: avgSampleMeses > 18 ? 'var(--text-danger)' : 'var(--accent-cyan)', marginTop: 2 }}>
-                      {avgSampleMeses.toFixed(1)} <span style={{ fontSize: 10, fontWeight: 400, color: 'rgba(255, 255, 255, 0.6)' }}>meses</span>
+                    <div style={{ fontSize: 'var(--fs-etiqueta)', color: 'rgba(255, 255, 255, 0.6)' }}>Plazo de Absorción</div>
+                    <div style={{ fontSize: 'var(--fs-cuerpo)', fontWeight: 800, color: avgSampleMeses > 18 ? 'var(--text-danger)' : 'var(--accent-cyan)', marginTop: 2 }}>
+                      {avgSampleMeses.toFixed(1)} <span style={{ fontSize: 'var(--fs-etiqueta)', fontWeight: 400, color: 'rgba(255, 255, 255, 0.6)' }}>meses</span>
                     </div>
                   </div>
                 </div>
@@ -851,7 +851,7 @@ export default function AnalysisPanel({
                 <div className="analysis-section" style={{ padding: 0 }}>
                   <div className="analysis-section-title">Diagnóstico Ejecutivo de Plaza</div>
                   <div style={{
-                    fontSize: 11.5,
+                    fontSize: 'var(--fs-etiqueta)',
                     color: 'rgba(255, 255, 255, 0.85)',
                     lineHeight: 1.65,
                     background: 'rgba(255, 255, 255, 0.06)',
@@ -887,16 +887,16 @@ export default function AnalysisPanel({
                           alignItems: 'center',
                         }}>
                           <div>
-                            <div style={{ fontSize: 11, fontWeight: 700, color: '#ffffff' }}>{s.etapa}</div>
-                            <div style={{ fontSize: 9.5, color: 'rgba(255, 255, 255, 0.6)' }}>
+                            <div style={{ fontSize: 'var(--fs-etiqueta)', fontWeight: 700, color: '#ffffff' }}>{s.etapa}</div>
+                            <div style={{ fontSize: 'var(--fs-etiqueta)', color: 'rgba(255, 255, 255, 0.6)' }}>
                               {s.count} {s.count === 1 ? 'proyecto' : 'proyectos'} · {s.undVendidas}/{s.undTotales} vendidas
                             </div>
                           </div>
                           <div style={{ textAlign: 'right' }}>
-                            <div style={{ fontSize: 11.5, fontWeight: 700, color: 'var(--accent-cyan)' }}>
+                            <div style={{ fontSize: 'var(--fs-etiqueta)', fontWeight: 700, color: 'var(--accent-cyan)' }}>
                               {fmt(s.undDisp, 0)} disp.
                             </div>
-                            <div style={{ fontSize: 9.5, color: 'rgba(255, 255, 255, 0.55)' }}>
+                            <div style={{ fontSize: 'var(--fs-etiqueta)', color: 'rgba(255, 255, 255, 0.55)' }}>
                               {s.undTotales > 0 ? Math.round((s.undVendidas / s.undTotales) * 100) : 0}% avance
                             </div>
                           </div>
@@ -915,15 +915,15 @@ export default function AnalysisPanel({
               <>
                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8 }}>
                   <div className="insight-card" style={{ margin: 0 }}>
-                    <div style={{ fontSize: 9.5, color: 'rgba(255, 255, 255, 0.6)' }}>Unidades por Vender</div>
-                    <div style={{ fontSize: 15, fontWeight: 800, color: 'var(--accent-cyan)', marginTop: 2 }}>
-                      {fmt(totalSampleDisp, 0)} <span style={{ fontSize: 10, fontWeight: 400, color: 'rgba(255, 255, 255, 0.6)' }}>und</span>
+                    <div style={{ fontSize: 'var(--fs-etiqueta)', color: 'rgba(255, 255, 255, 0.6)' }}>Unidades por Vender</div>
+                    <div style={{ fontSize: 'var(--fs-subtitulo)', fontWeight: 800, color: 'var(--accent-cyan)', marginTop: 2 }}>
+                      {fmt(totalSampleDisp, 0)} <span style={{ fontSize: 'var(--fs-etiqueta)', fontWeight: 400, color: 'rgba(255, 255, 255, 0.6)' }}>und</span>
                     </div>
                   </div>
                   <div className="insight-card" style={{ margin: 0 }}>
-                    <div style={{ fontSize: 9.5, color: 'rgba(255, 255, 255, 0.6)' }}>Inventario Remanente</div>
-                    <div style={{ fontSize: 15, fontWeight: 800, color: '#ffffff', marginTop: 2 }}>
-                      {100 - pctSampleVendido}% <span style={{ fontSize: 10, fontWeight: 400, color: 'rgba(255, 255, 255, 0.6)' }}>del total</span>
+                    <div style={{ fontSize: 'var(--fs-etiqueta)', color: 'rgba(255, 255, 255, 0.6)' }}>Inventario Remanente</div>
+                    <div style={{ fontSize: 'var(--fs-subtitulo)', fontWeight: 800, color: '#ffffff', marginTop: 2 }}>
+                      {100 - pctSampleVendido}% <span style={{ fontSize: 'var(--fs-etiqueta)', fontWeight: 400, color: 'rgba(255, 255, 255, 0.6)' }}>del total</span>
                     </div>
                   </div>
                 </div>
@@ -931,7 +931,7 @@ export default function AnalysisPanel({
                 <div className="analysis-section" style={{ padding: 0 }}>
                   <div className="analysis-section-title">Diagnóstico de Saturación de Inventario</div>
                   <div style={{
-                    fontSize: 11.5,
+                    fontSize: 'var(--fs-etiqueta)',
                     color: 'rgba(255, 255, 255, 0.85)',
                     lineHeight: 1.65,
                     background: 'rgba(255, 255, 255, 0.06)',
@@ -985,16 +985,16 @@ export default function AnalysisPanel({
                           }}
                         >
                           <div>
-                            <div style={{ fontSize: 11.5, fontWeight: 700, color: '#ffffff' }}>{p.proyecto}</div>
-                            <div style={{ fontSize: 9.5, color: 'rgba(255, 255, 255, 0.6)' }}>
+                            <div style={{ fontSize: 'var(--fs-etiqueta)', fontWeight: 700, color: '#ffffff' }}>{p.proyecto}</div>
+                            <div style={{ fontSize: 'var(--fs-etiqueta)', color: 'rgba(255, 255, 255, 0.6)' }}>
                               {p.ZONAS} · {p.und_vendidas ?? 0}/{p.und_totales ?? 0} vendidas
                             </div>
                           </div>
                           <div style={{ textAlign: 'right' }}>
-                            <div style={{ fontSize: 12, fontWeight: 700, color: 'var(--citrino-teal-light)' }}>
+                            <div style={{ fontSize: 'var(--fs-cuerpo)', fontWeight: 700, color: 'var(--citrino-teal-light)' }}>
                               {fmt(p.und_por_vender, 0)} disp.
                             </div>
-                            <div style={{ fontSize: 9.5, color: 'rgba(255, 255, 255, 0.55)' }}>
+                            <div style={{ fontSize: 'var(--fs-etiqueta)', color: 'rgba(255, 255, 255, 0.55)' }}>
                               {p.und_totales ? Math.round(((p.und_por_vender ?? 0) / p.und_totales) * 100) : 0}% libre
                             </div>
                           </div>
@@ -1013,14 +1013,14 @@ export default function AnalysisPanel({
               <>
                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8 }}>
                   <div className="insight-card" style={{ margin: 0 }}>
-                    <div style={{ fontSize: 9.5, color: 'rgba(255, 255, 255, 0.6)' }}>Capital Remanente en Riesgo</div>
-                    <div style={{ fontSize: 14, fontWeight: 800, color: 'var(--accent-emerald)', marginTop: 2 }}>
+                    <div style={{ fontSize: 'var(--fs-etiqueta)', color: 'rgba(255, 255, 255, 0.6)' }}>Capital Remanente en Riesgo</div>
+                    <div style={{ fontSize: 'var(--fs-cuerpo)', fontWeight: 800, color: 'var(--accent-emerald)', marginTop: 2 }}>
                       {fmtShortMoney(totalSampleStockUSD, moneda)}
                     </div>
                   </div>
                   <div className="insight-card" style={{ margin: 0 }}>
-                    <div style={{ fontSize: 9.5, color: 'rgba(255, 255, 255, 0.6)' }}>Exposición Media / Proy.</div>
-                    <div style={{ fontSize: 14, fontWeight: 800, color: '#ffffff', marginTop: 2 }}>
+                    <div style={{ fontSize: 'var(--fs-etiqueta)', color: 'rgba(255, 255, 255, 0.6)' }}>Exposición Media / Proy.</div>
+                    <div style={{ fontSize: 'var(--fs-cuerpo)', fontWeight: 800, color: '#ffffff', marginTop: 2 }}>
                       {fmtShortMoney(totalSampleProyectos > 0 ? totalSampleStockUSD / totalSampleProyectos : 0, moneda)}
                     </div>
                   </div>
@@ -1029,7 +1029,7 @@ export default function AnalysisPanel({
                 <div className="analysis-section" style={{ padding: 0 }}>
                   <div className="analysis-section-title">Diagnóstico de Exposición Financiera</div>
                   <div style={{
-                    fontSize: 11.5,
+                    fontSize: 'var(--fs-etiqueta)',
                     color: 'rgba(255, 255, 255, 0.85)',
                     lineHeight: 1.65,
                     background: 'rgba(255, 255, 255, 0.06)',
@@ -1075,16 +1075,16 @@ export default function AnalysisPanel({
                           }}
                         >
                           <div>
-                            <div style={{ fontSize: 11.5, fontWeight: 700, color: '#ffffff' }}>{p.proyecto}</div>
-                            <div style={{ fontSize: 9.5, color: 'rgba(255, 255, 255, 0.6)' }}>
+                            <div style={{ fontSize: 'var(--fs-etiqueta)', fontWeight: 700, color: '#ffffff' }}>{p.proyecto}</div>
+                            <div style={{ fontSize: 'var(--fs-etiqueta)', color: 'rgba(255, 255, 255, 0.6)' }}>
                               {p.ZONAS} · {fmt(p.und_por_vender, 0)} unidades remanentes
                             </div>
                           </div>
                           <div style={{ textAlign: 'right' }}>
-                            <div style={{ fontSize: 12, fontWeight: 700, color: 'var(--accent-emerald)' }}>
+                            <div style={{ fontSize: 'var(--fs-cuerpo)', fontWeight: 700, color: 'var(--accent-emerald)' }}>
                               {fmtShortMoney(p.stock_total ?? (p.stock_x_vender ?? 0), moneda)}
                             </div>
-                            <div style={{ fontSize: 9.5, color: 'rgba(255, 255, 255, 0.55)' }}>
+                            <div style={{ fontSize: 'var(--fs-etiqueta)', color: 'rgba(255, 255, 255, 0.55)' }}>
                               {fmt(p.meses_stock)} m. stock
                             </div>
                           </div>
@@ -1103,14 +1103,14 @@ export default function AnalysisPanel({
               <>
                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8 }}>
                   <div className="insight-card" style={{ margin: 0 }}>
-                    <div style={{ fontSize: 9.5, color: 'rgba(255, 255, 255, 0.6)' }}>Velocidad Promedio</div>
-                    <div style={{ fontSize: 15, fontWeight: 800, color: 'var(--accent-blue)', marginTop: 2 }}>
-                      {avgSampleRitmo.toFixed(2)} <span style={{ fontSize: 10, fontWeight: 400, color: 'rgba(255, 255, 255, 0.6)' }}>und/mes</span>
+                    <div style={{ fontSize: 'var(--fs-etiqueta)', color: 'rgba(255, 255, 255, 0.6)' }}>Velocidad Promedio</div>
+                    <div style={{ fontSize: 'var(--fs-subtitulo)', fontWeight: 800, color: 'var(--accent-blue)', marginTop: 2 }}>
+                      {avgSampleRitmo.toFixed(2)} <span style={{ fontSize: 'var(--fs-etiqueta)', fontWeight: 400, color: 'rgba(255, 255, 255, 0.6)' }}>und/mes</span>
                     </div>
                   </div>
                   <div className="insight-card" style={{ margin: 0 }}>
-                    <div style={{ fontSize: 9.5, color: 'rgba(255, 255, 255, 0.6)' }}>Delta vs Media Plaza</div>
-                    <div style={{ fontSize: 15, fontWeight: 800, color: ritmoDiffPct >= 0 ? 'var(--accent-emerald)' : 'var(--text-danger)', marginTop: 2 }}>
+                    <div style={{ fontSize: 'var(--fs-etiqueta)', color: 'rgba(255, 255, 255, 0.6)' }}>Delta vs Media Plaza</div>
+                    <div style={{ fontSize: 'var(--fs-subtitulo)', fontWeight: 800, color: ritmoDiffPct >= 0 ? 'var(--accent-emerald)' : 'var(--text-danger)', marginTop: 2 }}>
                       {ritmoDiffPct >= 0 ? `+${ritmoDiffPct}%` : `${ritmoDiffPct}%`}
                     </div>
                   </div>
@@ -1119,7 +1119,7 @@ export default function AnalysisPanel({
                 <div className="analysis-section" style={{ padding: 0 }}>
                   <div className="analysis-section-title">Diagnóstico de Tracción Comercial</div>
                   <div style={{
-                    fontSize: 11.5,
+                    fontSize: 'var(--fs-etiqueta)',
                     color: 'rgba(255, 255, 255, 0.85)',
                     lineHeight: 1.65,
                     background: 'rgba(255, 255, 255, 0.06)',
@@ -1168,22 +1168,22 @@ export default function AnalysisPanel({
                             <span style={{
                               width: 18, height: 18, borderRadius: 9,
                               background: 'rgba(255,255,255,0.12)', color: '#ffffff',
-                              fontSize: 9.5, fontWeight: 800, display: 'flex', alignItems: 'center', justifyContent: 'center'
+                              fontSize: 'var(--fs-etiqueta)', fontWeight: 800, display: 'flex', alignItems: 'center', justifyContent: 'center'
                             }}>
                               #{idx + 1}
                             </span>
                             <div>
-                              <div style={{ fontSize: 11.5, fontWeight: 700, color: '#ffffff' }}>{p.proyecto}</div>
-                              <div style={{ fontSize: 9.5, color: 'rgba(255, 255, 255, 0.6)' }}>
+                              <div style={{ fontSize: 'var(--fs-etiqueta)', fontWeight: 700, color: '#ffffff' }}>{p.proyecto}</div>
+                              <div style={{ fontSize: 'var(--fs-etiqueta)', color: 'rgba(255, 255, 255, 0.6)' }}>
                                 {p.ZONAS} · {p.und_vendidas ?? 0} vendidas
                               </div>
                             </div>
                           </div>
                           <div style={{ textAlign: 'right' }}>
-                            <div style={{ fontSize: 12, fontWeight: 700, color: 'var(--accent-emerald)' }}>
+                            <div style={{ fontSize: 'var(--fs-cuerpo)', fontWeight: 700, color: 'var(--accent-emerald)' }}>
                               {fmt(p.ritmo_venta)} und/mes
                             </div>
-                            <div style={{ fontSize: 9.5, color: 'rgba(255, 255, 255, 0.55)' }}>
+                            <div style={{ fontSize: 'var(--fs-etiqueta)', color: 'rgba(255, 255, 255, 0.55)' }}>
                               {fmt(p.meses_stock)} m. stock
                             </div>
                           </div>
@@ -1202,15 +1202,15 @@ export default function AnalysisPanel({
               <>
                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8 }}>
                   <div className="insight-card" style={{ margin: 0 }}>
-                    <div style={{ fontSize: 9.5, color: 'rgba(255, 255, 255, 0.6)' }}>Meses de Stock Promedio</div>
-                    <div style={{ fontSize: 15, fontWeight: 800, color: avgSampleMeses > 18 ? 'var(--text-danger)' : '#ffffff', marginTop: 2 }}>
-                      {avgSampleMeses.toFixed(1)} <span style={{ fontSize: 10, fontWeight: 400, color: 'rgba(255, 255, 255, 0.6)' }}>meses</span>
+                    <div style={{ fontSize: 'var(--fs-etiqueta)', color: 'rgba(255, 255, 255, 0.6)' }}>Meses de Stock Promedio</div>
+                    <div style={{ fontSize: 'var(--fs-subtitulo)', fontWeight: 800, color: avgSampleMeses > 18 ? 'var(--text-danger)' : '#ffffff', marginTop: 2 }}>
+                      {avgSampleMeses.toFixed(1)} <span style={{ fontSize: 'var(--fs-etiqueta)', fontWeight: 400, color: 'rgba(255, 255, 255, 0.6)' }}>meses</span>
                     </div>
                   </div>
                   <div className="insight-card" style={{ margin: 0 }}>
-                    <div style={{ fontSize: 9.5, color: 'rgba(255, 255, 255, 0.6)' }}>Proyectos con Sobre-Stock</div>
-                    <div style={{ fontSize: 15, fontWeight: 800, color: riskHigh.length > 0 ? 'var(--text-danger)' : 'var(--accent-emerald)', marginTop: 2 }}>
-                      {riskHigh.length} <span style={{ fontSize: 10, fontWeight: 400, color: 'rgba(255, 255, 255, 0.6)' }}>(&gt;18m)</span>
+                    <div style={{ fontSize: 'var(--fs-etiqueta)', color: 'rgba(255, 255, 255, 0.6)' }}>Proyectos con Sobre-Stock</div>
+                    <div style={{ fontSize: 'var(--fs-subtitulo)', fontWeight: 800, color: riskHigh.length > 0 ? 'var(--text-danger)' : 'var(--accent-emerald)', marginTop: 2 }}>
+                      {riskHigh.length} <span style={{ fontSize: 'var(--fs-etiqueta)', fontWeight: 400, color: 'rgba(255, 255, 255, 0.6)' }}>(&gt;18m)</span>
                     </div>
                   </div>
                 </div>
@@ -1227,7 +1227,7 @@ export default function AnalysisPanel({
                     gap: 10,
                   }}>
                     <div>
-                      <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 11, marginBottom: 3 }}>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 'var(--fs-etiqueta)', marginBottom: 3 }}>
                         <span style={{ color: 'var(--accent-emerald)', fontWeight: 600 }}>Alta Rotación (&lt;6 meses)</span>
                         <span style={{ color: '#ffffff' }}>{riskLow.length} proy. ({totalSampleProyectos > 0 ? Math.round((riskLow.length / totalSampleProyectos) * 100) : 0}%)</span>
                       </div>
@@ -1237,7 +1237,7 @@ export default function AnalysisPanel({
                     </div>
 
                     <div>
-                      <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 11, marginBottom: 3 }}>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 'var(--fs-etiqueta)', marginBottom: 3 }}>
                         <span style={{ color: '#60a5fa', fontWeight: 600 }}>Ritmo Equilibrado (6 - 12 meses)</span>
                         <span style={{ color: '#ffffff' }}>{riskHealthy.length} proy. ({totalSampleProyectos > 0 ? Math.round((riskHealthy.length / totalSampleProyectos) * 100) : 0}%)</span>
                       </div>
@@ -1247,7 +1247,7 @@ export default function AnalysisPanel({
                     </div>
 
                     <div>
-                      <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 11, marginBottom: 3 }}>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 'var(--fs-etiqueta)', marginBottom: 3 }}>
                         <span style={{ color: '#f59e0b', fontWeight: 600 }}>Presión Moderada (12 - 18 meses)</span>
                         <span style={{ color: '#ffffff' }}>{riskModerate.length} proy. ({totalSampleProyectos > 0 ? Math.round((riskModerate.length / totalSampleProyectos) * 100) : 0}%)</span>
                       </div>
@@ -1257,7 +1257,7 @@ export default function AnalysisPanel({
                     </div>
 
                     <div>
-                      <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 11, marginBottom: 3 }}>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 'var(--fs-etiqueta)', marginBottom: 3 }}>
                         <span style={{ color: 'var(--text-danger)', fontWeight: 600 }}>Sobreoferta Crítica (&gt;18 meses)</span>
                         <span style={{ color: '#ffffff' }}>{riskHigh.length} proy. ({totalSampleProyectos > 0 ? Math.round((riskHigh.length / totalSampleProyectos) * 100) : 0}%)</span>
                       </div>
@@ -1278,7 +1278,7 @@ export default function AnalysisPanel({
                 <div className="analysis-section" style={{ padding: 0 }}>
                   <div className="analysis-section-title">Comportamiento de Modelos de Dormitorio</div>
                   <div style={{
-                    fontSize: 11.5,
+                    fontSize: 'var(--fs-etiqueta)',
                     color: 'rgba(255, 255, 255, 0.85)',
                     lineHeight: 1.65,
                     background: 'rgba(255, 255, 255, 0.06)',
@@ -1305,16 +1305,16 @@ export default function AnalysisPanel({
                           alignItems: 'center',
                         }}>
                           <div>
-                            <div style={{ fontSize: 11.5, fontWeight: 700, color: '#ffffff' }}>{b.tipo}</div>
-                            <div style={{ fontSize: 9.5, color: 'rgba(255, 255, 255, 0.6)' }}>
+                            <div style={{ fontSize: 'var(--fs-etiqueta)', fontWeight: 700, color: '#ffffff' }}>{b.tipo}</div>
+                            <div style={{ fontSize: 'var(--fs-etiqueta)', color: 'rgba(255, 255, 255, 0.6)' }}>
                               Área media: {fmt(b.avgArea)} m² constr.
                             </div>
                           </div>
                           <div style={{ textAlign: 'right' }}>
-                            <div style={{ fontSize: 11.5, fontWeight: 700, color: '#ffffff' }}>
+                            <div style={{ fontSize: 'var(--fs-etiqueta)', fontWeight: 700, color: '#ffffff' }}>
                               {fmtMoney(b.avgPrecio, moneda)}
                             </div>
-                            <div style={{ fontSize: 9.5, color: 'var(--accent-emerald)' }}>
+                            <div style={{ fontSize: 'var(--fs-etiqueta)', color: 'var(--accent-emerald)' }}>
                               {fmt(b.avgSusM2)} $US/m²
                             </div>
                           </div>
@@ -1334,7 +1334,7 @@ export default function AnalysisPanel({
                 <div className="analysis-section" style={{ padding: 0 }}>
                   <div className="analysis-section-title">Estructura & Atributos de Producto</div>
                   <div style={{
-                    fontSize: 11.5,
+                    fontSize: 'var(--fs-etiqueta)',
                     color: 'rgba(255, 255, 255, 0.85)',
                     lineHeight: 1.65,
                     background: 'rgba(255, 255, 255, 0.06)',
@@ -1362,7 +1362,7 @@ export default function AnalysisPanel({
                 <div className="analysis-section" style={{ padding: 0 }}>
                   <div className="analysis-section-title">Polos Geográficos de Concentración</div>
                   <div style={{
-                    fontSize: 11.5,
+                    fontSize: 'var(--fs-etiqueta)',
                     color: 'rgba(255, 255, 255, 0.85)',
                     lineHeight: 1.65,
                     background: 'rgba(255, 255, 255, 0.06)',
@@ -1388,16 +1388,16 @@ export default function AnalysisPanel({
                         alignItems: 'center',
                       }}>
                         <div>
-                          <div style={{ fontSize: 11.5, fontWeight: 700, color: '#ffffff' }}>{z.zona}</div>
-                          <div style={{ fontSize: 9.5, color: 'rgba(255, 255, 255, 0.6)' }}>
+                          <div style={{ fontSize: 'var(--fs-etiqueta)', fontWeight: 700, color: '#ffffff' }}>{z.zona}</div>
+                          <div style={{ fontSize: 'var(--fs-etiqueta)', color: 'rgba(255, 255, 255, 0.6)' }}>
                             {z.proyectos} {z.proyectos === 1 ? 'desarrollo' : 'desarrollos'} · {fmt(z.undDisp, 0)} disponibles
                           </div>
                         </div>
                         <div style={{ textAlign: 'right' }}>
-                          <div style={{ fontSize: 11.5, fontWeight: 700, color: 'var(--accent-blue)' }}>
+                          <div style={{ fontSize: 'var(--fs-etiqueta)', fontWeight: 700, color: 'var(--accent-blue)' }}>
                             {z.avgRitmo.toFixed(2)} und/mes
                           </div>
-                          <div style={{ fontSize: 9.5, color: 'rgba(255, 255, 255, 0.55)' }}>
+                          <div style={{ fontSize: 'var(--fs-etiqueta)', color: 'rgba(255, 255, 255, 0.55)' }}>
                             {z.mesesStock.toFixed(1)} m. stock
                           </div>
                         </div>
@@ -1416,7 +1416,7 @@ export default function AnalysisPanel({
                 <div className="analysis-section" style={{ padding: 0 }}>
                   <div className="analysis-section-title">Concentración Empresarial de Cartera</div>
                   <div style={{
-                    fontSize: 11.5,
+                    fontSize: 'var(--fs-etiqueta)',
                     color: 'rgba(255, 255, 255, 0.85)',
                     lineHeight: 1.65,
                     background: 'rgba(255, 255, 255, 0.06)',
@@ -1442,16 +1442,16 @@ export default function AnalysisPanel({
                         alignItems: 'center',
                       }}>
                         <div>
-                          <div style={{ fontSize: 11, fontWeight: 700, color: '#ffffff' }}>{d.dev}</div>
-                          <div style={{ fontSize: 9.5, color: 'rgba(255, 255, 255, 0.6)' }}>
+                          <div style={{ fontSize: 'var(--fs-etiqueta)', fontWeight: 700, color: '#ffffff' }}>{d.dev}</div>
+                          <div style={{ fontSize: 'var(--fs-etiqueta)', color: 'rgba(255, 255, 255, 0.6)' }}>
                             {d.count} {d.count === 1 ? 'proyecto activo' : 'proyectos activos'}
                           </div>
                         </div>
                         <div style={{ textAlign: 'right' }}>
-                          <div style={{ fontSize: 11.5, fontWeight: 700, color: 'var(--accent-emerald)' }}>
+                          <div style={{ fontSize: 'var(--fs-etiqueta)', fontWeight: 700, color: 'var(--accent-emerald)' }}>
                             {fmt(d.undTotales, 0)} unds
                           </div>
-                          <div style={{ fontSize: 9.5, color: 'rgba(255, 255, 255, 0.55)' }}>
+                          <div style={{ fontSize: 'var(--fs-etiqueta)', color: 'rgba(255, 255, 255, 0.55)' }}>
                             en cartera
                           </div>
                         </div>
@@ -1470,7 +1470,7 @@ export default function AnalysisPanel({
                 <div className="analysis-section" style={{ padding: 0 }}>
                   <div className="analysis-section-title">Dispersión & Arbitraje Competitivo</div>
                   <div style={{
-                    fontSize: 11.5,
+                    fontSize: 'var(--fs-etiqueta)',
                     color: 'rgba(255, 255, 255, 0.85)',
                     lineHeight: 1.65,
                     background: 'rgba(255, 255, 255, 0.06)',
@@ -1498,7 +1498,7 @@ export default function AnalysisPanel({
                 border: '1px solid rgba(255, 255, 255, 0.14)',
                 borderRadius: 'var(--radius-md)',
                 padding: '10px 12px',
-                fontSize: 11,
+                fontSize: 'var(--fs-etiqueta)',
                 color: 'rgba(255, 255, 255, 0.85)',
                 lineHeight: 1.6,
               }}>

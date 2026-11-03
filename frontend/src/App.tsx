@@ -289,7 +289,7 @@ export default function App() {
         alignItems: 'center', justifyContent: 'center', background: 'var(--bg-base)', gap: 12,
       }}>
         <div className="loading-shimmer" style={{ width: 180, height: 18 }} />
-        <div style={{ fontSize: 11, color: 'var(--text-muted)' }}>Iniciando Citrino…</div>
+        <div style={{ fontSize: 'var(--fs-etiqueta)', color: 'var(--text-muted)' }}>Iniciando Citrino…</div>
       </div>
     )
   }

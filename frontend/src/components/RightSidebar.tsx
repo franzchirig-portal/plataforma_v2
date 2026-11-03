@@ -146,7 +146,7 @@ export default function RightSidebar({
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              fontSize: 15,
+              fontSize: 'var(--fs-subtitulo)',
               transition: 'background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease, opacity 0.15s ease, transform 0.15s ease, box-shadow 0.15s ease',
               boxShadow: activePanel === id
                 ? '0 0 10px var(--citrino-glow, rgba(34,211,238,0.35))'
@@ -199,7 +199,7 @@ export default function RightSidebar({
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              fontSize: 12,
+              fontSize: 'var(--fs-cuerpo)',
               color: 'var(--text-muted)',
               transition: 'background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease, opacity 0.15s ease, transform 0.15s ease, box-shadow 0.15s ease',
             }}
@@ -240,12 +240,12 @@ function NotificationsPanel() {
         gap: 8,
         background: 'var(--bg-panel-header)',
       }}>
-        <span style={{ fontSize: 11, fontWeight: 700, color: 'var(--text-secondary)', letterSpacing: '0.06em', textTransform: 'uppercase' }}>
+        <span style={{ fontSize: 'var(--fs-etiqueta)', fontWeight: 700, color: 'var(--text-secondary)', letterSpacing: '0.06em', textTransform: 'uppercase' }}>
           Notificaciones
         </span>
         <span style={{
           marginLeft: 'auto',
-          fontSize: 9.5,
+          fontSize: 'var(--fs-etiqueta)',
           fontWeight: 700,
           background: 'var(--bg-active)',
           color: '#fff',
@@ -273,11 +273,11 @@ function NotificationsPanel() {
             onMouseEnter={(e) => (e.currentTarget.style.borderColor = 'var(--border-bright)')}
             onMouseLeave={(e) => (e.currentTarget.style.borderColor = 'var(--border-default)')}
           >
-            <span style={{ fontSize: 18, lineHeight: 1 }}>{n.icon}</span>
+            <span style={{ fontSize: 'var(--fs-subtitulo)', lineHeight: 1 }}>{n.icon}</span>
             <div style={{ flex: 1, minWidth: 0 }}>
-              <div style={{ fontSize: 12, fontWeight: 700, color: 'var(--text-primary)', marginBottom: 2 }}>{n.title}</div>
-              <div style={{ fontSize: 11, color: 'var(--text-secondary)', lineHeight: 1.4 }}>{n.desc}</div>
-              <div style={{ fontSize: 10, color: 'var(--text-muted)', marginTop: 4 }}>{n.time}</div>
+              <div style={{ fontSize: 'var(--fs-cuerpo)', fontWeight: 700, color: 'var(--text-primary)', marginBottom: 2 }}>{n.title}</div>
+              <div style={{ fontSize: 'var(--fs-etiqueta)', color: 'var(--text-secondary)', lineHeight: 1.4 }}>{n.desc}</div>
+              <div style={{ fontSize: 'var(--fs-etiqueta)', color: 'var(--text-muted)', marginTop: 4 }}>{n.time}</div>
             </div>
           </div>
         ))}
@@ -299,7 +299,7 @@ function SettingsPanel() {
         gap: 8,
         background: 'var(--bg-panel-header)',
       }}>
-        <span style={{ fontSize: 11, fontWeight: 700, color: 'var(--text-secondary)', letterSpacing: '0.06em', textTransform: 'uppercase' }}>
+        <span style={{ fontSize: 'var(--fs-etiqueta)', fontWeight: 700, color: 'var(--text-secondary)', letterSpacing: '0.06em', textTransform: 'uppercase' }}>
           Ajustes
         </span>
       </div>
@@ -373,7 +373,7 @@ const selectStyle: React.CSSProperties = {
   border: '1px solid var(--border-default)',
   borderRadius: 6,
   padding: '3px 8px',
-  fontSize: 11,
+  fontSize: 'var(--fs-etiqueta)',
   cursor: 'pointer',
 }
 
@@ -381,7 +381,7 @@ function SettingsSection({ title, children }: { title: string; children: React.R
   return (
     <div>
       <div style={{
-        fontSize: 10,
+        fontSize: 'var(--fs-etiqueta)',
         fontWeight: 700,
         color: 'var(--citrino-teal, #0d9488)',
         letterSpacing: '0.1em',
@@ -402,7 +402,7 @@ function SettingsSection({ title, children }: { title: string; children: React.R
 function SettingsRow({ label, control }: { label: string; control: React.ReactNode }) {
   return (
     <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 10 }}>
-      <span style={{ fontSize: 11.5, color: 'var(--text-secondary)', flex: 1 }}>{label}</span>
+      <span style={{ fontSize: 'var(--fs-etiqueta)', color: 'var(--text-secondary)', flex: 1 }}>{label}</span>
       {control}
     </div>
   )

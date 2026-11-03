@@ -187,7 +187,7 @@ export default function CicloInmobiliarioPanel() {
               <h3 className="citrino-card-title">Reloj del Ciclo Físico de Santa Cruz</h3>
             </div>
             <ReactECharts option={getClockGaugeChart()} style={{ height: 260 }} />
-            <div style={{ background: 'rgba(255,255,255,0.03)', padding: 12, borderRadius: 6, fontSize: 12, color: 'var(--text-muted)' }}>
+            <div style={{ background: 'rgba(255,255,255,0.03)', padding: 12, borderRadius: 6, fontSize: 'var(--fs-cuerpo)', color: 'var(--text-muted)' }}>
               <b>Diagnóstico:</b> {faseActual.diagnostico}
             </div>
           </div>

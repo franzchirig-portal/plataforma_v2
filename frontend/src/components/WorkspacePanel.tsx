@@ -1631,7 +1631,7 @@ export default function WorkspacePanel({
         <div className="empty-state">
           <div className="loading-shimmer" style={{ width: 220, height: 16, marginBottom: 8 }} />
           <div className="loading-shimmer" style={{ width: 160, height: 12 }} />
-          <div style={{ marginTop: 12, fontSize: 11, color: 'var(--text-muted)' }}>
+          <div style={{ marginTop: 12, fontSize: 'var(--fs-etiqueta)', color: 'var(--text-muted)' }}>
             Cargando indicadores de mercado...
           </div>
         </div>
@@ -1653,16 +1653,16 @@ export default function WorkspacePanel({
         padding: '10px 12px',
         boxShadow: '0 2px 6px rgba(0,0,0,0.2)',
       }}>
-        <div style={{ fontSize: 22, fontWeight: 800, color: 'var(--accent-emerald)', letterSpacing: -0.5 }}>
+        <div style={{ fontSize: 'var(--fs-titulo)', fontWeight: 800, color: 'var(--accent-emerald)', letterSpacing: -0.5 }}>
           {isUSDActive ? fmtUSD(avgVendidoPorProyUSD) : avgVendidasPorProyInt.toLocaleString('es-BO')}{' '}
-          <span style={{ fontSize: 13, fontWeight: 500, color: 'var(--text-secondary)' }}>
+          <span style={{ fontSize: 'var(--fs-cuerpo)', fontWeight: 500, color: 'var(--text-secondary)' }}>
             {isUSDActive ? 'USD/proy' : 'und/proy'}
           </span>
         </div>
-        <div style={{ fontSize: 11, fontWeight: 600, color: 'var(--text-secondary)', marginTop: 2 }}>
+        <div style={{ fontSize: 'var(--fs-etiqueta)', fontWeight: 600, color: 'var(--text-secondary)', marginTop: 2 }}>
           {isUSDActive ? 'Promedio Vendido por Proyecto (USD)' : 'Promedio Vendido por Proyecto'}
         </div>
-        <div style={{ fontSize: 10, fontWeight: 600, marginTop: 4, display: 'flex', alignItems: 'center', gap: 4 }}>
+        <div style={{ fontSize: 'var(--fs-etiqueta)', fontWeight: 600, marginTop: 4, display: 'flex', alignItems: 'center', gap: 4 }}>
           {isUSDActive ? (
             prevSnapshotDate && prevAvgVendidoUSD > 0 ? (
               <>
@@ -1701,13 +1701,13 @@ export default function WorkspacePanel({
         padding: '10px 12px',
         boxShadow: '0 2px 6px rgba(0,0,0,0.2)',
       }}>
-        <div style={{ fontSize: 22, fontWeight: 800, color: 'var(--accent-emerald)', letterSpacing: -0.5 }}>
+        <div style={{ fontSize: 'var(--fs-titulo)', fontWeight: 800, color: 'var(--accent-emerald)', letterSpacing: -0.5 }}>
           {isUSDActive ? `${pctVendidoUSD.toFixed(1)}%` : `${pctVendido.toFixed(1)}%`}
         </div>
-        <div style={{ fontSize: 11, fontWeight: 600, color: 'var(--text-secondary)', marginTop: 2 }}>
+        <div style={{ fontSize: 'var(--fs-etiqueta)', fontWeight: 600, color: 'var(--text-secondary)', marginTop: 2 }}>
           {isUSDActive ? 'Porcentaje Vendido (USD)' : 'Porcentaje Vendido'}
         </div>
-        <div style={{ fontSize: 10, fontWeight: 600, marginTop: 4, display: 'flex', alignItems: 'center', gap: 4 }}>
+        <div style={{ fontSize: 'var(--fs-etiqueta)', fontWeight: 600, marginTop: 4, display: 'flex', alignItems: 'center', gap: 4 }}>
           {isUSDActive ? (
             prevSnapshotDate && prevPctVendidoUSD > 0 ? (
               <>
@@ -1745,12 +1745,12 @@ export default function WorkspacePanel({
       {/* ─── SECTION 1: DATOS DESTACADOS (Modern KPI Row) ────────────────── */}
       <div style={{ padding: '12px 16px 10px', background: 'var(--bg-panel-header)', borderBottom: '1px solid var(--border-subtle)' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 2 }}>
-          <span style={{ fontSize: 13, fontWeight: 700, color: 'var(--text-primary)', letterSpacing: -0.2 }}>
+          <span style={{ fontSize: 'var(--fs-cuerpo)', fontWeight: 700, color: 'var(--text-primary)', letterSpacing: -0.2 }}>
             Datos destacados
           </span>
-          <span style={{ fontSize: 11, color: 'var(--text-muted)' }} title="Consolidado de oferta censada">(i)</span>
+          <span style={{ fontSize: 'var(--fs-etiqueta)', color: 'var(--text-muted)' }} title="Consolidado de oferta censada">(i)</span>
         </div>
-        <div style={{ fontSize: 10.5, color: 'var(--text-muted)', marginBottom: 10 }}>
+        <div style={{ fontSize: 'var(--fs-etiqueta)', color: 'var(--text-muted)', marginBottom: 10 }}>
           Datos de: Censos Inmobiliarios 2025 - 2026 · {ciudad === 'ALL' ? 'Bolivia' : ciudad}
         </div>
 
@@ -1769,17 +1769,17 @@ export default function WorkspacePanel({
               padding: '10px 12px',
               boxShadow: '0 2px 6px rgba(0,0,0,0.2)',
             }}>
-              <div style={{ fontSize: 22, fontWeight: 800, color: 'var(--text-primary)', letterSpacing: -0.5 }}>
+              <div style={{ fontSize: 'var(--fs-titulo)', fontWeight: 800, color: 'var(--text-primary)', letterSpacing: -0.5 }}>
                 {Math.round(totalRitmoCurrent).toLocaleString('es-BO')}{' '}
-                <span style={{ fontSize: 13, fontWeight: 500, color: 'var(--text-secondary)' }}>und/mes</span>
+                <span style={{ fontSize: 'var(--fs-cuerpo)', fontWeight: 500, color: 'var(--text-secondary)' }}>und/mes</span>
               </div>
-              <div style={{ fontSize: 11, fontWeight: 600, color: 'var(--text-secondary)', marginTop: 2 }}>
+              <div style={{ fontSize: 'var(--fs-etiqueta)', fontWeight: 600, color: 'var(--text-secondary)', marginTop: 2 }}>
                 Total Ritmo de Ventas
               </div>
-              <div style={{ fontSize: 9.5, color: 'var(--text-muted)', marginTop: 2 }}>
+              <div style={{ fontSize: 'var(--fs-etiqueta)', color: 'var(--text-muted)', marginTop: 2 }}>
                 Velocidad de absorción mensual consolidada
               </div>
-              <div style={{ fontSize: 10, fontWeight: 600, marginTop: 5, display: 'flex', alignItems: 'center', gap: 4 }}>
+              <div style={{ fontSize: 'var(--fs-etiqueta)', fontWeight: 600, marginTop: 5, display: 'flex', alignItems: 'center', gap: 4 }}>
                 {prevSnapshotDate && totalRitmoPrev > 0 ? (
                   <>
                     <span className={deltaTotalRitmo >= 0 ? 'indicator-pos' : 'indicator-neg'}>
@@ -1805,17 +1805,17 @@ export default function WorkspacePanel({
               padding: '10px 12px',
               boxShadow: '0 2px 6px rgba(0,0,0,0.2)',
             }}>
-              <div style={{ fontSize: 22, fontWeight: 800, color: 'var(--accent-cyan)', letterSpacing: -0.5 }}>
+              <div style={{ fontSize: 'var(--fs-titulo)', fontWeight: 800, color: 'var(--accent-cyan)', letterSpacing: -0.5 }}>
                 {avgRitmoCurrent.toFixed(1)}{' '}
-                <span style={{ fontSize: 13, fontWeight: 500, color: 'var(--text-secondary)' }}>und/mes/proy</span>
+                <span style={{ fontSize: 'var(--fs-cuerpo)', fontWeight: 500, color: 'var(--text-secondary)' }}>und/mes/proy</span>
               </div>
-              <div style={{ fontSize: 11, fontWeight: 600, color: 'var(--text-secondary)', marginTop: 2 }}>
+              <div style={{ fontSize: 'var(--fs-etiqueta)', fontWeight: 600, color: 'var(--text-secondary)', marginTop: 2 }}>
                 Promedio Ritmo de Venta
               </div>
-              <div style={{ fontSize: 9.5, color: 'var(--text-muted)', marginTop: 2 }}>
+              <div style={{ fontSize: 'var(--fs-etiqueta)', color: 'var(--text-muted)', marginTop: 2 }}>
                 Ritmo promedio por proyecto censado
               </div>
-              <div style={{ fontSize: 10, fontWeight: 600, marginTop: 5, display: 'flex', alignItems: 'center', gap: 4 }}>
+              <div style={{ fontSize: 'var(--fs-etiqueta)', fontWeight: 600, marginTop: 5, display: 'flex', alignItems: 'center', gap: 4 }}>
                 {prevSnapshotDate && avgRitmoPrev > 0 ? (
                   <>
                     <span className={deltaAvgRitmo >= 0 ? 'indicator-pos' : 'indicator-neg'}>
@@ -1841,17 +1841,17 @@ export default function WorkspacePanel({
               padding: '10px 12px',
               boxShadow: '0 2px 6px rgba(0,0,0,0.2)',
             }}>
-              <div style={{ fontSize: 22, fontWeight: 800, color: 'var(--accent-emerald)', letterSpacing: -0.5 }}>
+              <div style={{ fontSize: 'var(--fs-titulo)', fontWeight: 800, color: 'var(--accent-emerald)', letterSpacing: -0.5 }}>
                 {mediaRitmoCurrent.toFixed(1)}{' '}
-                <span style={{ fontSize: 13, fontWeight: 500, color: 'var(--text-secondary)' }}>und/mes</span>
+                <span style={{ fontSize: 'var(--fs-cuerpo)', fontWeight: 500, color: 'var(--text-secondary)' }}>und/mes</span>
               </div>
-              <div style={{ fontSize: 11, fontWeight: 600, color: 'var(--text-secondary)', marginTop: 2 }}>
+              <div style={{ fontSize: 'var(--fs-etiqueta)', fontWeight: 600, color: 'var(--text-secondary)', marginTop: 2 }}>
                 Media Ritmo de Venta
               </div>
-              <div style={{ fontSize: 9.5, color: 'var(--text-muted)', marginTop: 2 }}>
+              <div style={{ fontSize: 'var(--fs-etiqueta)', color: 'var(--text-muted)', marginTop: 2 }}>
                 Mediana central de absorción del mercado
               </div>
-              <div style={{ fontSize: 10, fontWeight: 600, marginTop: 5, display: 'flex', alignItems: 'center', gap: 4 }}>
+              <div style={{ fontSize: 'var(--fs-etiqueta)', fontWeight: 600, marginTop: 5, display: 'flex', alignItems: 'center', gap: 4 }}>
                 {prevSnapshotDate && mediaRitmoPrev > 0 ? (
                   <>
                     <span className={deltaMediaRitmo >= 0 ? 'indicator-pos' : 'indicator-neg'}>
@@ -1883,16 +1883,16 @@ export default function WorkspacePanel({
               padding: '10px 12px',
               boxShadow: '0 2px 6px rgba(0,0,0,0.2)',
             }}>
-              <div style={{ fontSize: 22, fontWeight: 800, color: 'var(--text-primary)', letterSpacing: -0.5 }}>
-                {countActivosCurrent.toLocaleString('es-BO')} <span style={{ fontSize: 13, fontWeight: 500, color: 'var(--text-secondary)' }}>proyectos</span>
+              <div style={{ fontSize: 'var(--fs-titulo)', fontWeight: 800, color: 'var(--text-primary)', letterSpacing: -0.5 }}>
+                {countActivosCurrent.toLocaleString('es-BO')} <span style={{ fontSize: 'var(--fs-cuerpo)', fontWeight: 500, color: 'var(--text-secondary)' }}>proyectos</span>
               </div>
-              <div style={{ fontSize: 11, fontWeight: 600, color: 'var(--text-secondary)', marginTop: 2 }}>
+              <div style={{ fontSize: 'var(--fs-etiqueta)', fontWeight: 600, color: 'var(--text-secondary)', marginTop: 2 }}>
                 Cantidad de proyectos activos
               </div>
-              <div style={{ fontSize: 9.5, color: 'var(--text-muted)', marginTop: 2 }}>
+              <div style={{ fontSize: 'var(--fs-etiqueta)', color: 'var(--text-muted)', marginTop: 2 }}>
                 Preventas, Obra Bruta, Obra Fina y Terminada
               </div>
-              <div style={{ fontSize: 10, fontWeight: 600, marginTop: 5, display: 'flex', alignItems: 'center', gap: 4 }}>
+              <div style={{ fontSize: 'var(--fs-etiqueta)', fontWeight: 600, marginTop: 5, display: 'flex', alignItems: 'center', gap: 4 }}>
                 {prevSnapshotDate && countActivosPrev > 0 ? (
                   <>
                     <span className={deltaActivos >= 0 ? 'indicator-pos' : 'indicator-neg'}>
@@ -1922,19 +1922,19 @@ export default function WorkspacePanel({
                 cursor: 'pointer',
                 transition: 'background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease, opacity 0.15s ease, transform 0.15s ease, box-shadow 0.15s ease',
               }}>
-              <div style={{ fontSize: 22, fontWeight: 800, color: 'var(--accent-emerald)', letterSpacing: -0.5 }}>
-                {countVendidosCurrent.toLocaleString('es-BO')} <span style={{ fontSize: 13, fontWeight: 500, color: 'var(--text-secondary)' }}>proyectos</span>
+              <div style={{ fontSize: 'var(--fs-titulo)', fontWeight: 800, color: 'var(--accent-emerald)', letterSpacing: -0.5 }}>
+                {countVendidosCurrent.toLocaleString('es-BO')} <span style={{ fontSize: 'var(--fs-cuerpo)', fontWeight: 500, color: 'var(--text-secondary)' }}>proyectos</span>
               </div>
-              <div style={{ fontSize: 11, fontWeight: 600, color: 'var(--text-secondary)', marginTop: 2, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+              <div style={{ fontSize: 'var(--fs-etiqueta)', fontWeight: 600, color: 'var(--text-secondary)', marginTop: 2, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                 <span>Cantidad de proyectos vendidos</span>
                 {selectedResumenStage === 'Vendida' && (
-                  <span style={{ fontSize: 9.5, color: '#10b981', fontWeight: 700 }}>● Filtro activo</span>
+                  <span style={{ fontSize: 'var(--fs-etiqueta)', color: '#10b981', fontWeight: 700 }}>● Filtro activo</span>
                 )}
               </div>
-              <div style={{ fontSize: 9.5, color: 'var(--text-muted)', marginTop: 2 }}>
+              <div style={{ fontSize: 'var(--fs-etiqueta)', color: 'var(--text-muted)', marginTop: 2 }}>
                 Etapa Vendida (100% de colocación)
               </div>
-              <div style={{ fontSize: 10, fontWeight: 600, marginTop: 5, display: 'flex', alignItems: 'center', gap: 4 }}>
+              <div style={{ fontSize: 'var(--fs-etiqueta)', fontWeight: 600, marginTop: 5, display: 'flex', alignItems: 'center', gap: 4 }}>
                 {prevSnapshotDate && countVendidosPrev > 0 ? (
                   <>
                     <span className={deltaVendidos >= 0 ? 'indicator-pos' : 'indicator-neg'}>
@@ -1960,20 +1960,20 @@ export default function WorkspacePanel({
               boxShadow: '0 2px 6px rgba(0,0,0,0.2)',
             }}>
               <div style={{
-                fontSize: 22,
+                fontSize: 'var(--fs-titulo)',
                 fontWeight: 800,
                 color: countInactivosCurrent > 0 ? 'var(--color-warning)' : 'var(--text-muted)',
                 letterSpacing: -0.5
               }}>
-                {countInactivosCurrent.toLocaleString('es-BO')} <span style={{ fontSize: 13, fontWeight: 500, color: 'var(--text-secondary)' }}>proyectos</span>
+                {countInactivosCurrent.toLocaleString('es-BO')} <span style={{ fontSize: 'var(--fs-cuerpo)', fontWeight: 500, color: 'var(--text-secondary)' }}>proyectos</span>
               </div>
-              <div style={{ fontSize: 11, fontWeight: 600, color: 'var(--text-secondary)', marginTop: 2 }}>
+              <div style={{ fontSize: 'var(--fs-etiqueta)', fontWeight: 600, color: 'var(--text-secondary)', marginTop: 2 }}>
                 Cantidad de proyectos inactivos
               </div>
-              <div style={{ fontSize: 9.5, color: 'var(--text-muted)', marginTop: 2 }}>
+              <div style={{ fontSize: 'var(--fs-etiqueta)', color: 'var(--text-muted)', marginTop: 2 }}>
                 Etapas Paralizadas y Clandestinas
               </div>
-              <div style={{ fontSize: 10, fontWeight: 600, marginTop: 5, display: 'flex', alignItems: 'center', gap: 4 }}>
+              <div style={{ fontSize: 'var(--fs-etiqueta)', fontWeight: 600, marginTop: 5, display: 'flex', alignItems: 'center', gap: 4 }}>
                 {prevSnapshotDate && (countInactivosPrev > 0 || countInactivosCurrent > 0) ? (
                   <>
                     <span className={deltaInactivos <= 0 ? 'indicator-pos' : 'indicator-neg'}>
@@ -2006,19 +2006,19 @@ export default function WorkspacePanel({
                   boxShadow: '0 2px 6px rgba(0,0,0,0.2)',
                 }}>
                   <div style={{
-                    fontSize: 22,
+                    fontSize: 'var(--fs-titulo)',
                     fontWeight: 800,
                     color: avgMesesStock > 18 ? 'var(--color-negative)' : avgMesesStock > 12 ? 'var(--color-warning)' : 'var(--color-positive)',
                     letterSpacing: -0.5,
                   }}>
                     {avgMesesStock > 0 ? avgMesesStock.toFixed(1) : '—'}{' '}
-                    <span style={{ fontSize: 13, fontWeight: 500, color: 'var(--text-secondary)' }}>meses</span>
+                    <span style={{ fontSize: 'var(--fs-cuerpo)', fontWeight: 500, color: 'var(--text-secondary)' }}>meses</span>
                   </div>
-                  <div style={{ fontSize: 11, fontWeight: 600, color: 'var(--text-secondary)', marginTop: 2 }}>
+                  <div style={{ fontSize: 'var(--fs-etiqueta)', fontWeight: 600, color: 'var(--text-secondary)', marginTop: 2 }}>
                     Meses de Stock Promedio
                   </div>
                   <div style={{
-                    fontSize: 10,
+                    fontSize: 'var(--fs-etiqueta)',
                     fontWeight: 600,
                     marginTop: 4,
                     color: avgMesesStock <= 12 ? 'var(--color-positive)' : avgMesesStock <= 18 ? 'var(--color-warning)' : 'var(--color-negative)',
@@ -2035,14 +2035,14 @@ export default function WorkspacePanel({
                   padding: '10px 12px',
                   boxShadow: '0 2px 6px rgba(0,0,0,0.2)',
                 }}>
-                  <div style={{ fontSize: 22, fontWeight: 800, color: 'var(--accent-emerald)', letterSpacing: -0.5 }}>
+                  <div style={{ fontSize: 'var(--fs-titulo)', fontWeight: 800, color: 'var(--accent-emerald)', letterSpacing: -0.5 }}>
                     {Math.round(totalRitmoMensual).toLocaleString('es-BO')}{' '}
-                    <span style={{ fontSize: 13, fontWeight: 500, color: 'var(--text-secondary)' }}>und/mes</span>
+                    <span style={{ fontSize: 'var(--fs-cuerpo)', fontWeight: 500, color: 'var(--text-secondary)' }}>und/mes</span>
                   </div>
-                  <div style={{ fontSize: 11, fontWeight: 600, color: 'var(--text-secondary)', marginTop: 2 }}>
+                  <div style={{ fontSize: 'var(--fs-etiqueta)', fontWeight: 600, color: 'var(--text-secondary)', marginTop: 2 }}>
                     Ritmo de Ventas Mensual
                   </div>
-                  <div style={{ fontSize: 10, fontWeight: 600, marginTop: 4, color: 'var(--text-muted)' }}>
+                  <div style={{ fontSize: 'var(--fs-etiqueta)', fontWeight: 600, marginTop: 4, color: 'var(--text-muted)' }}>
                     Velocidad de absorción del mercado
                   </div>
                 </div>
@@ -2055,14 +2055,14 @@ export default function WorkspacePanel({
                   padding: '10px 12px',
                   boxShadow: '0 2px 6px rgba(0,0,0,0.2)',
                 }}>
-                  <div style={{ fontSize: 22, fontWeight: 800, color: 'var(--accent-cyan)', letterSpacing: -0.5 }}>
+                  <div style={{ fontSize: 'var(--fs-titulo)', fontWeight: 800, color: 'var(--accent-cyan)', letterSpacing: -0.5 }}>
                     {avgRitmoPorProyecto.toFixed(1)}{' '}
-                    <span style={{ fontSize: 13, fontWeight: 500, color: 'var(--text-secondary)' }}>und/mes/proy</span>
+                    <span style={{ fontSize: 'var(--fs-cuerpo)', fontWeight: 500, color: 'var(--text-secondary)' }}>und/mes/proy</span>
                   </div>
-                  <div style={{ fontSize: 11, fontWeight: 600, color: 'var(--text-secondary)', marginTop: 2 }}>
+                  <div style={{ fontSize: 'var(--fs-etiqueta)', fontWeight: 600, color: 'var(--text-secondary)', marginTop: 2 }}>
                     Ritmo Promedio por Proyecto
                   </div>
-                  <div style={{ fontSize: 10, fontWeight: 600, marginTop: 4, color: 'var(--text-muted)' }}>
+                  <div style={{ fontSize: 'var(--fs-etiqueta)', fontWeight: 600, marginTop: 4, color: 'var(--text-muted)' }}>
                     Ventas mensuales por desarrollo
                   </div>
                 </div>
@@ -2075,14 +2075,14 @@ export default function WorkspacePanel({
                   padding: '10px 12px',
                   boxShadow: '0 2px 6px rgba(0,0,0,0.2)',
                 }}>
-                  <div style={{ fontSize: 22, fontWeight: 800, color: 'var(--citrino-teal-light)', letterSpacing: -0.5 }}>
+                  <div style={{ fontSize: 'var(--fs-titulo)', fontWeight: 800, color: 'var(--citrino-teal-light)', letterSpacing: -0.5 }}>
                     {totalStockUnd.toLocaleString('es-BO')}{' '}
-                    <span style={{ fontSize: 13, fontWeight: 500, color: 'var(--text-secondary)' }}>unds</span>
+                    <span style={{ fontSize: 'var(--fs-cuerpo)', fontWeight: 500, color: 'var(--text-secondary)' }}>unds</span>
                   </div>
-                  <div style={{ fontSize: 11, fontWeight: 600, color: 'var(--text-secondary)', marginTop: 2 }}>
+                  <div style={{ fontSize: 'var(--fs-etiqueta)', fontWeight: 600, color: 'var(--text-secondary)', marginTop: 2 }}>
                     Stock por Vender a Absorber
                   </div>
-                  <div style={{ fontSize: 10, fontWeight: 600, marginTop: 4, color: 'var(--text-muted)' }}>
+                  <div style={{ fontSize: 'var(--fs-etiqueta)', fontWeight: 600, marginTop: 4, color: 'var(--text-muted)' }}>
                     Equivalente a: <strong style={{ color: 'var(--citrino-teal-light)' }}>{fmtUSD(totalStockXVenderUSD)} USD</strong>
                   </div>
                 </div>
@@ -2102,16 +2102,16 @@ export default function WorkspacePanel({
                   padding: '10px 12px',
                   boxShadow: '0 2px 6px rgba(0,0,0,0.2)',
                 }}>
-                  <div style={{ fontSize: 22, fontWeight: 800, color: 'var(--accent-cyan)', letterSpacing: -0.5 }}>
+                  <div style={{ fontSize: 'var(--fs-titulo)', fontWeight: 800, color: 'var(--accent-cyan)', letterSpacing: -0.5 }}>
                     {isUSDActive ? fmtUSD(avgPorVenderPorProyUSD) : avgPorVenderPorProyInt.toLocaleString('es-BO')}{' '}
-                    <span style={{ fontSize: 13, fontWeight: 500, color: 'var(--text-secondary)' }}>
+                    <span style={{ fontSize: 'var(--fs-cuerpo)', fontWeight: 500, color: 'var(--text-secondary)' }}>
                       {isUSDActive ? 'USD/proy' : 'und/proy'}
                     </span>
                   </div>
-                  <div style={{ fontSize: 11, fontWeight: 600, color: 'var(--text-secondary)', marginTop: 2 }}>
+                  <div style={{ fontSize: 'var(--fs-etiqueta)', fontWeight: 600, color: 'var(--text-secondary)', marginTop: 2 }}>
                     {isUSDActive ? 'Promedio por Vender por Proyecto (USD)' : 'Promedio por Vender por Proyecto'}
                   </div>
-                  <div style={{ fontSize: 10, fontWeight: 600, marginTop: 4, display: 'flex', alignItems: 'center', gap: 4 }}>
+                  <div style={{ fontSize: 'var(--fs-etiqueta)', fontWeight: 600, marginTop: 4, display: 'flex', alignItems: 'center', gap: 4 }}>
                     {isUSDActive ? (
                       prevSnapshotDate && prevAvgPorVenderUSD > 0 ? (
                         <>
@@ -2150,13 +2150,13 @@ export default function WorkspacePanel({
                   padding: '10px 12px',
                   boxShadow: '0 2px 6px rgba(0,0,0,0.2)',
                 }}>
-                  <div style={{ fontSize: 22, fontWeight: 800, color: 'var(--citrino-teal-light)', letterSpacing: -0.5 }}>
+                  <div style={{ fontSize: 'var(--fs-titulo)', fontWeight: 800, color: 'var(--citrino-teal-light)', letterSpacing: -0.5 }}>
                     {isUSDActive ? `${pctPorVenderUSD.toFixed(1)}%` : `${pctPorVender.toFixed(1)}%`}
                   </div>
-                  <div style={{ fontSize: 11, fontWeight: 600, color: 'var(--text-secondary)', marginTop: 2 }}>
+                  <div style={{ fontSize: 'var(--fs-etiqueta)', fontWeight: 600, color: 'var(--text-secondary)', marginTop: 2 }}>
                     {isUSDActive ? 'Porcentaje por Vender (USD)' : 'Porcentaje por Vender'}
                   </div>
-                  <div style={{ fontSize: 10, fontWeight: 600, marginTop: 4, display: 'flex', alignItems: 'center', gap: 4 }}>
+                  <div style={{ fontSize: 'var(--fs-etiqueta)', fontWeight: 600, marginTop: 4, display: 'flex', alignItems: 'center', gap: 4 }}>
                     {isUSDActive ? (
                       prevSnapshotDate && prevPctPorVenderUSD > 0 ? (
                         <>
@@ -2203,13 +2203,13 @@ export default function WorkspacePanel({
               padding: '10px 12px',
               boxShadow: '0 2px 6px rgba(0,0,0,0.2)',
             }}>
-              <div style={{ fontSize: 22, fontWeight: 800, color: 'var(--text-primary)', letterSpacing: -0.5 }}>
+              <div style={{ fontSize: 'var(--fs-titulo)', fontWeight: 800, color: 'var(--text-primary)', letterSpacing: -0.5 }}>
                 {totalStockUnd.toLocaleString('es-BO')}
               </div>
-              <div style={{ fontSize: 11, color: 'var(--text-secondary)', marginTop: 2 }}>
+              <div style={{ fontSize: 'var(--fs-etiqueta)', color: 'var(--text-secondary)', marginTop: 2 }}>
                 Stock en Oferta (Unds)
               </div>
-              <div style={{ fontSize: 10, fontWeight: 600, marginTop: 4, display: 'flex', alignItems: 'center', gap: 4 }}>
+              <div style={{ fontSize: 'var(--fs-etiqueta)', fontWeight: 600, marginTop: 4, display: 'flex', alignItems: 'center', gap: 4 }}>
                 <span className={pctVendido >= 50 ? 'badge-pos' : 'badge-neg'}>
                   {pctVendido >= 50 ? '▲' : '▼'} {pctVendido}% colocado
                 </span>
@@ -2225,13 +2225,13 @@ export default function WorkspacePanel({
               padding: '10px 12px',
               boxShadow: '0 2px 6px rgba(0,0,0,0.2)',
             }}>
-              <div style={{ fontSize: 22, fontWeight: 800, color: 'var(--accent-cyan)', letterSpacing: -0.5 }}>
+              <div style={{ fontSize: 'var(--fs-titulo)', fontWeight: 800, color: 'var(--accent-cyan)', letterSpacing: -0.5 }}>
                 {fmtUSD(totalStockUSD)}
               </div>
-              <div style={{ fontSize: 11, color: 'var(--text-secondary)', marginTop: 2 }}>
+              <div style={{ fontSize: 'var(--fs-etiqueta)', color: 'var(--text-secondary)', marginTop: 2 }}>
                 Monto Total por Vender
               </div>
-              <div style={{ fontSize: 10, color: 'var(--text-muted)', marginTop: 4 }}>
+              <div style={{ fontSize: 'var(--fs-etiqueta)', color: 'var(--text-muted)', marginTop: 4 }}>
                 {filteredProjects.length > 0 ? `${fmtUSD(totalStockUSD / filteredProjects.length)} prom / proyecto` : '—'}
               </div>
             </div>
@@ -2244,20 +2244,20 @@ export default function WorkspacePanel({
               padding: '10px 12px',
               boxShadow: '0 2px 6px rgba(0,0,0,0.2)',
             }}>
-              <div style={{ fontSize: 22, fontWeight: 800, color: 'var(--accent-emerald)', letterSpacing: -0.5 }}>
-                {Math.round(totalRitmoMensual)} <span style={{ fontSize: 12, fontWeight: 500 }}>und/mes</span>
+              <div style={{ fontSize: 'var(--fs-titulo)', fontWeight: 800, color: 'var(--accent-emerald)', letterSpacing: -0.5 }}>
+                {Math.round(totalRitmoMensual)} <span style={{ fontSize: 'var(--fs-cuerpo)', fontWeight: 500 }}>und/mes</span>
               </div>
-              <div style={{ fontSize: 11, color: 'var(--text-secondary)', marginTop: 2 }}>
+              <div style={{ fontSize: 'var(--fs-etiqueta)', color: 'var(--text-secondary)', marginTop: 2 }}>
                 Ritmo de Ventas Mensual
               </div>
               {deltaRitmo != null ? (
-                <div style={{ fontSize: 10, fontWeight: 600, marginTop: 4, display: 'flex', alignItems: 'center', gap: 4 }}>
+                <div style={{ fontSize: 'var(--fs-etiqueta)', fontWeight: 600, marginTop: 4, display: 'flex', alignItems: 'center', gap: 4 }}>
                   <span className={deltaRitmo >= 0 ? 'indicator-pos' : 'indicator-neg'}>
                     {deltaRitmo >= 0 ? `▲ +${deltaRitmo.toFixed(1)}%` : `▼ ${deltaRitmo.toFixed(1)}%`} vs censo anterior
                   </span>
                 </div>
               ) : (
-                <div style={{ fontSize: 10, color: 'var(--color-positive)', fontWeight: 600, marginTop: 4 }}>
+                <div style={{ fontSize: 'var(--fs-etiqueta)', color: 'var(--color-positive)', fontWeight: 600, marginTop: 4 }}>
                   ● {avgRitmoPorProyecto.toFixed(1)} und/mes promedio proyecto
                 </div>
               )}
@@ -2272,18 +2272,18 @@ export default function WorkspacePanel({
               boxShadow: '0 2px 6px rgba(0,0,0,0.2)',
             }}>
               <div style={{
-                fontSize: 22,
+                fontSize: 'var(--fs-titulo)',
                 fontWeight: 800,
                 color: avgMesesStock > 18 ? 'var(--color-negative)' : avgMesesStock > 12 ? 'var(--color-warning)' : 'var(--color-positive)',
                 letterSpacing: -0.5
               }}>
-                {avgMesesStock.toFixed(1)} <span style={{ fontSize: 12, fontWeight: 500 }}>meses</span>
+                {avgMesesStock.toFixed(1)} <span style={{ fontSize: 'var(--fs-cuerpo)', fontWeight: 500 }}>meses</span>
               </div>
-              <div style={{ fontSize: 11, color: 'var(--text-secondary)', marginTop: 2 }}>
+              <div style={{ fontSize: 'var(--fs-etiqueta)', color: 'var(--text-secondary)', marginTop: 2 }}>
                 Horizonte de Liquidación
               </div>
               <div style={{
-                fontSize: 10,
+                fontSize: 'var(--fs-etiqueta)',
                 color: avgMesesStock <= 12 ? 'var(--color-positive)' : avgMesesStock <= 18 ? 'var(--color-warning)' : 'var(--color-negative)',
                 fontWeight: 600,
                 marginTop: 4
@@ -2302,7 +2302,7 @@ export default function WorkspacePanel({
           <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
             {isStockMode ? (
               <>
-                <span style={{ fontSize: 14, fontWeight: 700, color: 'var(--text-primary)', letterSpacing: -0.2 }}>
+                <span style={{ fontSize: 'var(--fs-cuerpo)', fontWeight: 700, color: 'var(--text-primary)', letterSpacing: -0.2 }}>
                   {viewMode === 'chart'
                     ? (stockBarMode === 'usd' ? 'Stock en USD' : stockBarMode === 'meses' ? 'Meses de Stock' : 'Stock por Unidades')
                     : viewMode === 'table'
@@ -2327,7 +2327,7 @@ export default function WorkspacePanel({
                           onClick={() => setMetricType(opt.value)}
                           style={{
                             padding: '4px 10px',
-                            fontSize: 11,
+                            fontSize: 'var(--fs-etiqueta)',
                             fontWeight: isActive ? 700 : 500,
                             background: isActive ? 'var(--citrino-orange, #ff7a00)' : 'var(--bg-card)',
                             color: isActive ? '#fff' : 'var(--text-secondary)',
@@ -2345,12 +2345,12 @@ export default function WorkspacePanel({
                 )}
               </>
             ) : isRitmoVentas ? (
-              <span style={{ fontSize: 14, fontWeight: 700, color: 'var(--text-primary)', letterSpacing: -0.2 }}>
+              <span style={{ fontSize: 'var(--fs-cuerpo)', fontWeight: 700, color: 'var(--text-primary)', letterSpacing: -0.2 }}>
                 Ritmo de Ventas por Zona y Subzona
               </span>
             ) : !isResumenGeneral ? (
               <>
-                <span style={{ fontSize: 14, fontWeight: 700, color: 'var(--text-primary)' }}>
+                <span style={{ fontSize: 'var(--fs-cuerpo)', fontWeight: 700, color: 'var(--text-primary)' }}>
                   Indicadores
                 </span>
 
@@ -2365,7 +2365,7 @@ export default function WorkspacePanel({
                       border: '1px solid var(--border-default)',
                       borderRadius: 4,
                       padding: '5px 10px',
-                      fontSize: 11.5,
+                      fontSize: 'var(--fs-etiqueta)',
                       fontWeight: 600,
                       cursor: 'pointer',
                       boxShadow: 'none',
@@ -2379,7 +2379,7 @@ export default function WorkspacePanel({
                 </div>
               </>
             ) : (
-              <span style={{ fontSize: 14, fontWeight: 700, color: 'var(--text-primary)', letterSpacing: -0.2 }}>
+              <span style={{ fontSize: 'var(--fs-cuerpo)', fontWeight: 700, color: 'var(--text-primary)', letterSpacing: -0.2 }}>
                 {viewMode === 'chart'
                   ? 'Segmentación por Etapas'
                   : viewMode === 'table'
@@ -2446,11 +2446,11 @@ export default function WorkspacePanel({
                   minHeight: 0,
                 }}>
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 2 }}>
-                    <span style={{ fontSize: 13, fontWeight: 700, color: 'var(--text-primary)' }}>
+                    <span style={{ fontSize: 'var(--fs-cuerpo)', fontWeight: 700, color: 'var(--text-primary)' }}>
                       Cantidad de Proyectos por Etapas
                     </span>
                     <span style={{
-                      fontSize: 10.5,
+                      fontSize: 'var(--fs-etiqueta)',
                       fontWeight: 600,
                       background: theme === 'dark' ? 'rgba(161, 161, 170, 0.12)' : 'rgba(161, 161, 170, 0.18)',
                       color: theme === 'dark' ? '#cbd5e1' : '#475569',
@@ -2460,7 +2460,7 @@ export default function WorkspacePanel({
                       {totalProyectosResumen} proy. totales
                     </span>
                   </div>
-                  <div style={{ fontSize: 10.5, color: 'var(--text-muted)', marginBottom: 6 }}>
+                  <div style={{ fontSize: 'var(--fs-etiqueta)', color: 'var(--text-muted)', marginBottom: 6 }}>
                     Proyectos censados clasificados por fase constructiva y comercial
                   </div>
                   <div style={{ flex: 1, minHeight: 250, width: '100%' }}>
@@ -2513,11 +2513,11 @@ export default function WorkspacePanel({
                   minHeight: 0,
                 }}>
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 2 }}>
-                    <span style={{ fontSize: 13, fontWeight: 700, color: 'var(--text-primary)' }}>
+                    <span style={{ fontSize: 'var(--fs-cuerpo)', fontWeight: 700, color: 'var(--text-primary)' }}>
                       Ritmo de ventas (Zonas)
                     </span>
                     <span style={{
-                      fontSize: 10.5,
+                      fontSize: 'var(--fs-etiqueta)',
                       fontWeight: 600,
                       background: theme === 'dark' ? 'rgba(161, 161, 170, 0.12)' : 'rgba(161, 161, 170, 0.18)',
                       color: theme === 'dark' ? '#cbd5e1' : '#475569',
@@ -2527,7 +2527,7 @@ export default function WorkspacePanel({
                       {Math.round(totalRitmoCurrent).toLocaleString('es-BO')} und/mes totales
                     </span>
                   </div>
-                  <div style={{ fontSize: 10.5, color: 'var(--text-muted)', marginBottom: 6 }}>
+                  <div style={{ fontSize: 'var(--fs-etiqueta)', color: 'var(--text-muted)', marginBottom: 6 }}>
                     Velocidad mensual de absorción clasificada por zona geográfica
                   </div>
                   <div style={{ flex: 1, minHeight: 240, width: '100%' }}>
@@ -2552,11 +2552,11 @@ export default function WorkspacePanel({
                   minHeight: 0,
                 }}>
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 2 }}>
-                    <span style={{ fontSize: 13, fontWeight: 700, color: 'var(--text-primary)' }}>
+                    <span style={{ fontSize: 'var(--fs-cuerpo)', fontWeight: 700, color: 'var(--text-primary)' }}>
                       Ritmo de Ventas (Subzonas)
                     </span>
                     <span style={{
-                      fontSize: 10.5,
+                      fontSize: 'var(--fs-etiqueta)',
                       fontWeight: 600,
                       background: theme === 'dark' ? 'rgba(161, 161, 170, 0.12)' : 'rgba(161, 161, 170, 0.18)',
                       color: theme === 'dark' ? '#cbd5e1' : '#475569',
@@ -2566,7 +2566,7 @@ export default function WorkspacePanel({
                       {subzonaStockMetrics.filter((s) => s.totalRitmoMensual > 0).length} subzonas activas
                     </span>
                   </div>
-                  <div style={{ fontSize: 10.5, color: 'var(--text-muted)', marginBottom: 6 }}>
+                  <div style={{ fontSize: 'var(--fs-etiqueta)', color: 'var(--text-muted)', marginBottom: 6 }}>
                     Velocidad mensual de absorción clasificada por subzona
                   </div>
                   <div style={{ flex: 1, minHeight: 240, width: '100%' }}>
@@ -2600,11 +2600,11 @@ export default function WorkspacePanel({
                   minHeight: 0,
                 }}>
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 2 }}>
-                    <span style={{ fontSize: 13, fontWeight: 700, color: 'var(--text-primary)' }}>
+                    <span style={{ fontSize: 'var(--fs-cuerpo)', fontWeight: 700, color: 'var(--text-primary)' }}>
                       {stockBarMode === 'meses' ? 'Meses de Stock (Zonas)' : `Stock por Vender (Zonas)`}
                     </span>
                     <span style={{
-                      fontSize: 10.5,
+                      fontSize: 'var(--fs-etiqueta)',
                       fontWeight: 600,
                       background: stockBarMode === 'usd' ? 'rgba(0, 131, 143, 0.15)' : stockBarMode === 'meses' ? 'rgba(16,185,129,0.13)' : 'rgba(21, 101, 192, 0.15)',
                       color: stockBarMode === 'usd' ? '#00838f' : stockBarMode === 'meses' ? '#10b981' : '#60a5fa',
@@ -2618,7 +2618,7 @@ export default function WorkspacePanel({
                         : `${totalStockUnd.toLocaleString('es-BO')} unds en oferta`}
                     </span>
                   </div>
-                  <div style={{ fontSize: 10.5, color: 'var(--text-muted)', marginBottom: 6 }}>
+                  <div style={{ fontSize: 'var(--fs-etiqueta)', color: 'var(--text-muted)', marginBottom: 6 }}>
                     {stockBarMode === 'meses'
                       ? 'Horizonte de liquidación estimado por zona (verde <12m · amarillo 12-18m · rojo >18m)'
                       : stockBarMode === 'usd'
@@ -2652,11 +2652,11 @@ export default function WorkspacePanel({
                   minHeight: 0,
                 }}>
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 2 }}>
-                    <span style={{ fontSize: 13, fontWeight: 700, color: 'var(--text-primary)' }}>
+                    <span style={{ fontSize: 'var(--fs-cuerpo)', fontWeight: 700, color: 'var(--text-primary)' }}>
                       {stockBarMode === 'meses' ? 'Meses de Stock (Subzonas)' : 'Stock Vendido (Zonas)'}
                     </span>
                     <span style={{
-                      fontSize: 10.5,
+                      fontSize: 'var(--fs-etiqueta)',
                       fontWeight: 600,
                       background: stockBarMode === 'meses' ? 'rgba(16,185,129,0.13)' : 'rgba(239, 68, 68, 0.15)',
                       color: stockBarMode === 'meses' ? '#10b981' : '#f87171',
@@ -2670,7 +2670,7 @@ export default function WorkspacePanel({
                         : `${totalVendidas.toLocaleString('es-BO')} unds vendidas`}
                     </span>
                   </div>
-                  <div style={{ fontSize: 10.5, color: 'var(--text-muted)', marginBottom: 6 }}>
+                  <div style={{ fontSize: 'var(--fs-etiqueta)', color: 'var(--text-muted)', marginBottom: 6 }}>
                     {stockBarMode === 'meses'
                       ? 'Horizonte de liquidación estimado por subzona (verde <12m · amarillo 12-18m · rojo >18m)'
                       : stockBarMode === 'usd'
@@ -2706,12 +2706,12 @@ export default function WorkspacePanel({
               paddingTop: 10,
               marginTop: 6,
               borderTop: '1px solid var(--border-subtle)',
-              fontSize: 11,
+              fontSize: 'var(--fs-etiqueta)',
               flexWrap: 'wrap',
               gap: 12,
             }}>
               {/* Left: Always show Proyectos analizados, Zonas activas & Promedio Stock Inicial */}
-              <div style={{ display: 'flex', alignItems: 'center', gap: 16, color: 'var(--text-muted)', fontSize: 11 }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 16, color: 'var(--text-muted)', fontSize: 'var(--fs-etiqueta)' }}>
                 <span>Proyectos analizados: <strong style={{ color: 'var(--text-primary)' }}>{filteredProjects.length}</strong></span>
                 <span>{isStockMode && metricType === 'stock_subzona' ? 'Subzonas activas:' : 'Zonas activas:'} <strong style={{ color: 'var(--text-primary)' }}>{activeZonesCount}</strong></span>
                 <span>Promedio Stock Inicial: <strong style={{ color: 'var(--text-primary)' }}>{(stockBarMode === 'usd' || isStockUSD) ? fmtUSD(avgStockInicialUSD) : `${avgStockInicial.toLocaleString('es-BO')} unds`}</strong></span>
@@ -2781,7 +2781,7 @@ export default function WorkspacePanel({
                 style={{
                   flex: 1,
                   padding: '7px 12px',
-                  fontSize: 12,
+                  fontSize: 'var(--fs-cuerpo)',
                   background: 'var(--bg-input)',
                   border: '1px solid var(--border-default)',
                   borderRadius: 'var(--radius-sm)',
@@ -2837,8 +2837,8 @@ export default function WorkspacePanel({
                             borderLeft: isSelected ? '3px solid var(--citrino-teal-light)' : undefined,
                           }}>
                           <td className="td-project">{ind.proyecto}</td>
-                          <td style={{ fontSize: 11, color: 'var(--text-secondary)' }}>{ind.ZONAS || '—'}</td>
-                          <td style={{ fontSize: 11, color: 'var(--text-muted)' }}>{ind.etapa || '—'}</td>
+                          <td style={{ fontSize: 'var(--fs-etiqueta)', color: 'var(--text-secondary)' }}>{ind.ZONAS || '—'}</td>
+                          <td style={{ fontSize: 'var(--fs-etiqueta)', color: 'var(--text-muted)' }}>{ind.etapa || '—'}</td>
                           <td className="td-num">{ind.fecha_snapshot}</td>
                           <td className="td-num">{fmt(ind.und_totales, 0)}</td>
                           <td className="td-num" style={{ color: 'var(--color-positive)', fontWeight: 600 }}>{fmt(ind.und_vendidas, 0)}</td>
