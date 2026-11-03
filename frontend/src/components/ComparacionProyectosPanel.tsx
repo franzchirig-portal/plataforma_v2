@@ -187,7 +187,6 @@ export default function ComparacionProyectosPanel({
   periodoFilter,
   selectedIndicador,
   onSelectIndicador,
-  theme = 'dark',
 }: Props) {
   const [proyectos, setProyectos] = useState<IndicadorFull[]>([])
   const [loading, setLoading] = useState(true)

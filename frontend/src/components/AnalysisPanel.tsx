@@ -283,7 +283,6 @@ export default function AnalysisPanel({
   const riskHealthy = filteredProjects.filter((p) => (p.meses_stock ?? 0) >= 6 && (p.meses_stock ?? 0) < 12)
   const riskModerate = filteredProjects.filter((p) => (p.meses_stock ?? 0) >= 12 && (p.meses_stock ?? 0) <= 18)
   const riskHigh = filteredProjects.filter((p) => (p.meses_stock ?? 0) > 18)
-  const riskNoSales = filteredProjects.filter((p) => p.ritmo_venta == null || p.ritmo_venta <= 0)
 
   // Aggregated Zona Metrics for GIS, Stock and Location Analysis
   const zonaStats = useMemo(() => {
@@ -383,17 +382,10 @@ export default function AnalysisPanel({
     })
     .slice(0, 3)
 
-  // Projects under observation
-  const projectsAtRisk = [...filteredProjects]
-    .filter((p) => (p.meses_stock ?? 0) > 18 && (p.und_por_vender ?? 0) > 15)
-    .sort((a, b) => (b.meses_stock ?? 0) - (a.meses_stock ?? 0))
-    .slice(0, 3)
-
   // ─── Computations for Selected Project ───────────────────────────────────
   const ind = activeProjectInd
   let rankingInSample = 0
   let rankingInCity = 0
-  let percentileInSample = 0
   let projectedSoldOutDate = ''
   let zoneContext: {
     count: number
@@ -409,10 +401,6 @@ export default function AnalysisPanel({
       .filter((p) => p.ritmo_venta != null)
       .sort((a, b) => (b.ritmo_venta ?? 0) - (a.ritmo_venta ?? 0))
     rankingInSample = sortedSample.findIndex((p) => p.proyecto_id === ind.proyecto_id) + 1
-    if (sortedSample.length > 1) {
-      const lowerCount = sortedSample.filter((p) => (p.ritmo_venta ?? 0) < (ind.ritmo_venta ?? 0)).length
-      percentileInSample = Math.round((lowerCount / sortedSample.length) * 100)
-    }
 
     const sortedCity = [...baseProjects]
       .filter((p) => p.ritmo_venta != null)
@@ -961,7 +949,7 @@ export default function AnalysisPanel({
                   <div className="analysis-section" style={{ padding: 0 }}>
                     <div className="analysis-section-title">Mayor Concentración de Unidades por Vender</div>
                     <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
-                      {topStockProjects.map((p, idx) => (
+                      {topStockProjects.map((p) => (
                         <div
                           key={p.proyecto_id}
                           role="button"

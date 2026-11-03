@@ -1,4 +1,3 @@
-import React from 'react'
 import './ChapterDossierPanel.css'
 
 export interface ChapterDetails {

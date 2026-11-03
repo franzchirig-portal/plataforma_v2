@@ -6,7 +6,7 @@ import {
   computeZonaMetrics,
   fetchIndicadorIdsForTipologia,
 } from '../lib/supabase'
-import type { IndicadorFull, ZonaMetrics } from '../lib/supabase'
+import type { IndicadorFull } from '../lib/supabase'
 import GeoespacialPanel from './GeoespacialPanel'
 import ResumenEtapasMap from './ResumenEtapasMap'
 
@@ -76,7 +76,6 @@ export default function WorkspacePanel({
   etapaFilter,
   periodoFilter,
   tipologiaFilter,
-  moneda = 'USD',
   selectedIndicador,
   onSelectIndicador,
   initialMetric,
@@ -100,8 +99,8 @@ export default function WorkspacePanel({
   const [matchingTipologiaIds, setMatchingTipologiaIds] = useState<Set<string> | null>(null)
 
   // Series visibility toggles (like the screenshot checkboxes)
-  const [showVendidas, setShowVendidas] = useState(true)
-  const [showPorVender, setShowPorVender] = useState(true)
+  const [showVendidas] = useState(true)
+  const [showPorVender] = useState(true)
 
   useEffect(() => {
     setSelectedResumenStage(null)
@@ -367,7 +366,6 @@ export default function WorkspacePanel({
   const deltaVendidosPct = countVendidosPrev > 0 ? ((deltaVendidos) / countVendidosPrev) * 100 : null
 
   const deltaInactivos = countInactivosCurrent - countInactivosPrev
-  const deltaInactivosPct = countInactivosPrev > 0 ? ((deltaInactivos) / countInactivosPrev) * 100 : null
 
   // Previous snapshot metrics for Stock en Ventas (Unidades) 5 KPIs
   const prevStockUnd = prevProjects.reduce((s, p) => s + (p.und_por_vender ?? 0), 0)
@@ -378,8 +376,6 @@ export default function WorkspacePanel({
   const prevPctVendido = prevInicial > 0 ? (prevVendidas / prevInicial) * 100 : 0
   const prevPctPorVender = prevInicial > 0 ? (prevStockUnd / prevInicial) * 100 : 0
 
-  const deltaStock = totalStockUnd - prevStockUnd
-  const deltaStockPct = prevStockUnd > 0 ? ((totalStockUnd - prevStockUnd) / prevStockUnd) * 100 : null
   const deltaAvgVendidas = avgVendidasPorProy - prevAvgVendidas
   const deltaAvgVendidasPct = prevAvgVendidas > 0 ? ((avgVendidasPorProy - prevAvgVendidas) / prevAvgVendidas) * 100 : null
   const deltaPctVendido = pctVendido - prevPctVendido
@@ -521,8 +517,6 @@ export default function WorkspacePanel({
     // Por defecto, quitar los datos vendidos
     return rawStageItems.filter((s) => s.id !== 'Vendida')
   }, [rawStageItems, isEtapaFiltered, countVendida])
-
-  const selectedResumenStageItem = selectedResumenStage ? stageItems.find((s) => s.name === selectedResumenStage) : null
 
   // 1. Gráfico de Barras Laterales — Cantidad de Proyectos por Etapa (Color base: Gris Degradado #52525b-#a1a1aa)
   function getResumenEtapasBarOption() {
@@ -2355,8 +2349,8 @@ export default function WorkspacePanel({
               ciudad={ciudad}
               zonaFilter={zonaFilter}
               etapaFilter={etapaFilter}
-              selectedIndicador={selectedIndicador}
-              onSelectIndicador={onSelectIndicador}
+              selectedIndicador={selectedIndicador ?? null}
+              onSelectIndicador={onSelectIndicador ?? (() => {})}
               theme={theme}
             />
           </div>

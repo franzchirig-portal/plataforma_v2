@@ -59,6 +59,7 @@ export interface AvgTipologia {
   avg_precio: number | null
   avg_construccion_m2: number | null
   avg_sus_m2: number | null
+  avg_bs_m2: number | null
 }
 
 export interface CondicionFinanciera {
@@ -108,6 +109,11 @@ export type IndicadorFull = IndicadorCenso & {
   entrega: string | null
   parqueo_sus: number | null
   baulera_sus: number | null
+  // Campos que algunos paneles leen con valor de respaldo (??) pero que ninguna consulta
+  // rellena hoy: sus_m2 y tc son columnas de oferta_tipologias (TipologiaDetalle), no del proyecto.
+  sus_m2?: number | null
+  tc?: number | null
+  ticket_promedio?: number | null
 }
 
 // ─── Helpers ─────────────────────────────────────────────────────────────
