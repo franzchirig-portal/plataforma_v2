@@ -346,7 +346,7 @@ export default function ComparacionProyectosPanel({
             <span>Comparación Head-to-Head</span>
             <span className="cmp-tag-badge">Benchmark</span>
           </div>
-          <span style={{ fontSize: 11, color: 'var(--text-muted)' }}>
+          <span style={{ fontSize: 'var(--fs-etiqueta)', color: 'var(--text-muted)' }}>
             Contraste analítico de precios, absorción, condiciones y amenidades
           </span>
         </div>
@@ -381,7 +381,7 @@ export default function ComparacionProyectosPanel({
         {loading ? (
           <div style={{ textAlign: 'center', padding: '60px 0' }}>
             <div className="loading-shimmer" style={{ width: 220, height: 18, margin: '0 auto 10px' }} />
-            <div style={{ fontSize: 11.5, color: 'var(--text-muted)' }}>
+            <div style={{ fontSize: 'var(--fs-etiqueta)', color: 'var(--text-muted)' }}>
               Cargando catálogo de proyectos para comparación…
             </div>
           </div>
@@ -394,7 +394,7 @@ export default function ComparacionProyectosPanel({
                 <div className="cmp-slot-label-row">
                   <span className="cmp-slot-label slot-a">Proyecto 1 (Slot A)</span>
                   {projA?.etapa && (
-                    <span style={{ fontSize: 10, color: '#10b981', fontWeight: 700 }}>
+                    <span style={{ fontSize: 'var(--fs-etiqueta)', color: '#10b981', fontWeight: 700 }}>
                       {projA.etapa}
                     </span>
                   )}
@@ -428,7 +428,7 @@ export default function ComparacionProyectosPanel({
                 <div className="cmp-slot-label-row">
                   <span className="cmp-slot-label slot-b">Proyecto 2 (Slot B)</span>
                   {projB?.etapa && (
-                    <span style={{ fontSize: 10, color: '#3b82f6', fontWeight: 700 }}>
+                    <span style={{ fontSize: 'var(--fs-etiqueta)', color: '#3b82f6', fontWeight: 700 }}>
                       {projB.etapa}
                     </span>
                   )}
@@ -451,7 +451,7 @@ export default function ComparacionProyectosPanel({
                   <div className="cmp-slot-label-row">
                     <span className="cmp-slot-label slot-c">Proyecto 3 (Slot C - Opcional)</span>
                     {projC?.etapa && (
-                      <span style={{ fontSize: 10, color: '#f59e0b', fontWeight: 700 }}>
+                      <span style={{ fontSize: 'var(--fs-etiqueta)', color: '#f59e0b', fontWeight: 700 }}>
                         {projC.etapa}
                       </span>
                     )}
@@ -555,7 +555,7 @@ export default function ComparacionProyectosPanel({
                       <div className="cmp-hero-badges">
                         <span
                           style={{
-                            fontSize: 10,
+                            fontSize: 'var(--fs-etiqueta)',
                             fontWeight: 700,
                             padding: '3px 8px',
                             borderRadius: 12,
@@ -635,7 +635,7 @@ export default function ComparacionProyectosPanel({
               open={seccionesAbiertas.tipologias}
               onToggle={() => toggleSeccion('tipologias')}>
               {allComparedTypologies.length === 0 ? (
-                <div style={{ textAlign: 'center', padding: '20px 0', color: 'var(--text-muted)', fontSize: 11.5 }}>
+                <div style={{ textAlign: 'center', padding: '20px 0', color: 'var(--text-muted)', fontSize: 'var(--fs-etiqueta)' }}>
                   Sin tipologías desagregadas para este snapshot de proyectos.
                 </div>
               ) : (
@@ -676,13 +676,13 @@ export default function ComparacionProyectosPanel({
 
                             return (
                               <td key={p.proyecto_id} style={{ textAlign: 'center' }}>
-                                <div style={{ fontSize: 12, fontWeight: 700, color: 'var(--text-primary)' }}>
+                                <div style={{ fontSize: 'var(--fs-cuerpo)', fontWeight: 700, color: 'var(--text-primary)' }}>
                                   {fmtUSD(t.avg_precio)}
                                 </div>
-                                <div style={{ fontSize: 11, color: 'var(--text-secondary)', marginTop: 2 }}>
+                                <div style={{ fontSize: 'var(--fs-etiqueta)', color: 'var(--text-secondary)', marginTop: 2 }}>
                                   {t.avg_construccion_m2 ? `${fmt(t.avg_construccion_m2, 0)} m²` : '—'} • ${fmt(t.avg_sus_m2, 0)}/m²
                                 </div>
-                                <div style={{ fontSize: 10, color: 'var(--text-muted)', marginTop: 2 }}>
+                                <div style={{ fontSize: 'var(--fs-etiqueta)', color: 'var(--text-muted)', marginTop: 2 }}>
                                   {t.ritmo_venta != null ? `${fmt(t.ritmo_venta, 1)} u/m` : '0 u/m'} • {t.meses_stock != null ? `${fmt(t.meses_stock, 1)}m stock` : '—'}
                                 </div>
                               </td>
@@ -714,10 +714,10 @@ export default function ComparacionProyectosPanel({
                           style={{
                             textAlign: 'left',
                             color: idx === 0 ? '#10b981' : idx === 1 ? '#3b82f6' : '#f59e0b',
-                            fontSize: 12,
+                            fontSize: 'var(--fs-cuerpo)',
                           }}>
                           {p.proyecto}
-                          <div style={{ fontSize: 10, color: 'var(--text-muted)', fontWeight: 500, textTransform: 'none' }}>
+                          <div style={{ fontSize: 'var(--fs-etiqueta)', color: 'var(--text-muted)', fontWeight: 500, textTransform: 'none' }}>
                             {p.ZONAS} • {p.ciudad}
                           </div>
                         </th>
@@ -913,7 +913,7 @@ export default function ComparacionProyectosPanel({
                       {activeProjects.map((p) => (
                         <td key={p.proyecto_id}>
                           <strong>{p.sus_m2 ? `$${fmt(p.sus_m2, 0)}` : '—'}</strong>
-                          <span style={{ fontSize: 10, color: 'var(--text-muted)', marginLeft: 3 }}>USD/m²</span>
+                          <span style={{ fontSize: 'var(--fs-etiqueta)', color: 'var(--text-muted)', marginLeft: 3 }}>USD/m²</span>
                         </td>
                       ))}
                     </tr>
@@ -934,7 +934,7 @@ export default function ComparacionProyectosPanel({
                             <strong style={{ color: '#10b981' }}>
                               {avgReal ? `$${fmt(avgReal, 0)}` : '—'}
                             </strong>
-                            <span style={{ fontSize: 10, color: 'var(--text-muted)', marginLeft: 3 }}>USD/m²</span>
+                            <span style={{ fontSize: 'var(--fs-etiqueta)', color: 'var(--text-muted)', marginLeft: 3 }}>USD/m²</span>
                           </td>
                         )
                       })}
@@ -1003,14 +1003,14 @@ export default function ComparacionProyectosPanel({
               title="Comparativa de Áreas Comunes y Amenidades"
               subtitle="Equipamiento social, recreativo y de bienestar disponible en cada desarrollo"
               headerRight={
-                <span style={{ fontSize: 11, color: 'var(--text-muted)' }}>
+                <span style={{ fontSize: 'var(--fs-etiqueta)', color: 'var(--text-muted)' }}>
                   Total {allComparedAmenities.length} amenidades detectadas
                 </span>
               }
               open={seccionesAbiertas.amenidades}
               onToggle={() => toggleSeccion('amenidades')}>
               {allComparedAmenities.length === 0 ? (
-                <div style={{ textAlign: 'center', padding: '20px 0', color: 'var(--text-muted)', fontSize: 11.5 }}>
+                <div style={{ textAlign: 'center', padding: '20px 0', color: 'var(--text-muted)', fontSize: 'var(--fs-etiqueta)' }}>
                   No se registraron amenidades en la base de datos para los proyectos seleccionados.
                 </div>
               ) : (
