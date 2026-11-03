@@ -34,7 +34,7 @@
 }
 
 .citrino-badge {
-  font-size: 11px;
+  font-size: var(--fs-etiqueta);
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.6px;
@@ -46,7 +46,7 @@
 }
 
 .citrino-sample-badge {
-  font-size: 11px;
+  font-size: var(--fs-etiqueta);
   font-weight: 500;
   padding: 2px 8px;
   border-radius: 4px;
@@ -56,7 +56,7 @@
 }
 
 .citrino-panel-title {
-  font-size: 20px;
+  font-size: var(--fs-titulo);
   font-weight: 700;
   color: var(--text-primary, #f8fafc);
   margin: 0;
@@ -64,7 +64,7 @@
 }
 
 .citrino-panel-subtitle {
-  font-size: 13px;
+  font-size: var(--fs-cuerpo);
   color: var(--text-muted, #94a3b8);
   margin: 0;
 }
@@ -84,7 +84,7 @@
 
 .citrino-nav-pill-btn {
   padding: 6px 14px;
-  font-size: 12px;
+  font-size: var(--fs-cuerpo);
   font-weight: 600;
   border-radius: 6px;
   background: transparent;
@@ -116,7 +116,7 @@
 }
 
 .citrino-subpill-label {
-  font-size: 11px;
+  font-size: var(--fs-etiqueta);
   font-weight: 600;
   color: var(--text-muted, #64748b);
   text-transform: uppercase;
@@ -125,7 +125,7 @@
 
 .citrino-subpill-btn {
   padding: 4px 10px;
-  font-size: 11px;
+  font-size: var(--fs-etiqueta);
   font-weight: 500;
   border-radius: 4px;
   background: var(--bg-hover);
@@ -182,7 +182,7 @@
 .citrino-kpi-card.amber::before { background: #f59e0b; }
 
 .citrino-kpi-label {
-  font-size: 11px;
+  font-size: var(--fs-etiqueta);
   font-weight: 500;
   color: var(--text-muted, #94a3b8);
   text-transform: uppercase;
@@ -190,14 +190,14 @@
 }
 
 .citrino-kpi-val {
-  font-size: 22px;
+  font-size: var(--fs-titulo);
   font-weight: 700;
   color: var(--text-primary, #f8fafc);
   letter-spacing: -0.5px;
 }
 
 .citrino-kpi-sub {
-  font-size: 11px;
+  font-size: var(--fs-etiqueta);
   color: var(--text-muted, #64748b);
 }
 
@@ -226,14 +226,14 @@
 }
 
 .citrino-card-title {
-  font-size: 14px;
+  font-size: var(--fs-cuerpo);
   font-weight: 600;
   color: var(--text-primary, #f8fafc);
   margin: 0;
 }
 
 .citrino-card-hint {
-  font-size: 11px;
+  font-size: var(--fs-etiqueta);
   color: var(--text-muted, #64748b);
 }
 
@@ -248,7 +248,7 @@
 .citrino-table {
   width: 100%;
   border-collapse: collapse;
-  font-size: 12px;
+  font-size: var(--fs-cuerpo);
   text-align: left;
 }
 
