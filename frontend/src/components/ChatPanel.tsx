@@ -160,6 +160,8 @@ export default function ChatPanel({
         },
         yAxis: {
           type: 'value',
+          name: 'Proyectos',
+          nameTextStyle: { color: '#94a3b8', fontSize: 11 },
           axisLabel: { color: '#64748b', fontSize: 11 },
           splitLine: { lineStyle: { color: '#0d222b' } },
         },
@@ -230,6 +232,10 @@ export default function ChatPanel({
         grid: { left: 95, right: 35, top: 10, bottom: 20 },
         xAxis: {
           type: 'value',
+          name: 'und/mes',
+          nameLocation: 'end',
+          nameGap: 6,
+          nameTextStyle: { color: '#94a3b8', fontSize: 11 },
           axisLabel: { color: '#64748b', fontSize: 11 },
           splitLine: { lineStyle: { color: '#0d222b' } },
         },
@@ -391,6 +397,10 @@ export default function ChatPanel({
         grid: { left: 95, right: 25, top: 15, bottom: 20 },
         xAxis: {
           type: 'value',
+          name: 'und',
+          nameLocation: 'end',
+          nameGap: 6,
+          nameTextStyle: { color: '#94a3b8', fontSize: 11 },
           axisLabel: { color: '#64748b', fontSize: 11 },
           splitLine: { lineStyle: { color: '#0d222b' } },
         },
@@ -468,6 +478,8 @@ export default function ChatPanel({
         },
         yAxis: {
           type: 'value',
+          name: 'Unidades disponibles',
+          nameTextStyle: { color: '#94a3b8', fontSize: 11 },
           axisLabel: { color: '#64748b', fontSize: 11 },
           splitLine: { lineStyle: { color: '#0d222b' } },
         },
@@ -558,6 +570,8 @@ export default function ChatPanel({
         },
         yAxis: {
           type: 'value',
+          name: 'Unidades disponibles',
+          nameTextStyle: { color: '#94a3b8', fontSize: 11 },
           axisLabel: { color: '#64748b', fontSize: 11 },
           splitLine: { lineStyle: { color: '#0d222b' } },
         },

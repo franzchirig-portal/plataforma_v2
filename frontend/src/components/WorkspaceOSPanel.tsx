@@ -339,7 +339,11 @@ export default function WorkspaceOSPanel({
         borderColor: isLight ? '#cbd5e1' : '#383838',
         textStyle: { color: isLight ? '#0f172a' : '#f3f3f3' },
       },
-      grid: { left: '3%', right: '4%', bottom: '3%', top: '10%', containLabel: true },
+      grid: { left: '3%', right: '4%', bottom: '3%', top: 40, containLabel: true },
+      legend: {
+        top: 0,
+        textStyle: { color: isLight ? '#475569' : '#9d9d9d', fontSize: 11 },
+      },
       xAxis: {
         type: 'category',
         data: topZonas.map((z) => z.zona),
@@ -348,6 +352,8 @@ export default function WorkspaceOSPanel({
       },
       yAxis: {
         type: 'value',
+        name: 'Unidades',
+        nameTextStyle: { color: isLight ? '#475569' : '#9d9d9d', fontSize: 11 },
         axisLine: { lineStyle: { color: isLight ? '#cbd5e1' : '#383838' } },
         splitLine: { lineStyle: { color: isLight ? '#e2e8f0' : '#2d2d2d' } },
         axisLabel: { color: isLight ? '#475569' : '#9d9d9d', fontSize: 11 },

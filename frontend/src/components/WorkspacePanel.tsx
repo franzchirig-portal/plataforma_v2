@@ -552,6 +552,10 @@ export default function WorkspacePanel({
       },
       xAxis: {
         type: 'value',
+        name: 'proyectos',
+        nameLocation: 'end',
+        nameGap: 6,
+        nameTextStyle: { fontSize: 11, color: isDark ? '#94a3b8' : '#64748b' },
         splitLine: { lineStyle: { color: isDark ? '#2a2e39' : '#e2e8f0' } },
         axisLabel: { fontSize: 11, color: isDark ? '#94a3b8' : '#64748b' },
       },
@@ -724,6 +728,10 @@ export default function WorkspacePanel({
         },
         xAxis: {
           type: 'value',
+          name: 'meses',
+          nameLocation: 'end',
+          nameGap: 6,
+          nameTextStyle: { fontSize: 11, color: isDark ? '#94a3b8' : '#64748b' },
           splitLine: { lineStyle: { color: isDark ? '#2a2e39' : '#e2e8f0' } },
           axisLabel: { fontSize: 11, color: isDark ? '#94a3b8' : '#64748b', formatter: (v: number) => `${v.toFixed(0)}m` },
         },
@@ -805,6 +813,10 @@ export default function WorkspacePanel({
       },
       xAxis: {
         type: 'value',
+        name: stockBarMode === 'usd' ? undefined : 'Unidades',
+        nameLocation: 'end',
+        nameGap: 6,
+        nameTextStyle: { fontSize: 11, color: isDark ? '#94a3b8' : '#64748b' },
         splitLine: { lineStyle: { color: isDark ? '#2a2e39' : '#e2e8f0' } },
         axisLabel: {
           fontSize: 11,
@@ -893,6 +905,10 @@ export default function WorkspacePanel({
         },
         xAxis: {
           type: 'value',
+          name: 'meses',
+          nameLocation: 'end',
+          nameGap: 6,
+          nameTextStyle: { fontSize: 11, color: isDark ? '#94a3b8' : '#64748b' },
           splitLine: { lineStyle: { color: isDark ? '#2a2e39' : '#e2e8f0' } },
           axisLabel: {
             fontSize: 11,
@@ -981,6 +997,10 @@ export default function WorkspacePanel({
       },
       xAxis: {
         type: 'value',
+        name: stockBarMode === 'usd' ? undefined : 'Unidades',
+        nameLocation: 'end',
+        nameGap: 6,
+        nameTextStyle: { fontSize: 11, color: isDark ? '#94a3b8' : '#64748b' },
         splitLine: { lineStyle: { color: isDark ? '#2a2e39' : '#e2e8f0' } },
         axisLabel: {
           fontSize: 11,
@@ -1066,6 +1086,10 @@ export default function WorkspacePanel({
       },
       xAxis: {
         type: 'value',
+        name: 'und/mes',
+        nameLocation: 'end',
+        nameGap: 6,
+        nameTextStyle: { fontSize: 11, color: isDark ? '#94a3b8' : '#64748b' },
         splitLine: { lineStyle: { color: isDark ? '#2a2e39' : '#e2e8f0' } },
         axisLabel: {
           fontSize: 11,
@@ -1159,6 +1183,10 @@ export default function WorkspacePanel({
       },
       xAxis: {
         type: 'value',
+        name: 'und/mes',
+        nameLocation: 'end',
+        nameGap: 6,
+        nameTextStyle: { fontSize: 11, color: isDark ? '#94a3b8' : '#64748b' },
         splitLine: { lineStyle: { color: isDark ? '#2a2e39' : '#e2e8f0' } },
         axisLabel: {
           fontSize: 11,
@@ -1287,7 +1315,8 @@ export default function WorkspacePanel({
 
       return {
         ...CHART_BASE,
-        grid: { left: 20, right: 30, top: 20, bottom: 25, containLabel: true },
+        grid: { left: 20, right: 30, top: 40, bottom: 25, containLabel: true },
+        legend: { top: 0, textStyle: { color: '#94a3b8', fontSize: 11 } },
         tooltip: {
           trigger: 'axis',
           backgroundColor: '#1e2127',
@@ -1302,6 +1331,8 @@ export default function WorkspacePanel({
         },
         yAxis: {
           type: 'value',
+          name: 'Unidades',
+          nameTextStyle: { fontSize: 11, color: '#94a3b8' },
           splitLine: { lineStyle: { color: '#2a2e39' } },
           axisLabel: { fontSize: 11, color: '#94a3b8' },
         },
@@ -1327,6 +1358,10 @@ export default function WorkspacePanel({
         },
         xAxis: {
           type: 'value',
+          name: 'Unidades',
+          nameLocation: 'end',
+          nameGap: 6,
+          nameTextStyle: { fontSize: 11, color: '#94a3b8' },
           splitLine: { lineStyle: { color: '#2a2e39' } },
           axisLabel: { fontSize: 11, color: '#94a3b8' },
         },
@@ -1380,6 +1415,10 @@ export default function WorkspacePanel({
         },
         xAxis: {
           type: 'value',
+          name: 'und/mes',
+          nameLocation: 'end',
+          nameGap: 6,
+          nameTextStyle: { fontSize: 11, color: '#94a3b8' },
           splitLine: { lineStyle: { color: '#182c48' } },
           axisLabel: { fontSize: 11, color: '#94a3b8' },
         },
@@ -1489,6 +1528,10 @@ export default function WorkspacePanel({
       },
       xAxis: {
         type: 'value',
+        name: 'meses',
+        nameLocation: 'end',
+        nameGap: 6,
+        nameTextStyle: { fontSize: 11, color: '#94a3b8' },
         splitLine: { lineStyle: { color: '#182c48' } },
         axisLabel: { fontSize: 11, color: '#94a3b8' },
       },
