@@ -742,7 +742,7 @@ export default function ChatPanel({
                           alignItems: 'center',
                           gap: 5,
                           boxShadow: '0 2px 8px rgba(0,0,0,0.4)',
-                          transition: 'all 0.12s',
+                          transition: 'background-color 0.12s, border-color 0.12s, color 0.12s, opacity 0.12s, transform 0.12s, box-shadow 0.12s',
                         }}>
                         <span>{act.label}</span>
                       </button>
@@ -765,7 +765,7 @@ export default function ChatPanel({
                           fontSize: 10,
                           color: 'var(--text-primary)',
                           cursor: 'pointer',
-                          transition: 'all 0.12s',
+                          transition: 'background-color 0.12s, border-color 0.12s, color 0.12s, opacity 0.12s, transform 0.12s, box-shadow 0.12s',
                         }}>
                         {c}
                       </span>
@@ -846,7 +846,7 @@ export default function ChatPanel({
                 color: 'var(--text-secondary)',
                 cursor: 'pointer',
                 whiteSpace: 'nowrap',
-                transition: 'all 0.12s',
+                transition: 'background-color 0.12s, border-color 0.12s, color 0.12s, opacity 0.12s, transform 0.12s, box-shadow 0.12s',
               }}>
               {p}
             </button>

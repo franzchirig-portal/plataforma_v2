@@ -127,7 +127,7 @@ export default function LeftSidebar({
             alignItems: 'center',
             justifyContent: 'center',
             color: activeTab === 'workspace_os' ? 'var(--text-primary)' : 'var(--text-muted)',
-            transition: 'all 0.12s ease',
+            transition: 'background-color 0.12s ease, border-color 0.12s ease, color 0.12s ease, opacity 0.12s ease, transform 0.12s ease, box-shadow 0.12s ease',
             position: 'relative',
           }}
           onMouseEnter={(e) => {
@@ -181,7 +181,7 @@ export default function LeftSidebar({
               alignItems: 'center',
               justifyContent: 'center',
               color: activePanel === id ? 'var(--text-primary)' : 'var(--text-muted)',
-              transition: 'all 0.12s ease',
+              transition: 'background-color 0.12s ease, border-color 0.12s ease, color 0.12s ease, opacity 0.12s ease, transform 0.12s ease, box-shadow 0.12s ease',
               position: 'relative',
             }}
             onMouseEnter={(e) => {
@@ -222,7 +222,7 @@ export default function LeftSidebar({
               width: 48, height: 40, borderRadius: 0, border: 'none',
               background: 'transparent', cursor: 'pointer',
               display: 'flex', alignItems: 'center', justifyContent: 'center',
-              color: 'var(--text-muted)', transition: 'all 0.12s ease',
+              color: 'var(--text-muted)', transition: 'background-color 0.12s ease, border-color 0.12s ease, color 0.12s ease, opacity 0.12s ease, transform 0.12s ease, box-shadow 0.12s ease',
             }}
             onMouseEnter={(e) => {
               const btn = e.currentTarget as HTMLButtonElement

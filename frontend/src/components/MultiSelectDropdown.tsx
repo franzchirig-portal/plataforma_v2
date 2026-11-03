@@ -88,7 +88,7 @@ export default function MultiSelectDropdown({
           alignItems: 'center',
           gap: 6,
           cursor: 'pointer',
-          transition: 'all 0.15s ease',
+          transition: 'background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease, opacity 0.15s ease, transform 0.15s ease, box-shadow 0.15s ease',
           whiteSpace: 'nowrap',
         }}>
         <span style={{ maxWidth: 150, overflow: 'hidden', textOverflow: 'ellipsis' }}>{buttonText}</span>

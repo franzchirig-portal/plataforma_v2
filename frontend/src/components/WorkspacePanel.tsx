@@ -1920,7 +1920,7 @@ export default function WorkspacePanel({
                 padding: '10px 12px',
                 boxShadow: '0 2px 6px rgba(0,0,0,0.2)',
                 cursor: 'pointer',
-                transition: 'all 0.15s ease',
+                transition: 'background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease, opacity 0.15s ease, transform 0.15s ease, box-shadow 0.15s ease',
               }}>
               <div style={{ fontSize: 22, fontWeight: 800, color: 'var(--accent-emerald)', letterSpacing: -0.5 }}>
                 {countVendidosCurrent.toLocaleString('es-BO')} <span style={{ fontSize: 13, fontWeight: 500, color: 'var(--text-secondary)' }}>proyectos</span>
@@ -2334,7 +2334,7 @@ export default function WorkspacePanel({
                             border: `1px solid ${isActive ? 'var(--citrino-orange, #ff7a00)' : 'var(--border-default)'}`,
                             borderRadius: 4,
                             cursor: 'pointer',
-                            transition: 'all 0.15s ease',
+                            transition: 'background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease, opacity 0.15s ease, transform 0.15s ease, box-shadow 0.15s ease',
                           }}
                         >
                           {opt.label}

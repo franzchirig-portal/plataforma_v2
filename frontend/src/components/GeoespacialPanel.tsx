@@ -563,7 +563,7 @@ export default function GeoespacialPanel({
               padding: 6px 12px;
               border-radius: 4px;
               cursor: pointer;
-              transition: all 0.15s;
+              transition: background-color 0.15s, border-color 0.15s, color 0.15s, opacity 0.15s, transform 0.15s, box-shadow 0.15s;
               display: flex;
               align-items: center;
               justify-content: center;
@@ -840,7 +840,7 @@ export default function GeoespacialPanel({
               display: 'flex',
               alignItems: 'center',
               gap: 5,
-              transition: 'all 0.12s',
+              transition: 'background-color 0.12s, border-color 0.12s, color 0.12s, opacity 0.12s, transform 0.12s, box-shadow 0.12s',
             }}>
             <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>
             <span>Puntos</span>
@@ -861,7 +861,7 @@ export default function GeoespacialPanel({
               display: 'flex',
               alignItems: 'center',
               gap: 5,
-              transition: 'all 0.12s',
+              transition: 'background-color 0.12s, border-color 0.12s, color 0.12s, opacity 0.12s, transform 0.12s, box-shadow 0.12s',
             }}>
             <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4"/></svg>
             <span>Burbujas</span>
@@ -882,7 +882,7 @@ export default function GeoespacialPanel({
               display: 'flex',
               alignItems: 'center',
               gap: 5,
-              transition: 'all 0.12s',
+              transition: 'background-color 0.12s, border-color 0.12s, color 0.12s, opacity 0.12s, transform 0.12s, box-shadow 0.12s',
             }}>
             <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M12 2c0 0-6 4.5-6 10a6 6 0 0 0 12 0c0-5.5-6-10-6-10z"/><path d="M12 18a2 2 0 0 0 2-2c0-1.5-2-3-2-3s-2 1.5-2 3a2 2 0 0 0 2 2z"/></svg>
             <span>Mapa de Calor</span>
@@ -1334,7 +1334,7 @@ export default function GeoespacialPanel({
                   fontSize: 11,
                   fontWeight: 600,
                   cursor: 'pointer',
-                  transition: 'all 0.15s',
+                  transition: 'background-color 0.15s, border-color 0.15s, color 0.15s, opacity 0.15s, transform 0.15s, box-shadow 0.15s',
                 }}>
                   <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
                   <span>Seleccionar Archivo</span>
@@ -1427,7 +1427,7 @@ export default function GeoespacialPanel({
                     alignItems: 'center',
                     justifyContent: 'center',
                     gap: 6,
-                    transition: 'all 0.15s ease',
+                    transition: 'background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease, opacity 0.15s ease, transform 0.15s ease, box-shadow 0.15s ease',
                   }}>
                   <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
                   <span>Exportar Capa GeoJSON</span>
@@ -1496,7 +1496,7 @@ export default function GeoespacialPanel({
                       background: isSelected ? 'var(--bg-active)' : 'var(--bg-card)',
                       border: `1px solid ${isSelected ? 'var(--border-bright)' : 'var(--border-subtle)'}`,
                       cursor: 'pointer',
-                      transition: 'all 0.12s',
+                      transition: 'background-color 0.12s, border-color 0.12s, color 0.12s, opacity 0.12s, transform 0.12s, box-shadow 0.12s',
                     }}>
                     <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 6, marginBottom: 3 }}>
                       <span style={{ fontWeight: 600, fontSize: 11.5, color: 'var(--text-primary)', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>

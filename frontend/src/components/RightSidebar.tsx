@@ -147,7 +147,7 @@ export default function RightSidebar({
               alignItems: 'center',
               justifyContent: 'center',
               fontSize: 15,
-              transition: 'all 0.15s ease',
+              transition: 'background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease, opacity 0.15s ease, transform 0.15s ease, box-shadow 0.15s ease',
               boxShadow: activePanel === id
                 ? '0 0 10px var(--citrino-glow, rgba(34,211,238,0.35))'
                 : 'none',
@@ -201,7 +201,7 @@ export default function RightSidebar({
               justifyContent: 'center',
               fontSize: 12,
               color: 'var(--text-muted)',
-              transition: 'all 0.15s ease',
+              transition: 'background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease, opacity 0.15s ease, transform 0.15s ease, box-shadow 0.15s ease',
             }}
             onMouseEnter={(e) => {
               (e.currentTarget as HTMLButtonElement).style.background = 'var(--bg-card, rgba(255,255,255,0.06))'

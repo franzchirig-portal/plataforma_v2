@@ -156,7 +156,7 @@ export default function AuthScreen({ onSuccess }: AuthScreenProps) {
               border: mode === 'login' ? '1px solid var(--border-default, #333842)' : '1px solid transparent',
               borderRadius: 4,
               cursor: 'pointer',
-              transition: 'all 0.15s ease',
+              transition: 'background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease, opacity 0.15s ease, transform 0.15s ease, box-shadow 0.15s ease',
             }}>
             Iniciar Sesión
           </button>
@@ -173,7 +173,7 @@ export default function AuthScreen({ onSuccess }: AuthScreenProps) {
               border: mode === 'register' ? '1px solid var(--border-default, #333842)' : '1px solid transparent',
               borderRadius: 4,
               cursor: 'pointer',
-              transition: 'all 0.15s ease',
+              transition: 'background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease, opacity 0.15s ease, transform 0.15s ease, box-shadow 0.15s ease',
             }}>
             Crear Cuenta
           </button>
@@ -316,7 +316,7 @@ export default function AuthScreen({ onSuccess }: AuthScreenProps) {
               borderRadius: 6,
               cursor: loading ? 'not-allowed' : 'pointer',
               boxShadow: '0 2px 8px rgba(0, 0, 0, 0.4)',
-              transition: 'all 0.15s ease',
+              transition: 'background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease, opacity 0.15s ease, transform 0.15s ease, box-shadow 0.15s ease',
               opacity: loading ? 0.7 : 1,
             }}
             onMouseEnter={(e) => {
@@ -353,7 +353,7 @@ export default function AuthScreen({ onSuccess }: AuthScreenProps) {
               border: '1px solid var(--border-subtle, #2b2d30)',
               borderRadius: 6,
               cursor: 'pointer',
-              transition: 'all 0.15s ease',
+              transition: 'background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease, opacity 0.15s ease, transform 0.15s ease, box-shadow 0.15s ease',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
