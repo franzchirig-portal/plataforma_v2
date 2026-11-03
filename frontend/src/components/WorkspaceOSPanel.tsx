@@ -281,7 +281,7 @@ export default function WorkspaceOSPanel({
         splitNumber: 4,
         axisName: {
           color: isLight ? '#475569' : '#9d9d9d',
-          fontSize: 10,
+          fontSize: 11,
           fontWeight: 600,
         },
         splitLine: {
@@ -344,13 +344,13 @@ export default function WorkspaceOSPanel({
         type: 'category',
         data: topZonas.map((z) => z.zona),
         axisLine: { lineStyle: { color: isLight ? '#cbd5e1' : '#383838' } },
-        axisLabel: { color: isLight ? '#475569' : '#9d9d9d', fontSize: 10, rotate: 20 },
+        axisLabel: { color: isLight ? '#475569' : '#9d9d9d', fontSize: 11, rotate: 20 },
       },
       yAxis: {
         type: 'value',
         axisLine: { lineStyle: { color: isLight ? '#cbd5e1' : '#383838' } },
         splitLine: { lineStyle: { color: isLight ? '#e2e8f0' : '#2d2d2d' } },
-        axisLabel: { color: isLight ? '#475569' : '#9d9d9d', fontSize: 10 },
+        axisLabel: { color: isLight ? '#475569' : '#9d9d9d', fontSize: 11 },
       },
       series: [
         {

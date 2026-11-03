@@ -46,7 +46,7 @@ export default function CicloInmobiliarioPanel() {
         axisLabel: { color: ct.muted, fontSize: 11, distance: -40, formatter: '{value}%' },
         title: { offsetCenter: [0, '25%'], fontSize: 13, color: ct.text, fontWeight: 600 },
         detail: {
-          fontSize: 24,
+          fontSize: 22,
           offsetCenter: [0, '-15%'],
           valueAnimation: true,
           formatter: '{value}%',

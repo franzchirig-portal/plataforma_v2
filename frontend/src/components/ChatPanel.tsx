@@ -155,12 +155,12 @@ export default function ChatPanel({
         xAxis: {
           type: 'category',
           data: ['<12m\n(Rápido)', '12-18m\n(Equil.)', '18-24m\n(Presión)', '>24m\n(Riesgo)'],
-          axisLabel: { color: '#94a3b8', fontSize: 9.5, interval: 0 },
+          axisLabel: { color: '#94a3b8', fontSize: 11, interval: 0 },
           axisLine: { lineStyle: { color: '#163642' } },
         },
         yAxis: {
           type: 'value',
-          axisLabel: { color: '#64748b', fontSize: 9.5 },
+          axisLabel: { color: '#64748b', fontSize: 11 },
           splitLine: { lineStyle: { color: '#0d222b' } },
         },
         series: [
@@ -174,7 +174,7 @@ export default function ChatPanel({
               { value: sobreoferta, itemStyle: { color: '#ef4444', borderRadius: [4, 4, 0, 0] } },
             ],
             barMaxWidth: 32,
-            label: { show: true, position: 'top', color: '#f1f5f9', fontSize: 10, fontWeight: 'bold' },
+            label: { show: true, position: 'top', color: '#f1f5f9', fontSize: 11, fontWeight: 'bold' },
           },
         ],
       }
@@ -230,13 +230,13 @@ export default function ChatPanel({
         grid: { left: 95, right: 35, top: 10, bottom: 20 },
         xAxis: {
           type: 'value',
-          axisLabel: { color: '#64748b', fontSize: 9.5 },
+          axisLabel: { color: '#64748b', fontSize: 11 },
           splitLine: { lineStyle: { color: '#0d222b' } },
         },
         yAxis: {
           type: 'category',
           data: topNames,
-          axisLabel: { color: '#cbd5e1', fontSize: 10, fontWeight: 500 },
+          axisLabel: { color: '#cbd5e1', fontSize: 11, fontWeight: 500 },
           axisLine: { lineStyle: { color: '#163642' } },
         },
         series: [
@@ -255,7 +255,7 @@ export default function ChatPanel({
               },
               borderRadius: [0, 4, 4, 0],
             },
-            label: { show: true, position: 'right', color: '#f1f5f9', fontSize: 10.5, fontWeight: 'bold' },
+            label: { show: true, position: 'right', color: '#f1f5f9', fontSize: 11, fontWeight: 'bold' },
           },
         ],
       }
@@ -316,7 +316,7 @@ export default function ChatPanel({
         legend: {
           orient: 'horizontal',
           bottom: 0,
-          textStyle: { color: '#94a3b8', fontSize: 9.5 },
+          textStyle: { color: '#94a3b8', fontSize: 11 },
           itemWidth: 10,
           itemHeight: 10,
         },
@@ -391,13 +391,13 @@ export default function ChatPanel({
         grid: { left: 95, right: 25, top: 15, bottom: 20 },
         xAxis: {
           type: 'value',
-          axisLabel: { color: '#64748b', fontSize: 9.5 },
+          axisLabel: { color: '#64748b', fontSize: 11 },
           splitLine: { lineStyle: { color: '#0d222b' } },
         },
         yAxis: {
           type: 'category',
           data: topProjects.map((p) => p.proyecto.length > 14 ? p.proyecto.slice(0, 14) + '…' : p.proyecto).reverse(),
-          axisLabel: { color: '#cbd5e1', fontSize: 9.5 },
+          axisLabel: { color: '#cbd5e1', fontSize: 11 },
           axisLine: { lineStyle: { color: '#163642' } },
         },
         series: [
@@ -406,7 +406,7 @@ export default function ChatPanel({
             type: 'bar',
             data: topProjects.map((p) => p.und_por_vender ?? 0).reverse(),
             itemStyle: { color: '#a1a1aa', borderRadius: [0, 4, 4, 0] },
-            label: { show: true, position: 'right', color: '#f1f5f9', fontSize: 10 },
+            label: { show: true, position: 'right', color: '#f1f5f9', fontSize: 11 },
           },
         ],
       }
@@ -463,12 +463,12 @@ export default function ChatPanel({
         xAxis: {
           type: 'category',
           data: entries.map(([name]) => name.length > 9 ? name.slice(0, 9) + '…' : name),
-          axisLabel: { color: '#94a3b8', fontSize: 9, rotate: 25 },
+          axisLabel: { color: '#94a3b8', fontSize: 11, rotate: 25 },
           axisLine: { lineStyle: { color: '#163642' } },
         },
         yAxis: {
           type: 'value',
-          axisLabel: { color: '#64748b', fontSize: 9.5 },
+          axisLabel: { color: '#64748b', fontSize: 11 },
           splitLine: { lineStyle: { color: '#0d222b' } },
         },
         series: [
@@ -488,7 +488,7 @@ export default function ChatPanel({
               borderRadius: [4, 4, 0, 0],
             },
             barMaxWidth: 26,
-            label: { show: true, position: 'top', color: '#f1f5f9', fontSize: 9.5 },
+            label: { show: true, position: 'top', color: '#f1f5f9', fontSize: 11 },
           },
         ],
       }
@@ -553,12 +553,12 @@ export default function ChatPanel({
         xAxis: {
           type: 'category',
           data: ['Santa Cruz', 'La Paz', 'Cochabamba'],
-          axisLabel: { color: '#94a3b8', fontSize: 10 },
+          axisLabel: { color: '#94a3b8', fontSize: 11 },
           axisLine: { lineStyle: { color: '#163642' } },
         },
         yAxis: {
           type: 'value',
-          axisLabel: { color: '#64748b', fontSize: 9.5 },
+          axisLabel: { color: '#64748b', fontSize: 11 },
           splitLine: { lineStyle: { color: '#0d222b' } },
         },
         series: [
@@ -571,7 +571,7 @@ export default function ChatPanel({
               borderRadius: [4, 4, 0, 0],
             },
             barMaxWidth: 35,
-            label: { show: true, position: 'top', color: '#f1f5f9', fontSize: 10, fontWeight: 'bold' },
+            label: { show: true, position: 'top', color: '#f1f5f9', fontSize: 11, fontWeight: 'bold' },
           },
         ],
       }

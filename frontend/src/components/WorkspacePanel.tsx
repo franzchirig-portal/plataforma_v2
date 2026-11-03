@@ -553,7 +553,7 @@ export default function WorkspacePanel({
       xAxis: {
         type: 'value',
         splitLine: { lineStyle: { color: isDark ? '#2a2e39' : '#e2e8f0' } },
-        axisLabel: { fontSize: 10, color: isDark ? '#94a3b8' : '#64748b' },
+        axisLabel: { fontSize: 11, color: isDark ? '#94a3b8' : '#64748b' },
       },
       yAxis: {
         type: 'category',
@@ -590,7 +590,7 @@ export default function WorkspacePanel({
             label: {
               show: true,
               position: 'right',
-              fontSize: 10.5,
+              fontSize: 11,
               fontWeight: 600,
               color: countTextColor,
               formatter: '{c}',
@@ -615,7 +615,7 @@ export default function WorkspacePanel({
                 label: {
                   show: s.count > 0,
                   position: 'right',
-                  fontSize: 10,
+                  fontSize: 11,
                   color: currentLabelColor,
                   formatter: '{c}',
                 },
@@ -627,7 +627,7 @@ export default function WorkspacePanel({
                   label: {
                     show: s.count > 0,
                     position: 'right',
-                    fontSize: 10,
+                    fontSize: 11,
                     color: currentLabelColor,
                     formatter: '{c}',
                   },
@@ -663,7 +663,7 @@ export default function WorkspacePanel({
               label: {
                 show: s.count > 0,
                 position: 'right',
-                fontSize: 10.5,
+                fontSize: 11,
                 fontWeight: 600,
                 color: currentLabelColor,
                 formatter: '{c}',
@@ -676,7 +676,7 @@ export default function WorkspacePanel({
                 label: {
                   show: s.count > 0,
                   position: 'right',
-                  fontSize: 10.5,
+                  fontSize: 11,
                   fontWeight: 600,
                   color: currentLabelColor,
                   formatter: '{c}',
@@ -740,7 +740,7 @@ export default function WorkspacePanel({
         left: 'center',
         top: '38%',
         textStyle: {
-          fontSize: 28,
+          fontSize: 22,
           fontWeight: 800,
           color: sel ? sel.color : (isDark ? '#f8fafc' : '#0f172a'),
           lineHeight: 32,
@@ -825,12 +825,12 @@ export default function WorkspacePanel({
         xAxis: {
           type: 'value',
           splitLine: { lineStyle: { color: isDark ? '#2a2e39' : '#e2e8f0' } },
-          axisLabel: { fontSize: 10, color: isDark ? '#94a3b8' : '#64748b', formatter: (v: number) => `${v.toFixed(0)}m` },
+          axisLabel: { fontSize: 11, color: isDark ? '#94a3b8' : '#64748b', formatter: (v: number) => `${v.toFixed(0)}m` },
         },
         yAxis: {
           type: 'category',
           data: topZones.map((z) => (z.zona.length > 22 ? z.zona.slice(0, 22) + '…' : z.zona)),
-          axisLabel: { fontSize: 10.5, color: isDark ? '#cbd5e1' : '#334155', fontWeight: 500 },
+          axisLabel: { fontSize: 11, color: isDark ? '#cbd5e1' : '#334155', fontWeight: 500 },
           axisLine: { lineStyle: { color: isDark ? '#334155' : '#cbd5e1' } },
         },
         series: [{
@@ -848,7 +848,7 @@ export default function WorkspacePanel({
             borderRadius: [0, 4, 4, 0],
           },
           label: {
-            show: true, position: 'right', fontSize: 10.5, fontWeight: 600,
+            show: true, position: 'right', fontSize: 11, fontWeight: 600,
             color: isDark ? '#f1f5f9' : '#0f172a',
             formatter: (p: any) => p.value > 0 ? Number(p.value).toFixed(1) : '',
           },
@@ -907,7 +907,7 @@ export default function WorkspacePanel({
         type: 'value',
         splitLine: { lineStyle: { color: isDark ? '#2a2e39' : '#e2e8f0' } },
         axisLabel: {
-          fontSize: 10,
+          fontSize: 11,
           color: isDark ? '#94a3b8' : '#64748b',
           formatter: isStockUSD ? (v: number) => fmtUSD(v) : undefined,
         },
@@ -915,7 +915,7 @@ export default function WorkspacePanel({
       yAxis: {
         type: 'category',
         data: items.map((z) => (z.name.length > 22 ? z.name.slice(0, 22) + '…' : z.name)),
-        axisLabel: { fontSize: 10.5, color: isDark ? '#cbd5e1' : '#334155', fontWeight: 500 },
+        axisLabel: { fontSize: 11, color: isDark ? '#cbd5e1' : '#334155', fontWeight: 500 },
         axisLine: { lineStyle: { color: isDark ? '#334155' : '#cbd5e1' } },
       },
       series: [
@@ -934,7 +934,7 @@ export default function WorkspacePanel({
           label: {
             show: true,
             position: 'right',
-            fontSize: 10.5,
+            fontSize: 11,
             fontWeight: 600,
             color: isDark ? '#f1f5f9' : '#0f172a',
             formatter: (p: any) => {
@@ -995,7 +995,7 @@ export default function WorkspacePanel({
           type: 'value',
           splitLine: { lineStyle: { color: isDark ? '#2a2e39' : '#e2e8f0' } },
           axisLabel: {
-            fontSize: 10,
+            fontSize: 11,
             color: isDark ? '#94a3b8' : '#64748b',
             formatter: (v: number) => `${v.toFixed(0)}m`,
           },
@@ -1003,7 +1003,7 @@ export default function WorkspacePanel({
         yAxis: {
           type: 'category',
           data: items.map((z) => (z.name.length > 22 ? z.name.slice(0, 22) + '…' : z.name)),
-          axisLabel: { fontSize: 10.5, color: isDark ? '#cbd5e1' : '#334155', fontWeight: 500 },
+          axisLabel: { fontSize: 11, color: isDark ? '#cbd5e1' : '#334155', fontWeight: 500 },
           axisLine: { lineStyle: { color: isDark ? '#334155' : '#cbd5e1' } },
         },
         series: [
@@ -1024,7 +1024,7 @@ export default function WorkspacePanel({
             label: {
               show: true,
               position: 'right',
-              fontSize: 10.5,
+              fontSize: 11,
               fontWeight: 600,
               color: isDark ? '#f1f5f9' : '#0f172a',
               formatter: (p: any) => (p.value > 0 ? Number(p.value).toFixed(1) : ''),
@@ -1083,7 +1083,7 @@ export default function WorkspacePanel({
         type: 'value',
         splitLine: { lineStyle: { color: isDark ? '#2a2e39' : '#e2e8f0' } },
         axisLabel: {
-          fontSize: 10,
+          fontSize: 11,
           color: isDark ? '#94a3b8' : '#64748b',
           formatter: isStockUSD ? (v: number) => fmtUSD(v) : undefined,
         },
@@ -1091,7 +1091,7 @@ export default function WorkspacePanel({
       yAxis: {
         type: 'category',
         data: items.map((z) => (z.name.length > 22 ? z.name.slice(0, 22) + '…' : z.name)),
-        axisLabel: { fontSize: 10.5, color: isDark ? '#cbd5e1' : '#334155', fontWeight: 500 },
+        axisLabel: { fontSize: 11, color: isDark ? '#cbd5e1' : '#334155', fontWeight: 500 },
         axisLine: { lineStyle: { color: isDark ? '#334155' : '#cbd5e1' } },
       },
       series: [
@@ -1110,7 +1110,7 @@ export default function WorkspacePanel({
           label: {
             show: true,
             position: 'right',
-            fontSize: 10.5,
+            fontSize: 11,
             fontWeight: 600,
             color: isDark ? '#f1f5f9' : '#0f172a',
             formatter: (p: any) => {
@@ -1168,14 +1168,14 @@ export default function WorkspacePanel({
         type: 'value',
         splitLine: { lineStyle: { color: isDark ? '#2a2e39' : '#e2e8f0' } },
         axisLabel: {
-          fontSize: 10,
+          fontSize: 11,
           color: isDark ? '#94a3b8' : '#64748b',
         },
       },
       yAxis: {
         type: 'category',
         data: items.map((z) => (z.zona.length > 22 ? z.zona.slice(0, 22) + '…' : z.zona)),
-        axisLabel: { fontSize: 10.5, color: isDark ? '#cbd5e1' : '#334155', fontWeight: 500 },
+        axisLabel: { fontSize: 11, color: isDark ? '#cbd5e1' : '#334155', fontWeight: 500 },
         axisLine: { lineStyle: { color: isDark ? '#334155' : '#cbd5e1' } },
       },
       series: [
@@ -1207,7 +1207,7 @@ export default function WorkspacePanel({
           label: {
             show: true,
             position: 'right',
-            fontSize: 10.5,
+            fontSize: 11,
             fontWeight: 600,
             color: isDark ? '#f1f5f9' : '#0f172a',
             formatter: (p: any) => (p.value > 0 ? Number(p.value).toFixed(1) : ''),
@@ -1261,14 +1261,14 @@ export default function WorkspacePanel({
         type: 'value',
         splitLine: { lineStyle: { color: isDark ? '#2a2e39' : '#e2e8f0' } },
         axisLabel: {
-          fontSize: 10,
+          fontSize: 11,
           color: isDark ? '#94a3b8' : '#64748b',
         },
       },
       yAxis: {
         type: 'category',
         data: items.map((s) => (s.name.length > 22 ? s.name.slice(0, 22) + '…' : s.name)),
-        axisLabel: { fontSize: 10.5, color: isDark ? '#cbd5e1' : '#334155', fontWeight: 500 },
+        axisLabel: { fontSize: 11, color: isDark ? '#cbd5e1' : '#334155', fontWeight: 500 },
         axisLine: { lineStyle: { color: isDark ? '#334155' : '#cbd5e1' } },
       },
       series: [
@@ -1300,7 +1300,7 @@ export default function WorkspacePanel({
           label: {
             show: true,
             position: 'right',
-            fontSize: 10.5,
+            fontSize: 11,
             fontWeight: 600,
             color: isDark ? '#f1f5f9' : '#0f172a',
             formatter: (p: any) => (p.value > 0 ? Number(p.value).toFixed(1) : ''),
@@ -1398,12 +1398,12 @@ export default function WorkspacePanel({
           type: 'category',
           data: dates,
           axisLine: { lineStyle: { color: '#2a2e39' } },
-          axisLabel: { fontSize: 10, color: '#94a3b8' },
+          axisLabel: { fontSize: 11, color: '#94a3b8' },
         },
         yAxis: {
           type: 'value',
           splitLine: { lineStyle: { color: '#2a2e39' } },
-          axisLabel: { fontSize: 10, color: '#94a3b8' },
+          axisLabel: { fontSize: 11, color: '#94a3b8' },
         },
         series: seriesList,
       }
@@ -1428,12 +1428,12 @@ export default function WorkspacePanel({
         xAxis: {
           type: 'value',
           splitLine: { lineStyle: { color: '#2a2e39' } },
-          axisLabel: { fontSize: 10, color: '#94a3b8' },
+          axisLabel: { fontSize: 11, color: '#94a3b8' },
         },
         yAxis: {
           type: 'category',
           data: topZones.map((z) => (z.zona.length > 20 ? z.zona.slice(0, 20) + '…' : z.zona)),
-          axisLabel: { fontSize: 10, color: '#cbd5e1' },
+          axisLabel: { fontSize: 11, color: '#cbd5e1' },
         },
         series: [
           {
@@ -1452,7 +1452,7 @@ export default function WorkspacePanel({
             label: {
               show: true,
               position: 'right',
-              fontSize: 10,
+              fontSize: 11,
               fontWeight: 600,
               color: '#f4f4f5',
               formatter: (p: any) => (p.value > 0 ? Number(p.value).toLocaleString('es-BO') : ''),
@@ -1481,12 +1481,12 @@ export default function WorkspacePanel({
         xAxis: {
           type: 'value',
           splitLine: { lineStyle: { color: '#182c48' } },
-          axisLabel: { fontSize: 10, color: '#94a3b8' },
+          axisLabel: { fontSize: 11, color: '#94a3b8' },
         },
         yAxis: {
           type: 'category',
           data: topZones.map((z) => (z.zona.length > 20 ? z.zona.slice(0, 20) + '…' : z.zona)),
-          axisLabel: { fontSize: 10, color: '#cbd5e1' },
+          axisLabel: { fontSize: 11, color: '#cbd5e1' },
         },
         series: [
           {
@@ -1505,7 +1505,7 @@ export default function WorkspacePanel({
             label: {
               show: true,
               position: 'right',
-              fontSize: 10,
+              fontSize: 11,
               fontWeight: 600,
               color: '#10b981',
               formatter: (p: any) => (p.value > 0 ? Number(p.value).toFixed(1) : ''),
@@ -1535,7 +1535,7 @@ export default function WorkspacePanel({
           type: 'value',
           splitLine: { lineStyle: { color: '#182c48' } },
           axisLabel: {
-            fontSize: 10,
+            fontSize: 11,
             color: '#94a3b8',
             formatter: (v: number) => `$${(v / 1_000_000).toFixed(0)}M`,
           },
@@ -1543,7 +1543,7 @@ export default function WorkspacePanel({
         yAxis: {
           type: 'category',
           data: topZones.map((z) => (z.zona.length > 20 ? z.zona.slice(0, 20) + '…' : z.zona)),
-          axisLabel: { fontSize: 10, color: '#cbd5e1' },
+          axisLabel: { fontSize: 11, color: '#cbd5e1' },
         },
         series: [
           {
@@ -1562,7 +1562,7 @@ export default function WorkspacePanel({
             label: {
               show: true,
               position: 'right',
-              fontSize: 10,
+              fontSize: 11,
               fontWeight: 600,
               color: '#f1f5f9',
               formatter: (p: any) => (p.value > 0 ? fmtUSD(p.value) : ''),
@@ -1590,12 +1590,12 @@ export default function WorkspacePanel({
       xAxis: {
         type: 'value',
         splitLine: { lineStyle: { color: '#182c48' } },
-        axisLabel: { fontSize: 10, color: '#94a3b8' },
+        axisLabel: { fontSize: 11, color: '#94a3b8' },
       },
       yAxis: {
         type: 'category',
         data: topZones.map((z) => (z.zona.length > 20 ? z.zona.slice(0, 20) + '…' : z.zona)),
-        axisLabel: { fontSize: 10, color: '#cbd5e1' },
+        axisLabel: { fontSize: 11, color: '#cbd5e1' },
       },
       series: [
         {
@@ -1615,7 +1615,7 @@ export default function WorkspacePanel({
           label: {
             show: true,
             position: 'right',
-            fontSize: 10,
+            fontSize: 11,
             fontWeight: 600,
             color: '#cbd5e1',
             formatter: (p: any) => (p.value > 0 ? Number(p.value).toFixed(1) : ''),

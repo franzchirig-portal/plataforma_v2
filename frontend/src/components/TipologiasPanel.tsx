@@ -216,28 +216,28 @@ export default function TipologiasPanel({
     },
     legend: {
       data: ['Precio Promedio ($US)', 'Precio $/m²'],
-      textStyle: { color: ct.muted, fontSize: 10 },
+      textStyle: { color: ct.muted, fontSize: 11 },
       top: 2,
     },
     xAxis: {
       type: 'category',
       data: tipologias.map((t) => t.avg_tipologia),
-      axisLabel: { fontSize: 10, color: ct.muted, interval: 0 },
+      axisLabel: { fontSize: 11, color: ct.muted, interval: 0 },
     },
     yAxis: [
       {
         type: 'value',
         name: 'Precio $US',
-        nameTextStyle: { color: ct.muted, fontSize: 9 },
+        nameTextStyle: { color: ct.muted, fontSize: 11 },
         splitLine: { lineStyle: { color: ct.grid } },
-        axisLabel: { fontSize: 9, formatter: (v: number) => `$${(v / 1000).toFixed(0)}k` },
+        axisLabel: { fontSize: 11, formatter: (v: number) => `$${(v / 1000).toFixed(0)}k` },
       },
       {
         type: 'value',
         name: '$US/m²',
-        nameTextStyle: { color: ct.muted, fontSize: 9 },
+        nameTextStyle: { color: ct.muted, fontSize: 11 },
         splitLine: { show: false },
-        axisLabel: { fontSize: 9, formatter: (v: number) => `$${v}` },
+        axisLabel: { fontSize: 11, formatter: (v: number) => `$${v}` },
       },
     ],
     series: [
@@ -280,20 +280,20 @@ export default function TipologiasPanel({
     },
     legend: {
       data: ['Vendidas', 'Por Vender'],
-      textStyle: { color: ct.muted, fontSize: 10 },
+      textStyle: { color: ct.muted, fontSize: 11 },
       top: 2,
     },
     xAxis: {
       type: 'category',
       data: tipologias.map((t) => t.avg_tipologia),
-      axisLabel: { fontSize: 10, color: ct.muted, interval: 0 },
+      axisLabel: { fontSize: 11, color: ct.muted, interval: 0 },
     },
     yAxis: {
       type: 'value',
       name: 'Unidades',
-      nameTextStyle: { color: ct.muted, fontSize: 9 },
+      nameTextStyle: { color: ct.muted, fontSize: 11 },
       splitLine: { lineStyle: { color: '#133340' } },
-      axisLabel: { fontSize: 9 },
+      axisLabel: { fontSize: 11 },
     },
     series: [
       {
