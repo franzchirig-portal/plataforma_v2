@@ -1,208 +1,181 @@
 ---
 name: sheets-supabase-pipeline
 description: >
-  Pipeline ETL automatizado que sincroniza datos del mercado inmobiliario
-  boliviano desde Google Sheets (API v4) hacia Supabase, usando arquitectura
-  Medallion (Bronze → Silver → Gold). Ejecutado automáticamente por GitHub Actions
-  cada 6 horas. Soporta sync incremental (solo filas nuevas) y full (re-sync completo).
-  Consolida 3 ciudades (SCZ, LPZ, CBB) × 3 tabs por ciudad = 9 fuentes.
+  Pipeline ETL que sincroniza datos del mercado inmobiliario boliviano desde
+  Google Sheets (API v4) hacia Supabase con el modelo "Diamond": seis tablas
+  oferta_* cargadas directamente, sin capas intermedias. Corre cada 6 horas en
+  GitHub Actions o a demanda. Consolida 3 ciudades (SCZ, LPZ, CBB) x 3 pestañas.
+  Usar al modificar pipeline/, supabase/ o el workflow de sincronización.
 tags:
   - etl
   - google-sheets
   - supabase
   - github-actions
-  - medallion-architecture
+  - diamond-model
   - real-estate
   - bolivia
 ---
 
-# Skill: Google Sheets → Supabase Pipeline
+# Skill: Pipeline Google Sheets → Supabase (modelo Diamond)
 
-Pipeline ETL automatizado para el proyecto **Intelligence** de datos del mercado
-inmobiliario boliviano. Sincroniza Google Sheets hacia Supabase con arquitectura
-Medallion (Bronze/Silver/Gold).
+Documento autocontenido para trabajar en `pipeline/`. La visión general del
+proyecto está en el `README.md` de la raíz.
 
 ---
 
-## Arquitectura General
+## Arquitectura
 
 ```
-Google Sheets API v4
-    ↓  (Service Account auth)
-GitHub Actions (cron cada 6h o dispatch manual)
+Google Sheets API v4  (cuenta de servicio, solo lectura)
+    ↓
+GitHub Actions (cron cada 6 h, dispatch manual o push a pipeline/**)
     ↓
 pipeline/sync.py  ← orquestador
-    ├── sheets_client.py   ← fetch de datos
-    ├── transform.py       ← limpieza y normalización
-    └── supabase_client.py ← upsert idempotente
-         ├── Bronze: raw JSON con row_hash
-         ├── Silver: tablas normalizadas tipadas
-         └── Gold: REFRESH MATERIALIZED VIEWS
+    ├── sheets_client.py    ← extrae cada pestaña
+    ├── transform.py        ← DiamondTransformer: limpia y construye las 6 tablas
+    │     └── geospatial.py ← asigna zona/subzona por coordenadas (datakmz/*.kmz)
+    └── supabase_client.py  ← upsert por lotes de 500 vía REST
 ```
 
----
-
-## Fuentes de Datos
-
-| Ciudad | Spreadsheet | Tab | Rows (aprox) |
-|--------|------------|-----|-------------|
-| SCZ | `1ayF4ZM3wzd8CM8TN0sZYZb6ypiYl0fX2cthx0q__DIM` | Datos & Margenes | ~240 |
-| SCZ | mismo | Tipologia & Precios | ~5,500 |
-| SCZ | mismo | Amenidades | ~200 |
-| LPZ | `1MMONWgebCk39l7YMSzZG2q-JaNxWsDbDLoJVLItXhB0` | Datos & Margenes | ~240 |
-| LPZ | mismo | Tipologia & Precios | ~25,000 |
-| LPZ | mismo | Amenidades | ~4,200 |
-| CBB | `1eUP3bMfy9NIGicsNlsKLc9UWo89Iw3qUl8cpUON-J3w` | Datos & Margenes | ~55 |
-| CBB | mismo | Tipologia & Precios | ~5,500 |
-| CBB | mismo | Amenidades | ~200 |
+No existen capas Bronze/Silver/Gold, vistas materializadas ni funciones SQL de
+monitoreo: esa fue una versión anterior y fue reemplazada.
 
 ---
 
-## Setup Inicial (una sola vez)
+## Fuentes de datos
 
-### 1. Google Cloud Service Account
+Cada ciudad (`SCZ`, `LPZ`, `CBB`) tiene un Google Sheet con tres pestañas. Los
+identificadores de los Sheets y los nombres exactos de las pestañas están en
+`SHEETS_CONFIG` de `pipeline/config.py`:
+
+| Clave interna | Pestaña del Sheet | Alimenta |
+|---|---|---|
+| `datos_margenes` | `Datos & Margenes` | `proyectos`, `indicadores_censo`, `condiciones_financieras` |
+| `tipologia_precios` | `Tipología & Precios` | `tipologias`, `avg_tipologias` |
+| `amenidades` | `Amenidades` | `amenidades` |
+
+Las pestañas **dependen entre sí**: `tipologia_precios` y `amenidades` descartan
+las filas cuyo proyecto no salió de `datos_margenes` en la misma corrida.
+
+---
+
+## Tablas destino (esquema `public`)
+
+Definidas en `supabase/001_diamond_tables.sql`. Los nombres reales los da
+`DIAMOND_TABLES` en `pipeline/config.py`.
+
+| Tabla | Clave primaria | Referencia |
+|---|---|---|
+| `oferta_proyectos` | `proyecto_id` | — |
+| `oferta_indicadores_censo` | `indicador_censo_id` | `proyecto_id` → `oferta_proyectos` |
+| `oferta_tipologias` | `tipologia_id` | `indicador_censo_id` → `oferta_indicadores_censo` |
+| `oferta_avg_tipologias` | (`indicador_censo_id`, `avg_tipologia`) | `indicador_censo_id` → `oferta_indicadores_censo` |
+| `oferta_condiciones_financieras` | `condicion_financiera_id` | `indicador_censo_id` → `oferta_indicadores_censo` |
+| `oferta_amenidades` | `amenidad_id` | `proyecto_id` → `oferta_proyectos` |
+
+El orden de carga en `sync.py` respeta las claves foráneas: `proyectos`,
+`indicadores_censo`, `tipologias`, `avg_tipologias`, `condiciones_financieras`,
+`amenidades`.
+
+---
+
+## Idempotencia
+
+Los identificadores se generan con `make_uuid(...)` (`transform.py`): un UUID v5
+**determinista** a partir de textos normalizados (por ejemplo, proyecto + ciudad).
+El mismo dato produce siempre el mismo id y el volcado es un `upsert` con
+`on_conflict` sobre la clave primaria. Ejecutar el pipeline N veces no duplica
+datos.
+
+---
+
+## Configuración inicial (una sola vez)
+
+### 1. Cuenta de servicio de Google
+
+1. En Google Cloud Console: crear o elegir un proyecto y habilitar *Google Sheets API*.
+2. Credenciales → crear cuenta de servicio (sin roles de GCP) y descargar su clave JSON.
+3. Compartir cada Google Sheet con el correo de la cuenta de servicio, permiso *Lector*.
+
+### 2. Secretos de GitHub
+
+Repositorio → Settings → Secrets and variables → Actions:
+
+| Secreto | Valor |
+|---|---|
+| `GOOGLE_CREDENTIALS` | Contenido completo del JSON de la cuenta de servicio |
+| `SUPABASE_URL` | Supabase → Settings → API → Project URL |
+| `SUPABASE_SERVICE_KEY` | Supabase → Settings → API → clave `service_role` |
+
+### 3. Esquema de Supabase
+
+Ejecutar **manualmente y en orden** en el SQL Editor de Supabase:
+
+1. `supabase/001_diamond_tables.sql` — crea las seis tablas.
+2. `supabase/002_rls_public_read.sql` — lectura pública (rol `anon`) con RLS.
+3. `supabase/003_auth_config.sql` — configuración de autenticación.
+
+---
+
+## Ejecución
+
+Los parámetros se pasan con **variables de entorno** (no hay opciones de línea de comandos).
+
+| Variable | Valores | Efecto |
+|---|---|---|
+| `SYNC_CITY` | `ALL` (defecto), `SCZ`, `LPZ`, `CBB` | Ciudades a extraer |
+| `SYNC_TAB` | `ALL` (defecto), `datos_margenes`, `tipologia_precios`, `amenidades` | Carga solo las tablas derivadas de esa pestaña; `datos_margenes` se extrae siempre por la dependencia |
+| `SYNC_MODE` | `incremental` (defecto), `full` | Solo se registra en el log: el upsert es idempotente |
+
+Un valor inválido termina con error (código 1) antes de leer o escribir.
 
 ```bash
-# En Google Cloud Console:
-# 1. Crear proyecto (o usar uno existente)
-# 2. APIs & Services → Enable → "Google Sheets API"
-# 3. Credentials → Create Service Account
-#    - Nombre: intelligence-pipeline
-#    - Rol: ninguno (no necesita roles GCP)
-# 4. Descargar JSON key
-# 5. Compartir cada spreadsheet con el email del SA:
-#    intelligence-pipeline@TU-PROYECTO.iam.gserviceaccount.com
-#    Permiso: Viewer (solo lectura)
-```
-
-### 2. GitHub Secrets
-
-En tu repo → Settings → Secrets and variables → Actions:
-
-| Secret | Cómo obtenerlo |
-|--------|---------------|
-| `GOOGLE_CREDENTIALS` | Contenido completo del JSON de la Service Account |
-| `SUPABASE_URL` | Dashboard Supabase → Settings → API → Project URL |
-| `SUPABASE_SERVICE_KEY` | Dashboard Supabase → Settings → API → service_role key |
-
-### 3. Supabase Schema
-
-Ejecutar en orden en el SQL Editor de Supabase:
-
-```sql
--- Copiar y ejecutar cada archivo en orden:
--- supabase/001_bronze_tables.sql
--- supabase/002_silver_tables.sql
--- supabase/003_gold_views.sql
--- supabase/004_functions.sql
-```
-
----
-
-## Ejecución Manual Local
-
-```bash
-# Setup
+# Local: copiar .env.example a .env y completar las credenciales
 pip install -r requirements.txt
-cp .env.example .env
-# Editar .env con tus credenciales
-
-# Sync completo de todo
-python -m pipeline.sync --mode full
-
-# Solo una ciudad
-python -m pipeline.sync --city SCZ
-
-# Solo un tab de LPZ
-python -m pipeline.sync --city LPZ --tab tipologia_precios
-
-# Sync incremental (default)
-python -m pipeline.sync
+python -m pipeline.sync                                   # todo
+SYNC_CITY=LPZ python -m pipeline.sync                     # una ciudad (Bash)
+SYNC_CITY=LPZ SYNC_TAB=tipologia_precios python -m pipeline.sync
 ```
+
+```powershell
+$env:SYNC_CITY = "LPZ"; $env:SYNC_TAB = "tipologia_precios"; python -m pipeline.sync
+```
+
+En GitHub: *Actions → "📊 Sync: Sheets → Supabase" → Run workflow* con los mismos
+parámetros (`city`, `tab`, `mode`). Cualquier fallo de extracción o carga hace
+`sys.exit(1)` a propósito, para evitar sincronizaciones parciales.
 
 ---
 
-## Ejecución en GitHub Actions
+## Agregar una ciudad o una pestaña
 
-El workflow se ejecuta automáticamente cada 6h. Para ejecutar manualmente:
-
-```
-GitHub → Actions → "📊 Sync: Sheets → Supabase" → Run workflow
-```
-
-Parámetros disponibles:
-- **city**: ALL | SCZ | LPZ | CBB
-- **tab**: ALL | datos_margenes | tipologia_precios | amenidades
-- **mode**: incremental | full
+1. `pipeline/config.py`: agregar la entrada en `SHEETS_CONFIG` (`spreadsheet_id` y pestañas) y, si hay columnas nuevas, las variantes de encabezado en el mapeo de columnas (el Sheet tiene muchas variantes de escritura).
+2. `pipeline/sync.py`: agregar la ciudad a `VALID_CITIES`, o la pestaña a `VALID_TABS` y sus tablas a `TABLE_SOURCE_TAB`; si hay tabla nueva, incluirla también en `tables_to_load` respetando el orden de claves foráneas.
+3. `pipeline/transform.py`: si la ciudad o pestaña tiene estructura distinta, agregar su lógica (por ejemplo, SCZ usa columnas de zona propias).
+4. Si hay tabla nueva: script SQL en `supabase/` y política de lectura pública equivalente a la de `002_rls_public_read.sql`.
+5. Para zonas nuevas, agregar el archivo `.kmz` en `datakmz/`.
 
 ---
 
-## Detección de Cambios (Idempotencia)
+## Formato boliviano de números y fechas
 
-Cada fila se hashea con SHA256:
-```python
-hash = SHA256(city + tab + sorted(row_content))
-```
+Los Sheets usan punto para miles y coma para decimales. Las conversiones están
+en `pipeline/utils.py`:
 
-Si el hash ya existe en Bronze → `IGNORE` (no duplica).
-Si el hash es nuevo → INSERT en Bronze → transform → upsert Silver → refresh Gold.
-
-Esto significa que puedes ejecutar el pipeline N veces sin duplicar datos.
-
----
-
-## Agregar Nueva Ciudad o Tab
-
-1. En `pipeline/config.py`, agregar la entrada en `SHEETS_CONFIG`
-2. Si es un tab nuevo, agregar el mapeo de columnas
-3. Si es un tab con estructura distinta, agregar función en `transform.py`
-4. Actualizar `BRONZE_TABLES` si el tab va a una tabla nueva
-
----
-
-## Formato Boliviano de Números
-
-Los sheets usan formato boliviano (punto=miles, coma=decimal):
 - `"1.234.567,89"` → `1234567.89`
 - `"78,05%"` → `0.7805`
 - `"15/07/2023"` → `date(2023, 7, 15)`
 - `"-17.377, -66.166"` → `lat=-17.377, lng=-66.166`
 
-Todas las conversiones están en `pipeline/utils.py`.
-
 ---
 
-## Tablas Supabase
+## Verificación y monitoreo
 
-### Bronze (raw)
-- `bronze_datos_margenes` — JSONB crudo + hash
-- `bronze_tipologia_precios` — JSONB crudo + hash
-- `bronze_amenidades` — JSONB crudo + hash
-- `bronze_sync_log` — log de cada ejecución
-
-### Silver (normalizado)
-- `silver_cities` — catálogo de ciudades
-- `silver_projects` — proyectos (dimensión)
-- `silver_project_snapshots` — estado por fecha (hechos)
-- `silver_units` — unidades individuales
-- `silver_amenities` — amenidades por proyecto/fecha
-
-### Gold (ML-ready)
-- `gold_project_features` — feature matrix proyecto × snapshot
-- `gold_unit_features` — feature matrix por unidad individual
-- `gold_zone_features` — agregados por zona × snapshot
-
----
-
-## Monitoreo
+- Estado de la última corrida: pestaña *Actions* de GitHub (los logs indican filas obtenidas por ciudad y pestaña, y el error si hubo fallo).
+- Conteos en Supabase:
 
 ```sql
--- Ver estado del último sync
-SELECT * FROM get_last_sync_summary();
-
--- Ver estadísticas completas del pipeline
-SELECT get_pipeline_stats();
-
--- Ver logs recientes
-SELECT * FROM bronze_sync_log ORDER BY sync_timestamp DESC LIMIT 20;
+SELECT ciudad, count(*) FROM public.oferta_proyectos GROUP BY ciudad;
+SELECT count(*) FROM public.oferta_indicadores_censo;
+SELECT count(*) FROM public.oferta_tipologias;
 ```
