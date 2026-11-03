@@ -187,6 +187,20 @@ export default function CicloInmobiliarioPanel() {
               <h3 className="citrino-card-title">Reloj del Ciclo Físico de Santa Cruz</h3>
             </div>
             <ReactECharts option={getClockGaugeChart()} style={{ height: 260 }} />
+            {/* Leyenda de zonas del reloj: nombre y rango, para no depender solo del color */}
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '4px 14px', justifyContent: 'center', margin: '4px 0 10px', fontSize: 'var(--fs-etiqueta)', color: 'var(--text-secondary)' }}>
+              {[
+                { color: '#ef4444', label: 'Ajuste / Recesión (< 93,5 %)' },
+                { color: '#f59e0b', label: 'Recuperación (93,5 – 95,8 %)' },
+                { color: '#10b981', label: 'Expansión (95,8 – 98,5 %)' },
+                { color: '#38bdf8', label: 'Sobreoferta (> 98,5 %)' },
+              ].map((z) => (
+                <span key={z.label} style={{ display: 'inline-flex', alignItems: 'center', gap: 5 }}>
+                  <span aria-hidden="true" style={{ width: 10, height: 10, borderRadius: 2, background: z.color, flexShrink: 0 }} />
+                  {z.label}
+                </span>
+              ))}
+            </div>
             <div style={{ background: 'rgba(255,255,255,0.03)', padding: 12, borderRadius: 6, fontSize: 'var(--fs-cuerpo)', color: 'var(--text-muted)' }}>
               <b>Diagnóstico:</b> {faseActual.diagnostico}
             </div>

@@ -758,7 +758,8 @@ export default function WorkspacePanel({
           label: {
             show: true, position: 'right', fontSize: 11, fontWeight: 600,
             color: isDark ? '#f1f5f9' : '#0f172a',
-            formatter: (p: any) => p.value > 0 ? Number(p.value).toFixed(1) : '',
+            // Segunda señal además del color: ▲ crítico (>18m), ● atención (12-18m), ✓ saludable (<12m)
+            formatter: (p: any) => p.value > 0 ? `${p.value > 18 ? '▲' : p.value > 12 ? '●' : '✓'} ${Number(p.value).toFixed(1)}` : '',
           },
         }],
       }
@@ -943,7 +944,8 @@ export default function WorkspacePanel({
               fontSize: 11,
               fontWeight: 600,
               color: isDark ? '#f1f5f9' : '#0f172a',
-              formatter: (p: any) => (p.value > 0 ? Number(p.value).toFixed(1) : ''),
+              // Segunda señal además del color: ▲ crítico (>18m), ● atención (12-18m), ✓ saludable (<12m)
+              formatter: (p: any) => (p.value > 0 ? `${p.value > 18 ? '▲' : p.value > 12 ? '●' : '✓'} ${Number(p.value).toFixed(1)}` : ''),
             },
           },
         ],
@@ -1561,7 +1563,8 @@ export default function WorkspacePanel({
             fontSize: 11,
             fontWeight: 600,
             color: '#cbd5e1',
-            formatter: (p: any) => (p.value > 0 ? Number(p.value).toFixed(1) : ''),
+            // Segunda señal además del color: ▲ crítico (>18m), ● atención (12-18m), ✓ saludable (<12m)
+            formatter: (p: any) => (p.value > 0 ? `${p.value > 18 ? '▲' : p.value > 12 ? '●' : '✓'} ${Number(p.value).toFixed(1)}` : ''),
           },
         },
       ],
@@ -2563,7 +2566,7 @@ export default function WorkspacePanel({
                   </div>
                   <div style={{ fontSize: 'var(--fs-etiqueta)', color: 'var(--text-muted)', marginBottom: 6 }}>
                     {stockBarMode === 'meses'
-                      ? 'Horizonte de liquidación estimado por zona (verde <12m · amarillo 12-18m · rojo >18m)'
+                      ? 'Horizonte de liquidación estimado por zona (✓ verde <12m · ● amarillo 12-18m · ▲ rojo >18m)'
                       : stockBarMode === 'usd'
                       ? 'Monto USD disponible censado agrupado por zona'
                       : 'Unidades disponibles censadas agrupadas por zona'}
@@ -2615,7 +2618,7 @@ export default function WorkspacePanel({
                   </div>
                   <div style={{ fontSize: 'var(--fs-etiqueta)', color: 'var(--text-muted)', marginBottom: 6 }}>
                     {stockBarMode === 'meses'
-                      ? 'Horizonte de liquidación estimado por subzona (verde <12m · amarillo 12-18m · rojo >18m)'
+                      ? 'Horizonte de liquidación estimado por subzona (✓ verde <12m · ● amarillo 12-18m · ▲ rojo >18m)'
                       : stockBarMode === 'usd'
                       ? 'Monto USD históricamente colocado agrupado por zona'
                       : 'Unidades históricamente colocadas agrupadas por zona'}
