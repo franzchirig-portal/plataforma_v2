@@ -65,7 +65,7 @@
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  transition: all 0.15s ease;
+  transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease, opacity 0.15s ease, transform 0.15s ease, box-shadow 0.15s ease;
 }
 
 .cmp-btn:hover {
@@ -155,13 +155,14 @@
   font-size: 12.5px;
   font-weight: 600;
   padding: 7px 10px;
-  outline: none;
   cursor: pointer;
   transition: border-color 0.15s ease;
 }
 
-.cmp-select:focus {
+.cmp-select:focus-visible {
   border-color: #10b981;
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 2px;
 }
 
 .cmp-vs-badge-wrap {
@@ -260,7 +261,9 @@
   margin-top: 3px;
   display: flex;
   align-items: center;
-  gap: 4px;
+  gap: 6px;
+  row-gap: 3px;
+  flex-wrap: wrap;
 }
 
 .cmp-hero-badges {
@@ -398,6 +401,61 @@
 .cmp-card-subtitle {
   font-size: 11px;
   color: var(--text-muted);
+}
+
+/* ── Secciones desplegables ── */
+.cmp-collapse-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  background: none;
+  border: none;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.cmp-collapse-toggle.is-open {
+  border-bottom: 1px solid var(--border-subtle);
+  padding-bottom: 8px;
+}
+
+.cmp-collapse-toggle:focus-visible {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 4px;
+  border-radius: var(--radius-sm);
+}
+
+.cmp-collapse-head-side {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-shrink: 0;
+}
+
+.cmp-collapse-chevron {
+  display: inline-flex;
+  color: var(--text-muted);
+  transition: transform 0.2s ease, color 0.2s ease;
+}
+
+.cmp-collapse-toggle:hover .cmp-collapse-chevron {
+  color: var(--text-primary);
+}
+
+.cmp-collapse-toggle.is-open .cmp-collapse-chevron {
+  transform: rotate(180deg);
+}
+
+.cmp-collapse-body {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
 }
 
 /* ── Matrix Head-to-Head Table ── */

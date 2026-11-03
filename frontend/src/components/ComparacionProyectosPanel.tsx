@@ -1,4 +1,5 @@
 import { useEffect, useState, useMemo } from 'react'
+import type { ReactNode } from 'react'
 import {
   fetchIndicadores,
   getLatestPerProject,
@@ -90,6 +91,58 @@ const IconTrophy = () => (
   </svg>
 )
 
+const IconCalendar = () => (
+  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ opacity: 0.85 }}>
+    <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
+    <line x1="16" y1="2" x2="16" y2="6" />
+    <line x1="8" y1="2" x2="8" y2="6" />
+    <line x1="3" y1="10" x2="21" y2="10" />
+  </svg>
+)
+
+const IconChevron = () => (
+  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <polyline points="6 9 12 15 18 9" />
+  </svg>
+)
+
+// ─── Sección desplegable (colapsada por defecto, se abre al hacer click) ────
+interface CollapsibleSectionProps {
+  id: string
+  title: string
+  subtitle: string
+  headerRight?: ReactNode
+  open: boolean
+  onToggle: () => void
+  children: ReactNode
+}
+
+function CollapsibleSection({ id, title, subtitle, headerRight, open, onToggle, children }: CollapsibleSectionProps) {
+  const contentId = `cmp-section-${id}`
+  return (
+    <div className="cmp-panel-card">
+      <button
+        type="button"
+        className={`cmp-collapse-toggle${open ? ' is-open' : ''}`}
+        aria-expanded={open}
+        aria-controls={contentId}
+        onClick={onToggle}>
+        <div>
+          <div className="cmp-card-title">{title}</div>
+          <div className="cmp-card-subtitle">{subtitle}</div>
+        </div>
+        <div className="cmp-collapse-head-side">
+          {headerRight}
+          <span className="cmp-collapse-chevron">
+            <IconChevron />
+          </span>
+        </div>
+      </button>
+      {open && <div id={contentId} className="cmp-collapse-body">{children}</div>}
+    </div>
+  )
+}
+
 function fmt(n: number | null | undefined, dec = 1): string {
   if (n == null) return '—'
   return n.toLocaleString('es-BO', { maximumFractionDigits: dec })
@@ -98,6 +151,24 @@ function fmt(n: number | null | undefined, dec = 1): string {
 function fmtUSD(n: number | null | undefined): string {
   if (n == null) return '—'
   return '$US ' + Math.round(n).toLocaleString('es-BO')
+}
+
+function fmtLanzamiento(raw: string | null | undefined): string {
+  if (!raw) return 'No indicada'
+  const trimmed = raw.trim()
+  if (!trimmed) return 'No indicada'
+  if (/^\d{4}-\d{2}(-\d{2})?/.test(trimmed)) {
+    const parts = trimmed.split('-')
+    const y = parseInt(parts[0], 10)
+    const m = parseInt(parts[1], 10) - 1
+    const d = parts[2] ? parseInt(parts[2], 10) : 1
+    const dt = new Date(y, m, d)
+    if (!isNaN(dt.getTime())) {
+      const monthName = dt.toLocaleDateString('es-BO', { month: 'short' })
+      return `${monthName.charAt(0).toUpperCase() + monthName.slice(1)} ${y}`
+    }
+  }
+  return trimmed
 }
 
 interface ProjectDataBundle {
@@ -129,6 +200,16 @@ export default function ComparacionProyectosPanel({
 
   // Bundles containing enriched details per project
   const [bundles, setBundles] = useState<Record<string, ProjectDataBundle>>({})
+
+  // Secciones desplegables: colapsadas por defecto. El estado vive aquí (no en
+  // CollapsibleSection) para que no se reinicie al recargar el listado por filtros.
+  const [seccionesAbiertas, setSeccionesAbiertas] = useState({
+    tipologias: false,
+    matriz: false,
+    amenidades: false,
+  })
+  const toggleSeccion = (key: keyof typeof seccionesAbiertas) =>
+    setSeccionesAbiertas((prev) => ({ ...prev, [key]: !prev[key] }))
 
   // Load project list
   useEffect(() => {
@@ -402,22 +483,43 @@ export default function ComparacionProyectosPanel({
                 const ritmoVal =
                   p.ritmo_venta ?? (b?.tipologias.reduce((s, t) => s + (t.ritmo_venta ?? 0), 0) || null)
 
+                // Tamaño promedio m²
+                const validTiposM2 = (b?.tipologias || [])
+                  .map((t) => t.avg_construccion_m2)
+                  .filter((m): m is number => m != null && m > 0)
+                const validDetallesM2 = (b?.detalles || [])
+                  .map((d) => d.construccion_m2_original)
+                  .filter((m): m is number => m != null && m > 0)
+                const tiposWithArea = (b?.tipologias || []).filter((t) => (t.avg_construccion_m2 ?? 0) > 0)
+                const sumUnds = tiposWithArea.reduce((s, t) => s + (t.und_totales ?? 0), 0)
+                const weightedM2 = sumUnds > 0
+                  ? Math.round(tiposWithArea.reduce((s, t) => s + (t.avg_construccion_m2! * (t.und_totales ?? 0)), 0) / sumUnds)
+                  : (validTiposM2.length > 0
+                      ? Math.round(validTiposM2.reduce((s, v) => s + v, 0) / validTiposM2.length)
+                      : null)
+                const tamanoPromedioM2 = weightedM2 ?? (validDetallesM2.length > 0
+                  ? Math.round(validDetallesM2.reduce((s, v) => s + v, 0) / validDetallesM2.length)
+                  : null)
+
+                // $/m² lista con fallback a promedio de tipologías
+                const precioM2Lista = p.sus_m2 ?? (
+                  b?.tipologias && b.tipologias.some((t) => (t.avg_sus_m2 ?? 0) > 0)
+                    ? Math.round(
+                        b.tipologias.filter((t) => (t.avg_sus_m2 ?? 0) > 0).reduce((s, t) => s + t.avg_sus_m2!, 0) /
+                        b.tipologias.filter((t) => (t.avg_sus_m2 ?? 0) > 0).length
+                      )
+                    : null
+                )
+
                 // Competitive advantages vs other active projects
                 const isWinnerRitmo =
                   ritmoVal != null &&
                   ritmoVal > 0 &&
                   ritmoVal === Math.max(...activeProjects.map((x) => x.ritmo_venta ?? 0))
 
-                const isWinnerMeses =
-                  (p.meses_stock ?? 0) > 0 &&
-                  (p.meses_stock ?? 0) ===
-                    Math.min(
-                      ...activeProjects.filter((x) => (x.meses_stock ?? 0) > 0).map((x) => x.meses_stock ?? 999)
-                    )
-
                 const isWinnerM2 =
-                  (p.sus_m2 ?? 0) > 0 &&
-                  (p.sus_m2 ?? 0) ===
+                  (precioM2Lista ?? 0) > 0 &&
+                  (precioM2Lista ?? 0) ===
                     Math.min(
                       ...activeProjects.filter((x) => (x.sus_m2 ?? 0) > 0).map((x) => x.sus_m2 ?? 99999)
                     )
@@ -435,10 +537,17 @@ export default function ComparacionProyectosPanel({
                           <h3 className="cmp-hero-name">{p.proyecto}</h3>
                         </div>
                         <div className="cmp-hero-loc">
-                          <IconLocation />
-                          <span>
-                            {p.ZONAS || 'Zona no indicada'}
-                            {p.SUBZONAS ? ` • ${p.SUBZONAS}` : ''} • {p.ciudad}
+                          <span style={{ display: 'inline-flex', alignItems: 'center', gap: 4 }}>
+                            <IconLocation />
+                            <span>
+                              {p.ZONAS || 'Zona no indicada'}
+                              {p.SUBZONAS ? ` • ${p.SUBZONAS}` : ''} • {p.ciudad}
+                            </span>
+                          </span>
+                          <span style={{ opacity: 0.4 }}>•</span>
+                          <span style={{ display: 'inline-flex', alignItems: 'center', gap: 4 }} title="Fecha de Lanzamiento">
+                            <IconCalendar />
+                            <span>Lanzamiento: <strong style={{ color: 'var(--text-primary)', fontWeight: 600 }}>{fmtLanzamiento(p.lanzamiento)}</strong></span>
                           </span>
                         </div>
                       </div>
@@ -466,14 +575,14 @@ export default function ComparacionProyectosPanel({
                           <IconTrophy /> Mayor Tracción (+ Ritmo)
                         </span>
                       )}
-                      {isWinnerMeses && (
-                        <span className="cmp-winner-tag">
-                          <IconTrophy /> Menor Exposición (Stock)
-                        </span>
-                      )}
                       {isWinnerM2 && (
                         <span className="cmp-subwinner-tag">
                           Mejor $/m² de Entrada
+                        </span>
+                      )}
+                      {tamanoPromedioM2 && (
+                        <span className="cmp-subwinner-tag">
+                          {fmt(tamanoPromedioM2, 0)} m² Prom.
                         </span>
                       )}
                       {b && b.amenidades.length > 5 && (
@@ -493,25 +602,16 @@ export default function ComparacionProyectosPanel({
                       </div>
 
                       <div className="cmp-hero-kpi-item">
-                        <div className="cmp-hero-kpi-label">Meses Stock</div>
-                        <div
-                          className="cmp-hero-kpi-val"
-                          style={{
-                            color:
-                              (p.meses_stock ?? 0) > 18
-                                ? '#f43f5e'
-                                : (p.meses_stock ?? 0) > 12
-                                ? '#f59e0b'
-                                : '#10b981',
-                          }}>
-                          {p.meses_stock != null ? `${fmt(p.meses_stock, 1)} m` : '—'}
+                        <div className="cmp-hero-kpi-label">Tamaño Promedio M²</div>
+                        <div className="cmp-hero-kpi-val">
+                          {tamanoPromedioM2 ? `${fmt(tamanoPromedioM2, 0)} m²` : '—'}
                         </div>
                       </div>
 
                       <div className="cmp-hero-kpi-item">
                         <div className="cmp-hero-kpi-label">$/m² Lista</div>
                         <div className="cmp-hero-kpi-val">
-                          {p.sus_m2 ? `$${fmt(p.sus_m2, 0)}` : '—'}
+                          {precioM2Lista ? `$${fmt(precioM2Lista, 0)}` : '—'}
                         </div>
                       </div>
 
@@ -527,109 +627,82 @@ export default function ComparacionProyectosPanel({
               })}
             </div>
 
-            {/* ── DIAGNÓSTICO COMPARATIVO DIRECTO ── */}
-            <div className="cmp-panel-card">
-              <div className="cmp-card-title-row">
-                <div>
-                  <div className="cmp-card-title">Diagnóstico Comparativo Directo</div>
-                  <div className="cmp-card-subtitle">
-                    Deltas de rendimiento entre {projA?.proyecto || 'Slot A'} y {projB?.proyecto || 'Slot B'}
-                  </div>
+            {/* ── COMPARATIVA DE MODELOS / TIPOLOGÍAS ── */}
+            <CollapsibleSection
+              id="tipologias"
+              title="Comparativa por Tipología (Modelos de Unidades)"
+              subtitle="Contraste directo de superficie construida, precios de ticket y valores por m²"
+              open={seccionesAbiertas.tipologias}
+              onToggle={() => toggleSeccion('tipologias')}>
+              {allComparedTypologies.length === 0 ? (
+                <div style={{ textAlign: 'center', padding: '20px 0', color: 'var(--text-muted)', fontSize: 11.5 }}>
+                  Sin tipologías desagregadas para este snapshot de proyectos.
                 </div>
-              </div>
+              ) : (
+                <div className="cmp-table-wrap">
+                  <table className="cmp-table">
+                    <thead>
+                      <tr>
+                        <th>Tipología</th>
+                        {activeProjects.map((p, idx) => (
+                          <th
+                            key={p.proyecto_id}
+                            style={{
+                              textAlign: 'center',
+                              color: idx === 0 ? '#10b981' : idx === 1 ? '#3b82f6' : '#f59e0b',
+                            }}>
+                            {p.proyecto}
+                          </th>
+                        ))}
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {allComparedTypologies.map((tipo) => (
+                        <tr key={tipo}>
+                          <td style={{ fontWeight: 700, color: 'var(--text-primary)' }}>{tipo}</td>
+                          {activeProjects.map((p) => {
+                            const b = bundles[p.proyecto_id]
+                            const t = b?.tipologias.find(
+                              (x) => x.avg_tipologia.toLowerCase().trim() === tipo.toLowerCase().trim()
+                            )
 
-              <div className="cmp-diagnostico-grid">
-                {projA && projB ? (
-                  <>
-                    {/* Ritmo delta */}
-                    <div className="cmp-diagnostico-item">
-                      <div className="cmp-diagnostico-label">Diferencial de Tracción Comercial</div>
-                      <div className="cmp-diagnostico-val">
-                        {((projA.ritmo_venta ?? 0) - (projB.ritmo_venta ?? 0)) >= 0 ? (
-                          <span style={{ color: '#10b981' }}>
-                            {projA.proyecto} supera por {fmt(Math.abs((projA.ritmo_venta ?? 0) - (projB.ritmo_venta ?? 0)), 1)} und/mes
-                          </span>
-                        ) : (
-                          <span style={{ color: '#3b82f6' }}>
-                            {projB.proyecto} supera por {fmt(Math.abs((projB.ritmo_venta ?? 0) - (projA.ritmo_venta ?? 0)), 1)} und/mes
-                          </span>
-                        )}
-                      </div>
-                    </div>
+                            if (!t) {
+                              return (
+                                <td key={p.proyecto_id} style={{ textAlign: 'center', color: 'var(--text-muted)' }}>
+                                  — No disponible —
+                                </td>
+                              )
+                            }
 
-                    {/* Precio $/m² delta */}
-                    <div className="cmp-diagnostico-item">
-                      <div className="cmp-diagnostico-label">Diferencial de Precio ($/m²)</div>
-                      <div className="cmp-diagnostico-val">
-                        {projA.sus_m2 && projB.sus_m2 ? (
-                          projA.sus_m2 <= projB.sus_m2 ? (
-                            <span style={{ color: '#10b981' }}>
-                              {projA.proyecto} es ${fmt(projB.sus_m2 - projA.sus_m2, 0)}/m² más accesible
-                            </span>
-                          ) : (
-                            <span style={{ color: '#3b82f6' }}>
-                              {projB.proyecto} es ${fmt(projA.sus_m2 - projB.sus_m2, 0)}/m² más accesible
-                            </span>
-                          )
-                        ) : (
-                          <span style={{ color: 'var(--text-muted)' }}>Sin datos directos de lista</span>
-                        )}
-                      </div>
-                    </div>
-
-                    {/* Meses de stock delta */}
-                    <div className="cmp-diagnostico-item">
-                      <div className="cmp-diagnostico-label">Horizonte de Agotamiento de Stock</div>
-                      <div className="cmp-diagnostico-val">
-                        {projA.meses_stock && projB.meses_stock ? (
-                          projA.meses_stock <= projB.meses_stock ? (
-                            <span style={{ color: '#10b981' }}>
-                              {projA.proyecto} agota {fmt(projB.meses_stock - projA.meses_stock, 1)} meses antes
-                            </span>
-                          ) : (
-                            <span style={{ color: '#3b82f6' }}>
-                              {projB.proyecto} agota {fmt(projA.meses_stock - projB.meses_stock, 1)} meses antes
-                            </span>
-                          )
-                        ) : (
-                          <span style={{ color: 'var(--text-muted)' }}>—</span>
-                        )}
-                      </div>
-                    </div>
-
-                    {/* Amenidades count delta */}
-                    <div className="cmp-diagnostico-item">
-                      <div className="cmp-diagnostico-label">Equipamiento de Áreas Comunes</div>
-                      <div className="cmp-diagnostico-val">
-                        {(bundleA?.amenidades.length ?? 0) >= (bundleB?.amenidades.length ?? 0) ? (
-                          <span style={{ color: '#10b981' }}>
-                            {projA.proyecto} ({bundleA?.amenidades.length ?? 0}) vs {projB.proyecto} ({bundleB?.amenidades.length ?? 0})
-                          </span>
-                        ) : (
-                          <span style={{ color: '#3b82f6' }}>
-                            {projB.proyecto} ({bundleB?.amenidades.length ?? 0}) vs {projA.proyecto} ({bundleA?.amenidades.length ?? 0})
-                          </span>
-                        )}
-                      </div>
-                    </div>
-                  </>
-                ) : (
-                  <div style={{ color: 'var(--text-muted)', padding: '12px' }}>Selecciona dos proyectos para ver el comparativo directo.</div>
-                )}
-              </div>
-            </div>
+                            return (
+                              <td key={p.proyecto_id} style={{ textAlign: 'center' }}>
+                                <div style={{ fontSize: 12, fontWeight: 700, color: 'var(--text-primary)' }}>
+                                  {fmtUSD(t.avg_precio)}
+                                </div>
+                                <div style={{ fontSize: 11, color: 'var(--text-secondary)', marginTop: 2 }}>
+                                  {t.avg_construccion_m2 ? `${fmt(t.avg_construccion_m2, 0)} m²` : '—'} • ${fmt(t.avg_sus_m2, 0)}/m²
+                                </div>
+                                <div style={{ fontSize: 10, color: 'var(--text-muted)', marginTop: 2 }}>
+                                  {t.ritmo_venta != null ? `${fmt(t.ritmo_venta, 1)} u/m` : '0 u/m'} • {t.meses_stock != null ? `${fmt(t.meses_stock, 1)}m stock` : '—'}
+                                </div>
+                              </td>
+                            )
+                          })}
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              )}
+            </CollapsibleSection>
 
             {/* ── TABLA COMPARATIVA HEAD-TO-HEAD COMPLETA ── */}
-            <div className="cmp-panel-card">
-              <div className="cmp-card-title-row">
-                <div>
-                  <div className="cmp-card-title">Matriz Analítica Comparativa (Head-to-Head)</div>
-                  <div className="cmp-card-subtitle">
-                    Todos los atributos censales, comerciales, financieros y de producto
-                  </div>
-                </div>
-              </div>
-
+            <CollapsibleSection
+              id="matriz"
+              title="Matriz Analítica Comparativa (Head-to-Head)"
+              subtitle="Todos los atributos censales, comerciales, financieros y de producto"
+              open={seccionesAbiertas.matriz}
+              onToggle={() => toggleSeccion('matriz')}>
               <div className="cmp-table-wrap">
                 <table className="cmp-table">
                   <thead>
@@ -701,6 +774,42 @@ export default function ComparacionProyectosPanel({
                           {p.pisos ? `${p.pisos} Pisos` : '—'}
                         </td>
                       ))}
+                    </tr>
+                    <tr>
+                      <td className="cmp-metric-name">Fecha de Lanzamiento</td>
+                      {activeProjects.map((p) => (
+                        <td key={p.proyecto_id} style={{ fontWeight: 600 }}>
+                          {fmtLanzamiento(p.lanzamiento)}
+                        </td>
+                      ))}
+                    </tr>
+                    <tr>
+                      <td className="cmp-metric-name">Tamaño Promedio Estimado (m²)</td>
+                      {activeProjects.map((p) => {
+                        const b = bundles[p.proyecto_id]
+                        const validTiposM2 = (b?.tipologias || [])
+                          .map((t) => t.avg_construccion_m2)
+                          .filter((m): m is number => m != null && m > 0)
+                        const validDetallesM2 = (b?.detalles || [])
+                          .map((d) => d.construccion_m2_original)
+                          .filter((m): m is number => m != null && m > 0)
+                        const tiposWithArea = (b?.tipologias || []).filter((t) => (t.avg_construccion_m2 ?? 0) > 0)
+                        const sumUnds = tiposWithArea.reduce((s, t) => s + (t.und_totales ?? 0), 0)
+                        const weightedM2 = sumUnds > 0
+                          ? Math.round(tiposWithArea.reduce((s, t) => s + (t.avg_construccion_m2! * (t.und_totales ?? 0)), 0) / sumUnds)
+                          : (validTiposM2.length > 0
+                              ? Math.round(validTiposM2.reduce((s, v) => s + v, 0) / validTiposM2.length)
+                              : null)
+                        const avgArea = weightedM2 ?? (validDetallesM2.length > 0
+                          ? Math.round(validDetallesM2.reduce((s, v) => s + v, 0) / validDetallesM2.length)
+                          : null)
+
+                        return (
+                          <td key={p.proyecto_id} style={{ fontWeight: 700 }}>
+                            {avgArea ? `${fmt(avgArea, 0)} m²` : '—'}
+                          </td>
+                        )
+                      })}
                     </tr>
 
                     {/* SECTION: DESEMPEÑO COMERCIAL Y ABSORCIÓN */}
@@ -886,22 +995,20 @@ export default function ComparacionProyectosPanel({
                   </tbody>
                 </table>
               </div>
-            </div>
+            </CollapsibleSection>
 
             {/* ── ÁREAS COMUNES Y EQUIPAMIENTO (CROSS CHECKLIST) ── */}
-            <div className="cmp-panel-card">
-              <div className="cmp-card-title-row">
-                <div>
-                  <div className="cmp-card-title">Comparativa de Áreas Comunes y Amenidades</div>
-                  <div className="cmp-card-subtitle">
-                    Equipamiento social, recreativo y de bienestar disponible en cada desarrollo
-                  </div>
-                </div>
-                <div style={{ fontSize: 11, color: 'var(--text-muted)' }}>
+            <CollapsibleSection
+              id="amenidades"
+              title="Comparativa de Áreas Comunes y Amenidades"
+              subtitle="Equipamiento social, recreativo y de bienestar disponible en cada desarrollo"
+              headerRight={
+                <span style={{ fontSize: 11, color: 'var(--text-muted)' }}>
                   Total {allComparedAmenities.length} amenidades detectadas
-                </div>
-              </div>
-
+                </span>
+              }
+              open={seccionesAbiertas.amenidades}
+              onToggle={() => toggleSeccion('amenidades')}>
               {allComparedAmenities.length === 0 ? (
                 <div style={{ textAlign: 'center', padding: '20px 0', color: 'var(--text-muted)', fontSize: 11.5 }}>
                   No se registraron amenidades en la base de datos para los proyectos seleccionados.
@@ -934,80 +1041,7 @@ export default function ComparacionProyectosPanel({
                   })}
                 </div>
               )}
-            </div>
-
-            {/* ── COMPARATIVA DE MODELOS / TIPOLOGÍAS ── */}
-            <div className="cmp-panel-card">
-              <div className="cmp-card-title-row">
-                <div>
-                  <div className="cmp-card-title">Comparativa por Tipología (Modelos de Unidades)</div>
-                  <div className="cmp-card-subtitle">
-                    Contraste directo de superficie construida, precios de ticket y valores por m²
-                  </div>
-                </div>
-              </div>
-
-              {allComparedTypologies.length === 0 ? (
-                <div style={{ textAlign: 'center', padding: '20px 0', color: 'var(--text-muted)', fontSize: 11.5 }}>
-                  Sin tipologías desagregadas para este snapshot de proyectos.
-                </div>
-              ) : (
-                <div className="cmp-table-wrap">
-                  <table className="cmp-table">
-                    <thead>
-                      <tr>
-                        <th>Tipología</th>
-                        {activeProjects.map((p, idx) => (
-                          <th
-                            key={p.proyecto_id}
-                            style={{
-                              textAlign: 'center',
-                              color: idx === 0 ? '#10b981' : idx === 1 ? '#3b82f6' : '#f59e0b',
-                            }}>
-                            {p.proyecto}
-                          </th>
-                        ))}
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {allComparedTypologies.map((tipo) => (
-                        <tr key={tipo}>
-                          <td style={{ fontWeight: 700, color: 'var(--text-primary)' }}>{tipo}</td>
-                          {activeProjects.map((p) => {
-                            const b = bundles[p.proyecto_id]
-                            const t = b?.tipologias.find(
-                              (x) => x.avg_tipologia.toLowerCase().trim() === tipo.toLowerCase().trim()
-                            )
-
-                            if (!t) {
-                              return (
-                                <td key={p.proyecto_id} style={{ textAlign: 'center', color: 'var(--text-muted)' }}>
-                                  — No disponible —
-                                </td>
-                              )
-                            }
-
-                            return (
-                              <td key={p.proyecto_id} style={{ textAlign: 'center' }}>
-                                <div style={{ fontSize: 12, fontWeight: 700, color: 'var(--text-primary)' }}>
-                                  {fmtUSD(t.avg_precio)}
-                                </div>
-                                <div style={{ fontSize: 11, color: 'var(--text-secondary)', marginTop: 2 }}>
-                                  {t.avg_construccion_m2 ? `${fmt(t.avg_construccion_m2, 0)} m²` : '—'} • ${fmt(t.avg_sus_m2, 0)}/m²
-                                </div>
-                                <div style={{ fontSize: 10, color: 'var(--text-muted)', marginTop: 2 }}>
-                                  {t.ritmo_venta != null ? `${fmt(t.ritmo_venta, 1)} u/m` : '0 u/m'} • {t.meses_stock != null ? `${fmt(t.meses_stock, 1)}m stock` : '—'}
-                                </div>
-                              </td>
-                            )
-                          })}
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
-              )}
-            </div>
+            </CollapsibleSection>
           </>
         )}
       </div>
