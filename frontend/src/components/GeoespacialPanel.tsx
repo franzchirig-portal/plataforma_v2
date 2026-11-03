@@ -906,7 +906,6 @@ export default function GeoespacialPanel({
                   borderRadius: 4,
                   fontSize: 11,
                   fontWeight: 500,
-                  outline: 'none',
                   cursor: 'pointer',
                 }}>
                 <option value="meses_stock">Meses Stock (Riesgo)</option>
@@ -931,7 +930,6 @@ export default function GeoespacialPanel({
                   borderRadius: 4,
                   fontSize: 11,
                   fontWeight: 500,
-                  outline: 'none',
                   cursor: 'pointer',
                 }}>
                 <option value="und_por_vender">Stock en Oferta (Unds)</option>
@@ -956,7 +954,6 @@ export default function GeoespacialPanel({
                   borderRadius: 4,
                   fontSize: 11,
                   fontWeight: 500,
-                  outline: 'none',
                   cursor: 'pointer',
                 }}>
                 <option value="stock">Oferta Acumulada (Stock)</option>
@@ -1041,7 +1038,6 @@ export default function GeoespacialPanel({
               color: 'var(--text-primary)',
               fontSize: 11.5,
               width: '100%',
-              outline: 'none',
             }}
           />
           {searchQuery && (
@@ -1369,7 +1365,6 @@ export default function GeoespacialPanel({
                       padding: '6px 10px',
                       fontSize: 11,
                       color: 'var(--text-primary)',
-                      outline: 'none',
                     }}
                   />
                   <input
@@ -1384,7 +1379,6 @@ export default function GeoespacialPanel({
                       padding: '6px 10px',
                       fontSize: 11,
                       color: 'var(--text-primary)',
-                      outline: 'none',
                     }}
                   />
                   <button

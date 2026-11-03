@@ -543,7 +543,6 @@ export default function EvolutivoOfertaPanel() {
                 padding: '6px 12px',
                 color: '#f8fafc',
                 fontSize: 12,
-                outline: 'none',
               }}
             />
           </div>

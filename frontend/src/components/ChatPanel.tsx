@@ -876,7 +876,6 @@ export default function ChatPanel({
               padding: '6px 10px',
               fontSize: 11,
               resize: 'none',
-              outline: 'none',
             }}
           />
           <button

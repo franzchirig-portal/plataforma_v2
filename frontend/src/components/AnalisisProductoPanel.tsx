@@ -282,7 +282,6 @@ export default function AnalisisProductoPanel({
                 color: 'var(--text-primary)',
                 border: '1px solid var(--border-default)',
                 borderRadius: 'var(--radius-md)',
-                outline: 'none',
                 cursor: 'pointer',
               }}>
               {proyectos.map((p) => (

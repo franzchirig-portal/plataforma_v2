@@ -128,7 +128,6 @@ export default function LeftSidebar({
             justifyContent: 'center',
             color: activeTab === 'workspace_os' ? 'var(--text-primary)' : 'var(--text-muted)',
             transition: 'all 0.12s ease',
-            outline: 'none',
             position: 'relative',
           }}
           onMouseEnter={(e) => {
@@ -183,7 +182,6 @@ export default function LeftSidebar({
               justifyContent: 'center',
               color: activePanel === id ? 'var(--text-primary)' : 'var(--text-muted)',
               transition: 'all 0.12s ease',
-              outline: 'none',
               position: 'relative',
             }}
             onMouseEnter={(e) => {
@@ -345,7 +343,7 @@ function SettingsPanel() {
   )
 }
 
-const selStyle: React.CSSProperties = { background: 'var(--bg-base)', color: 'var(--text-primary)', border: '1px solid var(--border-default)', borderRadius: 6, padding: '3px 8px', fontSize: 11, outline: 'none', cursor: 'pointer' }
+const selStyle: React.CSSProperties = { background: 'var(--bg-base)', color: 'var(--text-primary)', border: '1px solid var(--border-default)', borderRadius: 6, padding: '3px 8px', fontSize: 11, cursor: 'pointer' }
 
 function Sel({ options }: { options: string[] }) {
   return <select style={selStyle}>{options.map(o => <option key={o}>{o}</option>)}</select>

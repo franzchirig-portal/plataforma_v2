@@ -2367,7 +2367,6 @@ export default function WorkspacePanel({
                       padding: '5px 10px',
                       fontSize: 11.5,
                       fontWeight: 600,
-                      outline: 'none',
                       cursor: 'pointer',
                       boxShadow: 'none',
                     }}>
@@ -2787,7 +2786,6 @@ export default function WorkspacePanel({
                   border: '1px solid var(--border-default)',
                   borderRadius: 'var(--radius-sm)',
                   color: 'var(--text-primary)',
-                  outline: 'none',
                 }}
               />
             </div>

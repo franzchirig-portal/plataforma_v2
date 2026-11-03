@@ -148,7 +148,6 @@ export default function RightSidebar({
               justifyContent: 'center',
               fontSize: 15,
               transition: 'all 0.15s ease',
-              outline: 'none',
               boxShadow: activePanel === id
                 ? '0 0 10px var(--citrino-glow, rgba(34,211,238,0.35))'
                 : 'none',
@@ -375,7 +374,6 @@ const selectStyle: React.CSSProperties = {
   borderRadius: 6,
   padding: '3px 8px',
   fontSize: 11,
-  outline: 'none',
   cursor: 'pointer',
 }
 
