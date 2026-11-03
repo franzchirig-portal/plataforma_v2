@@ -243,7 +243,7 @@ export default function EndeudamientoHipotecarioPanel({ initialChapter = '4.1' }
                   <div className="citrino-charts-grid" style={{ marginBottom: 0 }}>
                     <div style={{ flex: 1 }}>
                       <ReactECharts
-                        option={getPie(caracteristicasHogar.tipoVivienda.map((t) => ({ name: t.tipo, value: t.pct })), ['#ff6b00', '#38bdf8'])}
+                        option={getBarH(caracteristicasHogar.tipoVivienda.map((t) => t.tipo), caracteristicasHogar.tipoVivienda.map((t) => t.pct), '#ff6b00')}
                         style={{ height: 260 }}
                       />
                     </div>
