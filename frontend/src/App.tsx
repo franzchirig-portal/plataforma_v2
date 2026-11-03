@@ -1,6 +1,5 @@
 import { useState, useEffect, useRef } from 'react'
 import './index.css'
-import { IconAssistant } from './components/LeftSidebar'
 import ChatPanel from './components/ChatPanel'
 import AnalysisPanel from './components/AnalysisPanel'
 import WorkspacePanel from './components/WorkspacePanel'
@@ -8,7 +7,6 @@ import TipologiasPanel from './components/TipologiasPanel'
 import AnalisisProductoPanel from './components/AnalisisProductoPanel'
 import ComparacionProyectosPanel from './components/ComparacionProyectosPanel'
 import GeoespacialPanel from './components/GeoespacialPanel'
-import WorkspaceOSPanel from './components/WorkspaceOSPanel'
 import AuthScreen from './components/AuthScreen'
 import LeftAnalyticsBar from './components/LeftAnalyticsBar'
 import SubHeader, { type Tab } from './components/SubHeader'
@@ -52,14 +50,6 @@ const IconLogout = () => (
     <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
     <polyline points="16 17 21 12 16 7" />
     <line x1="21" y1="12" x2="9" y2="12" />
-  </svg>
-)
-
-const IconAnalysis = () => (
-  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round">
-    <rect x="3" y="3" width="18" height="18" rx="2" />
-    <path d="M3 9h18" />
-    <path d="M9 21V9" />
   </svg>
 )
 
