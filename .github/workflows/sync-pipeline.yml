@@ -40,8 +40,8 @@ on:
         default: "incremental"
         type: choice
         options:
-          - incremental   # Solo filas nuevas/modificadas
-          - full          # Re-sync completo (más lento, pero garantiza consistencia)
+          - incremental   # Upsert idempotente (valor por defecto)
+          - full          # Mismo upsert; el modo solo queda registrado en el log
 
   # También ejecutar al hacer push al branch main (para probar cambios al pipeline)
   push:
