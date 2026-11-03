@@ -27,7 +27,7 @@ export const SUB_TABS: SubTab[] = [
   { id: 'stock_unidades',         label: 'Stock en Ventas' },
   { id: 'ritmo_ventas',           label: 'Ritmo de Ventas' },
   { id: 'analisis_producto',      label: 'Análisis de Producto' },
-  { id: 'comparacion_proyectos',  label: 'Comparación de Proyecto' },
+  { id: 'comparacion_proyectos',  label: 'Comparación de Proyectos' },
   { id: 'proyectos',              label: 'Proyectos' },
   { id: 'tipologias',             label: 'Tipologías' },
   { id: 'geoespacial',            label: 'Mapa' },
