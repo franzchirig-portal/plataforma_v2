@@ -878,7 +878,7 @@ export default function ComparacionProyectosPanel({
                       <td className="cmp-metric-name">Unidades Vendidas / Stock Restante</td>
                       {activeProjects.map((p) => (
                         <td key={p.proyecto_id}>
-                          <span style={{ color: '#10b981', fontWeight: 600 }}>{p.und_vendidas ?? 0} vendidas</span>
+                          <span style={{ color: 'var(--text-success)', fontWeight: 600 }}>{p.und_vendidas ?? 0} vendidas</span>
                           <span style={{ color: 'var(--text-muted)' }}> / {p.und_por_vender ?? '—'} stock</span>
                         </td>
                       ))}

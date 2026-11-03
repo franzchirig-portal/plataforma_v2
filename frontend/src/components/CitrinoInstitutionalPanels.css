@@ -318,3 +318,10 @@
 [data-theme="light"] .citrino-sample-badge,
 [data-theme="light"] .citrino-subpill-btn.active { color: var(--citrino-sky); }
 [data-theme="light"] .citrino-nav-pill-btn.active { background: var(--citrino-orange); }
+
+/* ─── Cifras alineadas y contraste sobre el naranja de marca ─────────────── */
+.citrino-table td,
+.citrino-table th,
+.citrino-kpi-val { font-variant-numeric: tabular-nums; }
+/* Blanco sobre #ff6b00 da 2,9:1; en oscuro se usa texto oscuro (≈6,4:1). En claro el fondo ya es más oscuro. */
+:root:not([data-theme="light"]) .citrino-nav-pill-btn.active { color: var(--bg-base); }

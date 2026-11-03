@@ -287,7 +287,7 @@
     border: none;
     border-radius: 999px;
     background: #ff7a00;
-    color: #ffffff;
+    color: #181818; /* blanco sobre #ff7a00 daba 2,6:1 */
     font: inherit;
     font-size: var(--fs-cuerpo);
     font-weight: 700;

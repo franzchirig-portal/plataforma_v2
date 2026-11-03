@@ -49,7 +49,9 @@
   --color-negative:  #f43f5e;
   --color-warning:   #f59e0b;
 
-  /* Accents */
+  /* Accents. --accent-blue/cyan/violet/teal son grises a propósito (paleta neutra,
+     "Zero Blue, Zero Purple"): los nombres son históricos. Los colores con significado
+     son emerald (positivo), ruby (negativo) y amber (atención). */
   --accent-blue:     #e5e5e5;
   --accent-blue-glow:transparent;
   --accent-cyan:     #e5e5e5;
