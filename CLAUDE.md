@@ -45,7 +45,7 @@ There is no test suite for either half.
 
 * `utils.py` parses Bolivian number formats; `config.py` maps sheet headers (with many spelling variants) to internal columns — add new header variants there.
 * `geospatial.py` (`KMZMatcher`) loads polygons from `datakmz/\*.kmz` and does point-in-polygon matching to assign zones to projects by lat/lon.
-* `.github/workflows/sync-pipeline.yml` runs the sync every 6h, on manual dispatch and on pushes touching `pipeline/\*\*`, `supabase/\*\*` or `requirements.txt`. Secrets: `GOOGLE\_CREDENTIALS`, `SUPABASE\_URL`, `SUPABASE\_SERVICE\_KEY`. Note: `sync.py` currently ignores the `SYNC\_CITY/TAB/MODE` env vars the workflow passes.
+* `.github/workflows/sync-pipeline.yml` runs the sync every 6h, on manual dispatch and on pushes touching `pipeline/\*\*`, `supabase/\*\*` or `requirements.txt`. Secrets: `GOOGLE\_CREDENTIALS`, `SUPABASE\_URL`, `SUPABASE\_SERVICE\_KEY`. `sync.py` reads `SYNC\_CITY` (ALL/SCZ/LPZ/CBB), `SYNC\_TAB` (ALL or one tab) and `SYNC\_MODE` (incremental/full) from the environment and fails on invalid values. `SYNC\_TAB` always extracts `datos\_margenes` too (the other tabs depend on it) and loads only the tables derived from the chosen tab (`TABLE\_SOURCE\_TAB` in `sync.py`). `SYNC\_MODE` is only logged, because the Supabase upsert is idempotent.
 * `supabase/001–003\_\*.sql` are applied manually (schema, public-read RLS, auth config).
 
 ## Frontend architecture
