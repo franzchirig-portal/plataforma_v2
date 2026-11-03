@@ -33,7 +33,7 @@ Frontend (run from `frontend/`; needs `VITE\_SUPABASE\_URL` and `VITE\_SUPABASE\
 ```bash
 npm install
 npm run dev       # vite dev server
-npm run build     # vite build (no tsc step; type errors do not fail the build)
+npm run build     # tsc -b && vite build (a type error fails the build)
 npm run lint      # oxlint
 ```
 
@@ -51,9 +51,9 @@ There is no test suite for either half.
 ## Frontend architecture
 
 * `src/lib/supabase.ts` is the whole data layer: Supabase client, types (`Proyecto`, `IndicadorCenso`, `AvgTipologia`, `IndicadorFull`), and fetchers with a 60s in-memory cache. It fetches `oferta\_proyectos` and `oferta\_indicadores\_censo` whole and **joins in JS** (`fetchIndicadores`); `getLatestPerProject` picks the newest snapshot per project. Metric helpers (`computeZonaMetrics`, `computeTipologiaBenchmarks`, `fetchKPIs`) live here too.
-* `src/App.tsx` owns session/auth state (Supabase auth or guest mode via `AuthScreen`), the city filter (`SCZ|LPZ|CBB|ALL`), the top tab bar, and the Antigravity-IDE-style shell (`LeftSidebar`, `RightSidebar`/`ChatPanel`, `CommandPalette` on Ctrl/⌘+K).
-* Each tab is a large panel component in `src/components/`: `WorkspaceOSPanel` (Mission Control, comparator, report generator — see `docs/WORKSPACE\_OS\_GUIDE.md`), `AnalysisPanel`, `TipologiasPanel`, `WorkspacePanel`, `GeoespacialPanel` (maps, heatmaps, bubble maps, QGIS layers). Charts use ECharts (`echarts-for-react`).
-* Styling is plain CSS in `src/index.css` / `App.css` following an Antigravity IDE dark palette; there is no CSS framework.
+* `src/App.tsx` owns session/auth state (Supabase auth or guest mode via `AuthScreen`), the city filter (`SCZ|LPZ|CBB|ALL`), the theme (saved in `localStorage` key `citrino\_theme\_v2`; without a saved choice it follows the system `prefers-color-scheme`) and the shell: `SubHeader` (top tabs), `LeftAnalyticsBar` (chapter navigation), `FilterBar`, the active panel wrapped in an `ErrorBoundary`, and `ChatPanel`/`AnalysisPanel` on the right.
+* Each tab is a large panel component in `src/components/`: `WorkspacePanel` (main dashboard), `AnalysisPanel`, `TipologiasPanel`, `AnalisisProductoPanel`, `ComparacionProyectosPanel`, `GeoespacialPanel` (maps, heatmaps, bubble maps, QGIS layers) and `HipotecarioPanel`. The "Data Studio" chapters (`EvolutivoOfertaPanel`, `MarketplaceParticularesPanel`, `BienesAdjudicadosPanel`, `AnalisisDemandaPanel`, `SistemaFinancieroPanel`, `CicloInmobiliarioPanel`, `EndeudamientoHipotecarioPanel`) read fixed data from `src/data/citrinoDataStudioData.ts`, not from Supabase. Charts use ECharts (`echarts-for-react`); `useChartTheme` (`src/lib/chartTheme.ts`) gives them axis/legend colors for the current theme. Components that were removed from the layout (command palette, `RightSidebar`, `LeftSidebar`, `WorkspaceOSPanel`) were deleted; they are in git history.
+* Styling is plain CSS in `src/index.css` (design tokens in `:root`, light theme in `[data-theme="light"]`), `src/mobile.css` and one CSS file per large component; there is no CSS framework. Text uses only four sizes, defined as tokens: `--fs-etiqueta` (11px), `--fs-cuerpo` (13px), `--fs-subtitulo` (16px) and `--fs-titulo` (22px) — use `var(--fs-...)` in CSS and inline styles, and plain numbers 11/13/16/22 inside ECharts options (which cannot use CSS variables).
 
 ## Deployment
 
