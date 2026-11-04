@@ -72,14 +72,7 @@ Cada capítulo de los paneles con pestañas muestra sus pestañas arriba (compon
 - **Estilos:** CSS plano con tokens en `src/index.css`. Sin framework de CSS.
 - **Publicación:** Vercel (`vercel.json`) o Netlify (`netlify.toml`), con reescritura a `index.html`.
 
-## 5. Piezas que ya no existen
-
-Estas partes se eliminaron del código y solo quedan en el historial de git. No volver a usarlas como referencia:
-
-- Command Palette (⌘K), `RightSidebar`, `LeftSidebar`, `WorkspaceOSPanel`.
-- Arquitectura "Medallion" (Bronze, Silver, Gold): reemplazada por el modelo Diamond.
-
-## 6. Dónde mirar antes de cambiar algo
+## 5. Dónde mirar antes de cambiar algo
 
 | Quiero cambiar... | Mirar |
 |---|---|
