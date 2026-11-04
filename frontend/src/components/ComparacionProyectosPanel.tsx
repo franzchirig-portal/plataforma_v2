@@ -427,7 +427,7 @@ export default function ComparacionProyectosPanel({
                 <div className="cmp-slot-label-row">
                   <span className="cmp-slot-label slot-b">Proyecto 2 (Slot B)</span>
                   {projB?.etapa && (
-                    <span style={{ fontSize: 'var(--fs-etiqueta)', color: '#3b82f6', fontWeight: 700 }}>
+                    <span style={{ fontSize: 'var(--fs-etiqueta)', color: 'var(--color-azul-500)', fontWeight: 700 }}>
                       {projB.etapa}
                     </span>
                   )}
@@ -530,7 +530,7 @@ export default function ComparacionProyectosPanel({
                     <div className="cmp-hero-header">
                       <div>
                         <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                          <span style={{ color: idx === 0 ? 'var(--text-success)' : idx === 1 ? '#3b82f6' : 'var(--text-warning)' }}>
+                          <span style={{ color: idx === 0 ? 'var(--text-success)' : idx === 1 ? 'var(--color-azul-500)' : 'var(--text-warning)' }}>
                             {isCasa ? <IconHouse /> : <IconBuilding />}
                           </span>
                           <h3 className="cmp-hero-name">{p.proyecto}</h3>
@@ -648,7 +648,7 @@ export default function ComparacionProyectosPanel({
                             key={p.proyecto_id}
                             style={{
                               textAlign: 'center',
-                              color: idx === 0 ? 'var(--text-success)' : idx === 1 ? '#3b82f6' : 'var(--text-warning)',
+                              color: idx === 0 ? 'var(--text-success)' : idx === 1 ? 'var(--color-azul-500)' : 'var(--text-warning)',
                             }}>
                             {p.proyecto}
                           </th>
@@ -712,7 +712,7 @@ export default function ComparacionProyectosPanel({
                           key={p.proyecto_id}
                           style={{
                             textAlign: 'left',
-                            color: idx === 0 ? 'var(--text-success)' : idx === 1 ? '#3b82f6' : 'var(--text-warning)',
+                            color: idx === 0 ? 'var(--text-success)' : idx === 1 ? 'var(--color-azul-500)' : 'var(--text-warning)',
                             fontSize: 'var(--fs-cuerpo)',
                           }}>
                           {p.proyecto}
@@ -894,7 +894,7 @@ export default function ComparacionProyectosPanel({
                                 style={{
                                   width: `${Math.min(100, p.pct_vendido ?? 0)}%`,
                                   height: '100%',
-                                  background: (p.pct_vendido ?? 0) >= 50 ? 'var(--text-success)' : '#3b82f6',
+                                  background: (p.pct_vendido ?? 0) >= 50 ? 'var(--text-success)' : 'var(--color-azul-500)',
                                 }}
                               />
                             </div>
