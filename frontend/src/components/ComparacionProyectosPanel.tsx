@@ -393,7 +393,7 @@ export default function ComparacionProyectosPanel({
                 <div className="cmp-slot-label-row">
                   <span className="cmp-slot-label slot-a">Proyecto 1 (Slot A)</span>
                   {projA?.etapa && (
-                    <span style={{ fontSize: 'var(--fs-etiqueta)', color: '#10b981', fontWeight: 700 }}>
+                    <span style={{ fontSize: 'var(--fs-etiqueta)', color: 'var(--text-success)', fontWeight: 700 }}>
                       {projA.etapa}
                     </span>
                   )}
@@ -450,7 +450,7 @@ export default function ComparacionProyectosPanel({
                   <div className="cmp-slot-label-row">
                     <span className="cmp-slot-label slot-c">Proyecto 3 (Slot C - Opcional)</span>
                     {projC?.etapa && (
-                      <span style={{ fontSize: 'var(--fs-etiqueta)', color: '#f59e0b', fontWeight: 700 }}>
+                      <span style={{ fontSize: 'var(--fs-etiqueta)', color: 'var(--text-warning)', fontWeight: 700 }}>
                         {projC.etapa}
                       </span>
                     )}
@@ -530,7 +530,7 @@ export default function ComparacionProyectosPanel({
                     <div className="cmp-hero-header">
                       <div>
                         <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                          <span style={{ color: idx === 0 ? '#10b981' : idx === 1 ? '#3b82f6' : '#f59e0b' }}>
+                          <span style={{ color: idx === 0 ? 'var(--text-success)' : idx === 1 ? '#3b82f6' : 'var(--text-warning)' }}>
                             {isCasa ? <IconHouse /> : <IconBuilding />}
                           </span>
                           <h3 className="cmp-hero-name">{p.proyecto}</h3>
@@ -595,7 +595,7 @@ export default function ComparacionProyectosPanel({
                     <div className="cmp-hero-kpis-row">
                       <div className="cmp-hero-kpi-item">
                         <div className="cmp-hero-kpi-label">Ritmo Venta</div>
-                        <div className="cmp-hero-kpi-val" style={{ color: (ritmoVal ?? 0) > 0 ? '#10b981' : 'inherit' }}>
+                        <div className="cmp-hero-kpi-val" style={{ color: (ritmoVal ?? 0) > 0 ? 'var(--text-success)' : 'inherit' }}>
                           {ritmoVal != null && ritmoVal > 0 ? `${fmt(ritmoVal, 1)} u/m` : '—'}
                         </div>
                       </div>
@@ -616,7 +616,7 @@ export default function ComparacionProyectosPanel({
 
                       <div className="cmp-hero-kpi-item">
                         <div className="cmp-hero-kpi-label">% Vendido</div>
-                        <div className="cmp-hero-kpi-val" style={{ color: (p.pct_vendido ?? 0) >= 50 ? '#10b981' : '#f59e0b' }}>
+                        <div className="cmp-hero-kpi-val" style={{ color: (p.pct_vendido ?? 0) >= 50 ? 'var(--text-success)' : 'var(--text-warning)' }}>
                           {p.pct_vendido ?? 0}%
                         </div>
                       </div>
@@ -648,7 +648,7 @@ export default function ComparacionProyectosPanel({
                             key={p.proyecto_id}
                             style={{
                               textAlign: 'center',
-                              color: idx === 0 ? '#10b981' : idx === 1 ? '#3b82f6' : '#f59e0b',
+                              color: idx === 0 ? 'var(--text-success)' : idx === 1 ? '#3b82f6' : 'var(--text-warning)',
                             }}>
                             {p.proyecto}
                           </th>
@@ -712,7 +712,7 @@ export default function ComparacionProyectosPanel({
                           key={p.proyecto_id}
                           style={{
                             textAlign: 'left',
-                            color: idx === 0 ? '#10b981' : idx === 1 ? '#3b82f6' : '#f59e0b',
+                            color: idx === 0 ? 'var(--text-success)' : idx === 1 ? '#3b82f6' : 'var(--text-warning)',
                             fontSize: 'var(--fs-cuerpo)',
                           }}>
                           {p.proyecto}
@@ -823,7 +823,7 @@ export default function ComparacionProyectosPanel({
                         const isWin = ritmo != null && ritmo === Math.max(...activeProjects.map((x) => x.ritmo_venta ?? 0))
                         return (
                           <td key={p.proyecto_id}>
-                            <strong style={{ color: (ritmo ?? 0) > 0 ? '#10b981' : 'var(--text-primary)' }}>
+                            <strong style={{ color: (ritmo ?? 0) > 0 ? 'var(--text-success)' : 'var(--text-primary)' }}>
                               {ritmo != null && ritmo > 0 ? `${fmt(ritmo, 1)} und/mes` : '—'}
                             </strong>
                             {isWin && activeProjects.length > 1 && (
@@ -850,10 +850,10 @@ export default function ComparacionProyectosPanel({
                               style={{
                                 color:
                                   (p.meses_stock ?? 0) > 18
-                                    ? '#f43f5e'
+                                    ? 'var(--text-danger)'
                                     : (p.meses_stock ?? 0) > 12
-                                    ? '#f59e0b'
-                                    : '#10b981',
+                                    ? 'var(--text-warning)'
+                                    : 'var(--text-success)',
                               }}>
                               {p.meses_stock != null ? `${fmt(p.meses_stock, 1)} meses` : '—'}
                             </strong>
@@ -894,7 +894,7 @@ export default function ComparacionProyectosPanel({
                                 style={{
                                   width: `${Math.min(100, p.pct_vendido ?? 0)}%`,
                                   height: '100%',
-                                  background: (p.pct_vendido ?? 0) >= 50 ? '#10b981' : '#3b82f6',
+                                  background: (p.pct_vendido ?? 0) >= 50 ? 'var(--text-success)' : '#3b82f6',
                                 }}
                               />
                             </div>
@@ -930,7 +930,7 @@ export default function ComparacionProyectosPanel({
 
                         return (
                           <td key={p.proyecto_id}>
-                            <strong style={{ color: '#10b981' }}>
+                            <strong style={{ color: 'var(--text-success)' }}>
                               {avgReal ? `$${fmt(avgReal, 0)}` : '—'}
                             </strong>
                             <span style={{ fontSize: 'var(--fs-etiqueta)', color: 'var(--text-muted)', marginLeft: 3 }}>USD/m²</span>
