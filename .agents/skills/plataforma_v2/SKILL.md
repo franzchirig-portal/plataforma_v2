@@ -1,5 +1,5 @@
 ---
-name: citrino-intelligence-workspace
+name: plataforma_v2
 description: >
   Mapa completo de la plataforma Citrino Intelligence (Bolivia): cada área de la pantalla,
   cada capítulo y pestaña con su archivo, de dónde sale cada dato (base de datos o archivo
