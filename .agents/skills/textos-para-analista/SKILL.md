@@ -49,6 +49,19 @@ El usuario es analista de inteligencia de negocios. No programa. Ve datos y grá
 | Pico pos-pandemia | Pico después de la pandemia |
 | T/C oficial | Tipo de cambio oficial |
 | Ratio | Porcentaje o tasa (según el caso) |
+| Ratio deuda / ingreso | Porcentaje de la deuda sobre el ingreso |
+| Ticket Lista ($US) / Ticket promedio | Precio de lista / Precio promedio |
+| Ticket medio hipotecario | Monto promedio del préstamo |
+| Plazo de Absorción | Tiempo para vender todo el stock |
+| Absorción saludable (<12m) | Ritmo sano de venta (menos de 12 meses) |
+| Presión moderada (12-18m) | Presión moderada (12 a 18 meses) |
+| Sobre-inventario (>18m) | Exceso de unidades por vender (más de 18 meses) |
+| Velocidad de Absorción (Ritmo) | Ritmo de venta |
+| Und. Vendidas | Unidades vendidas |
+| Matriz Oficial 01-E | Tabla oficial de tipologías |
+| Matriz Analítica Comparativa (Head-to-Head) | Comparación lado a lado |
+| Desempeño Comercial y Absorción | Desempeño comercial y ritmo de venta |
+| unds / und. | unidades |
 
 ## Glosario del mercado (términos que sí se pueden usar)
 
@@ -63,6 +76,16 @@ El usuario es analista de inteligencia de negocios. No programa. Ve datos y grá
 - **Ritmo de venta:** porcentaje o cantidad de unidades vendidas por mes.
 - **Cuota inicial:** parte del precio que se paga al contado antes del crédito.
 - **Tipología:** modelo de departamento según cantidad de cuartos (1 dormitorio, 2, 3, etc.).
+
+## Cómo revisar
+
+Buscar las palabras prohibidas en los paneles (ignora comentarios, que no se ven):
+
+```bash
+grep -n -E "Pestaña|Sup\.|Precio/m²|Und\.|Absorci|Ticket|Filosofía|Matriz|Módulo 0|auditad|Looker|Dcto\.|Ratio|Head-to-Head|unds" frontend/src/components/*Panel.tsx
+```
+
+Cada coincidencia que se ve en pantalla debe cambiarse con la tabla de arriba. Las que son nombres de variables en el código (por ejemplo `probabilidadDefault`) no se tocan.
 
 ## Revisión antes de entregar
 
