@@ -622,7 +622,7 @@ export default function ChatPanel({
         {line.split(/(\*\*[^*]+\*\*|\*[^*]+\*)/).map((part, j) => {
           if (part.startsWith('**') && part.endsWith('**')) {
             return (
-              <strong key={j} style={{ color: '#f1f5f9', fontWeight: 600 }}>
+              <strong key={j} style={{ color: 'var(--color-pizarra-100)', fontWeight: 600 }}>
                 {part.slice(2, -2)}
               </strong>
             )
@@ -675,7 +675,7 @@ export default function ChatPanel({
                   fontWeight: 700,
                   flexShrink: 0,
                   background: msg.role === 'ai' ? 'var(--bg-card-hover)' : 'var(--bg-card)',
-                  color: msg.role === 'ai' ? '#ffffff' : 'var(--text-secondary)',
+                  color: msg.role === 'ai' ? 'var(--color-blanco)' : 'var(--text-secondary)',
                   border: `1px solid var(--border-default)`,
                 }}>
                 {msg.role === 'ai' ? (
@@ -706,7 +706,7 @@ export default function ChatPanel({
                 {msg.chartOption && (
                   <div style={{
                     marginTop: 10,
-                    background: '#040e12',
+                    background: 'var(--color-fondo-profundo)',
                     border: '1px solid #163642',
                     borderRadius: 8,
                     padding: '8px 6px 4px',
@@ -746,7 +746,7 @@ export default function ChatPanel({
                         style={{
                           background: 'linear-gradient(135deg, #032e35 0%, #094754 100%)',
                           border: '1px solid var(--border-default, #1a4354)',
-                          color: '#ffffff',
+                          color: 'var(--color-blanco)',
                           padding: '4px 9px',
                           borderRadius: 6,
                           fontSize: 'var(--fs-etiqueta)',
@@ -806,7 +806,7 @@ export default function ChatPanel({
                 alignItems: 'center',
                 justifyContent: 'center',
                 fontSize: 'var(--fs-etiqueta)',
-                color: '#ffffff',
+                color: 'var(--color-blanco)',
               }}>
               <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M12 2a10 10 0 0 1 10 10c0 5.52-4.48 10-10 10S2 17.52 2 12 6.48 2 12 2z"/>
@@ -886,7 +886,7 @@ export default function ChatPanel({
               background: 'var(--bg-card)',
               border: '1px solid var(--border-default)',
               borderRadius: 6,
-              color: '#f1f5f9',
+              color: 'var(--color-pizarra-100)',
               padding: '6px 10px',
               fontSize: 'var(--fs-etiqueta)',
               resize: 'none',
