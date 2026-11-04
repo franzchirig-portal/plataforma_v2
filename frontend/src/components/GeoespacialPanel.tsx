@@ -1128,15 +1128,15 @@ export default function GeoespacialPanel({
               {colorMetric === 'meses_stock' && (
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-                    <div style={{ width: 10, height: 10, borderRadius: 2, background: '#10b981' }} />
+                    <div style={{ width: 10, height: 10, borderRadius: 2, background: 'var(--text-success)' }} />
                     <span style={{ color: 'var(--text-primary)' }}>&lt; 12 meses (Alta rotación)</span>
                   </div>
                   <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-                    <div style={{ width: 10, height: 10, borderRadius: 2, background: '#94a3b8' }} />
+                    <div style={{ width: 10, height: 10, borderRadius: 2, background: 'var(--text-muted)' }} />
                     <span style={{ color: 'var(--text-primary)' }}>12 - 18 meses (Equilibrado)</span>
                   </div>
                   <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-                    <div style={{ width: 10, height: 10, borderRadius: 2, background: '#f59e0b' }} />
+                    <div style={{ width: 10, height: 10, borderRadius: 2, background: 'var(--text-warning)' }} />
                     <span style={{ color: 'var(--text-primary)' }}>18 - 24 meses (Presión moderada)</span>
                   </div>
                   <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
@@ -1149,15 +1149,15 @@ export default function GeoespacialPanel({
               {colorMetric === 'ritmo_venta' && (
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-                    <div style={{ width: 10, height: 10, borderRadius: 2, background: '#10b981' }} />
+                    <div style={{ width: 10, height: 10, borderRadius: 2, background: 'var(--text-success)' }} />
                     <span style={{ color: 'var(--text-primary)' }}>&gt; 2.0 und/mes (Rápido)</span>
                   </div>
                   <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-                    <div style={{ width: 10, height: 10, borderRadius: 2, background: '#94a3b8' }} />
+                    <div style={{ width: 10, height: 10, borderRadius: 2, background: 'var(--text-muted)' }} />
                     <span style={{ color: 'var(--text-primary)' }}>1.0 - 2.0 und/mes (Medio)</span>
                   </div>
                   <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-                    <div style={{ width: 10, height: 10, borderRadius: 2, background: '#f59e0b' }} />
+                    <div style={{ width: 10, height: 10, borderRadius: 2, background: 'var(--text-warning)' }} />
                     <span style={{ color: 'var(--text-primary)' }}>0.4 - 1.0 und/mes (Lento)</span>
                   </div>
                   <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
@@ -1417,7 +1417,7 @@ export default function GeoespacialPanel({
                     width: '100%',
                     padding: '8px 12px',
                     background: '#f3f3f3',
-                    color: '#181818',
+                    color: 'var(--bg-base)',
                     border: 'none',
                     borderRadius: 4,
                     fontSize: 'var(--fs-etiqueta)',
