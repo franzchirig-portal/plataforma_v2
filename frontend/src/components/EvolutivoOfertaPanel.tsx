@@ -142,14 +142,14 @@ export default function EvolutivoOfertaPanel() {
     },
     series: [
       {
-        name: 'Precio m² T/C Oficial (6.96)',
+        name: 'Precio m² oficial (6.96)',
         type: 'line',
         data: EVOLUTIVO_OFERTA_SNAPSHOTS.map((s) => s.precioM2Oficial),
         itemStyle: { color: '#38bdf8' },
         lineStyle: { width: 3 },
       },
       {
-        name: 'Precio m² T/C Paralelo (9.90+)',
+        name: 'Precio m² paralelo (9.90+)',
         type: 'line',
         data: EVOLUTIVO_OFERTA_SNAPSHOTS.map((s) => s.precioM2Paralelo),
         itemStyle: { color: '#ff6b00' },
@@ -222,18 +222,18 @@ export default function EvolutivoOfertaPanel() {
         <div>
           {/* Sub-pills (auditado de Looker Studio: Cuantificación vs Estadística) */}
           <div className="citrino-subpills-row">
-            <span className="citrino-subpill-label">Vista analítica:</span>
+            <span className="citrino-subpill-label">Ver:</span>
             <button
               className={`citrino-subpill-btn ${subPillCuant === 'estadistica' ? 'active' : ''}`}
               onClick={() => setSubPillCuant('estadistica')}
             >
-              📊 Pestaña Estadística (Promedios y Ratios)
+              📊 Promedios y proporciones
             </button>
             <button
               className={`citrino-subpill-btn ${subPillCuant === 'cuantificacion' ? 'active' : ''}`}
               onClick={() => setSubPillCuant('cuantificacion')}
             >
-              📈 Pestaña Cuantificación (Volúmenes Totales)
+              📈 Totales
             </button>
           </div>
 
@@ -250,36 +250,36 @@ export default function EvolutivoOfertaPanel() {
               <span className="citrino-kpi-sub">Total censado: {latest.undTotales.toLocaleString()} unds</span>
             </div>
             <div className="citrino-kpi-card green">
-              <span className="citrino-kpi-label">Stock USD Promedio / Proyecto</span>
+              <span className="citrino-kpi-label">Stock promedio por proyecto (USD)</span>
               <span className="citrino-kpi-val">${latest.stockPromedioUsd} M</span>
               <span className="citrino-kpi-sub">Stock total censado: ${latest.stockTotalUsd} M</span>
             </div>
             <div className="citrino-kpi-card purple">
-              <span className="citrino-kpi-label">Balance Vendido vs Vacante</span>
+              <span className="citrino-kpi-label">Vendido vs por vender</span>
               <span className="citrino-kpi-val">{latest.pctVendido}% / {latest.pctPorVender}%</span>
-              <span className="citrino-kpi-sub">Meses stock promedio: {latest.mesesStockPromedio} meses</span>
+              <span className="citrino-kpi-sub">Meses para vender el stock: {latest.mesesStockPromedio} meses</span>
             </div>
           </div>
 
           {subPillCuant === 'estadistica' ? (
             <div className="citrino-card-box">
               <div className="citrino-card-header">
-                <h3 className="citrino-card-title">Matriz Estadística Censal Histórica (2016 - 2026)</h3>
-                <span className="citrino-card-hint">Valores consolidados por censo inmobiliario</span>
+                <h3 className="citrino-card-title">Resumen anual de la oferta (2016 - 2026)</h3>
+                <span className="citrino-card-hint">Cifras de cada año</span>
               </div>
               <div className="citrino-table-wrap">
                 <table className="citrino-table">
                   <thead>
                     <tr>
-                      <th>Año Censo</th>
+                      <th>Año</th>
                       <th className="num">Proyectos</th>
-                      <th className="num">Und. Totales</th>
-                      <th className="num">Und. Promedio</th>
+                      <th className="num">Unidades totales</th>
+                      <th className="num">Unidades promedio</th>
                       <th className="num">Stock Total ($US M)</th>
-                      <th className="num">Stock Prom. ($US M)</th>
+                      <th className="num">Stock promedio ($US M)</th>
                       <th className="num">% Vendido</th>
                       <th className="num">% Por Vender</th>
-                      <th className="num">Meses Stock</th>
+                      <th className="num">Meses para vender</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -316,21 +316,21 @@ export default function EvolutivoOfertaPanel() {
               className={`citrino-subpill-btn ${subPillStock === 'stock_und' ? 'active' : ''}`}
               onClick={() => setSubPillStock('stock_und')}
             >
-              📦 Stock Unidades Vacantes
+              📦 Unidades por vender
             </button>
             <button
               className={`citrino-subpill-btn ${subPillStock === 'stock_usd' ? 'active' : ''}`}
               onClick={() => setSubPillStock('stock_usd')}
             >
-              💰 Stock Capital ($US M)
+              💰 Capital por vender ($US M)
             </button>
           </div>
           <div className="citrino-card-box">
             <div className="citrino-card-header">
               <h3 className="citrino-card-title">
                 {subPillStock === 'stock_und'
-                  ? 'Evolutivo de Stock en Unidades por Vender'
-                  : 'Evolutivo de Stock en Millones de $US'}
+                  ? 'Unidades por vender, por año'
+                  : 'Capital por vender, por año ($US millones)'}
               </h3>
               <span className="citrino-card-hint">Serie 2016-2026</span>
             </div>
@@ -339,8 +339,8 @@ export default function EvolutivoOfertaPanel() {
                 <thead>
                   <tr>
                     <th>Año</th>
-                    <th className="num">Stock Unds por Vender</th>
-                    <th className="num">Stock Capital ($US M)</th>
+                    <th className="num">Unidades por vender</th>
+                    <th className="num">Capital por vender ($US M)</th>
                     <th className="num">% Por Vender</th>
                   </tr>
                 </thead>
@@ -403,24 +403,24 @@ export default function EvolutivoOfertaPanel() {
         <div>
           {/* Sub-pills (auditado de Looker Studio: Gráfico vs Tabla) */}
           <div className="citrino-subpills-row">
-            <span className="citrino-subpill-label">Formato de datos:</span>
+            <span className="citrino-subpill-label">Ver:</span>
             <button
               className={`citrino-subpill-btn ${subPillRitmo === 'grafico' ? 'active' : ''}`}
               onClick={() => setSubPillRitmo('grafico')}
             >
-              📈 Pestaña Gráfico (Curva Mensual Histórica)
+              📈 Gráfico
             </button>
             <button
               className={`citrino-subpill-btn ${subPillRitmo === 'tabla' ? 'active' : ''}`}
               onClick={() => setSubPillRitmo('tabla')}
             >
-              📋 Pestaña Tabla Matricial
+              📋 Tabla
             </button>
           </div>
 
           <div className="citrino-kpis-grid">
             <div className="citrino-kpi-card green">
-              <span className="citrino-kpi-label">Ritmo de Ventas Actual</span>
+              <span className="citrino-kpi-label">Ritmo de venta actual</span>
               <span className="citrino-kpi-val">3.4% / mes</span>
               <span className="citrino-kpi-sub">Corte Septiembre 2026</span>
             </div>
@@ -439,15 +439,15 @@ export default function EvolutivoOfertaPanel() {
           {subPillRitmo === 'grafico' ? (
             <div className="citrino-card-box">
               <div className="citrino-card-header">
-                <h3 className="citrino-card-title">Curva Histórica Mensual del Ritmo de Venta (%)</h3>
-                <span className="citrino-card-hint">Muestra mensual censal continua</span>
+                <h3 className="citrino-card-title">Ritmo de venta mensual (%)</h3>
+                <span className="citrino-card-hint">Dato mensual, de feb-2021 a sep-2026</span>
               </div>
               <ReactECharts option={getRitmoChart()} style={{ height: 360 }} />
             </div>
           ) : (
             <div className="citrino-card-box">
               <div className="citrino-card-header">
-                <h3 className="citrino-card-title">Serie Mensual de Velocidad de Absorción</h3>
+                <h3 className="citrino-card-title">Ritmo de venta por mes</h3>
               </div>
               <div className="citrino-table-wrap">
                 <table className="citrino-table">
@@ -455,7 +455,7 @@ export default function EvolutivoOfertaPanel() {
                     <tr>
                       <th>Periodo</th>
                       <th className="num">Ritmo de Venta (%)</th>
-                      <th>Comportamiento Cíclico</th>
+                      <th>Nivel relativo</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -480,9 +480,9 @@ export default function EvolutivoOfertaPanel() {
           <div className="citrino-card-box" style={{ marginTop: 18 }}>
             <div className="citrino-card-header">
               <h3 className="citrino-card-title">
-                Análisis de Brecha Cambiaria: Precio / m² a T/C Oficial (6.96) vs T/C Paralelo (9.90+)
+                Precio por m² al tipo de cambio oficial (6.96) vs paralelo (9.90+)
               </h3>
-              <span className="citrino-card-hint">Divergencia real del costo de reposición y metro cuadrado</span>
+              <span className="citrino-card-hint">Diferencia entre el precio en dólar oficial y en paralelo</span>
             </div>
             <ReactECharts option={getBrechaChart()} style={{ height: 380 }} />
           </div>
@@ -493,7 +493,7 @@ export default function EvolutivoOfertaPanel() {
       {activeTab === 'proyectos' && (
         <div className="citrino-card-box">
           <div className="citrino-card-header">
-            <h3 className="citrino-card-title">02-E Condiciones Comerciales y Fichas de Proyectos Censados</h3>
+            <h3 className="citrino-card-title">Condiciones comerciales por proyecto</h3>
             <input
               type="text"
               placeholder="Buscar proyecto o zona..."
@@ -517,8 +517,8 @@ export default function EvolutivoOfertaPanel() {
                   <th>Zona</th>
                   <th className="num">Cuota Inicial</th>
                   <th>Financiamiento Ofrecido</th>
-                  <th className="num">Dcto. Contado</th>
-                  <th className="num">Velocidad Venta</th>
+                  <th className="num">Descuento al contado</th>
+                  <th className="num">Ritmo de venta</th>
                 </tr>
               </thead>
               <tbody>
