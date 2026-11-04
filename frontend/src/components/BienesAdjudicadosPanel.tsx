@@ -3,12 +3,13 @@ import ReactECharts from 'echarts-for-react'
 import './CitrinoInstitutionalPanels.css'
 import { BIENES_ADJUDICADOS_DATA } from '../data/citrinoDataStudioData'
 import { useChartTheme } from '../lib/chartTheme'
+import TopTabBar from './TopTabBar'
 
 type SubTab = 'remates' | 'adjudicados'
 
 export default function BienesAdjudicadosPanel() {
   const ct = useChartTheme()
-  const [activeSubTab, setActiveSubTab] = useState<SubTab>('adjudicados')
+  const [activeSubTab, setActiveSubTab] = useState<SubTab>('remates')
   // Sub-pill auditado de Data Studio: Mensual vs Anual
   const [subPillAdjudicados, setSubPillAdjudicados] = useState<'mensual' | 'anual'>('mensual')
 
@@ -140,19 +141,13 @@ export default function BienesAdjudicadosPanel() {
 
   return (
     <div className="citrino-panel-wrap">
-      {/* Header */}
-      <div className="citrino-panel-header">
-        <div className="citrino-title-area">
-          <div className="citrino-badge-row">
-            <span className="citrino-badge">Módulo 04</span>
-            <span className="citrino-sample-badge">Regulación ASFI & Edictos Judiciales</span>
-          </div>
-          <h1 className="citrino-panel-title">Bienes Adjudicados y Remates Judiciales</h1>
-          <p className="citrino-panel-subtitle">
-            Seguimiento de activos inmobiliarios recuperados por el sistema financiero y volumen de remates judiciales en Santa Cruz.
-          </p>
-        </div>
-      </div>
+      {/* Pestañas superiores */}
+      <TopTabBar
+        tabs={[
+          { label: 'Remates Judiciales', active: activeSubTab === 'remates', onClick: () => setActiveSubTab('remates') },
+          { label: 'Bienes Adjudicados', active: activeSubTab === 'adjudicados', onClick: () => setActiveSubTab('adjudicados') },
+        ]}
+      />
 
       {/* KPIs Grid */}
       <div className="citrino-kpis-grid">
@@ -173,23 +168,7 @@ export default function BienesAdjudicadosPanel() {
         </div>
       </div>
 
-      {/* Nav Pills */}
-      <div className="citrino-nav-pills">
-        <button
-          className={`citrino-nav-pill-btn ${activeSubTab === 'adjudicados' ? 'active' : ''}`}
-          onClick={() => setActiveSubTab('adjudicados')}
-        >
-          04-B Bienes Adjudicados por Bancos
-        </button>
-        <button
-          className={`citrino-nav-pill-btn ${activeSubTab === 'remates' ? 'active' : ''}`}
-          onClick={() => setActiveSubTab('remates')}
-        >
-          04-A Remates Judiciales
-        </button>
-      </div>
-
-      {/* ── 04-B BIENES ADJUDICADOS ASFI ── */}
+      {/* ── BIENES ADJUDICADOS ASFI ── */}
       {activeSubTab === 'adjudicados' && (
         <div>
           {/* Sub-pill (auditado de Looker Studio: Mensual vs Anual) */}
@@ -199,13 +178,13 @@ export default function BienesAdjudicadosPanel() {
               className={`citrino-subpill-btn ${subPillAdjudicados === 'mensual' ? 'active' : ''}`}
               onClick={() => setSubPillAdjudicados('mensual')}
             >
-              📅 Pestaña Mensual (Dic-2022 a Mar-2026)
+              📅 Mensual (dic-2022 a mar-2026)
             </button>
             <button
               className={`citrino-subpill-btn ${subPillAdjudicados === 'anual' ? 'active' : ''}`}
               onClick={() => setSubPillAdjudicados('anual')}
             >
-              🏛️ Pestaña Anual Histórica ASFI (2003 - 2026)
+              🏛️ Anual histórica (2003 - 2026)
             </button>
           </div>
 
@@ -213,8 +192,8 @@ export default function BienesAdjudicadosPanel() {
             <div className="citrino-card-header">
               <h3 className="citrino-card-title">
                 {subPillAdjudicados === 'mensual'
-                  ? 'Serie Mensual Continua: Inmuebles Adjudicados ASFI (Dic-2022 a Mar-2026)'
-                  : 'Ciclo Histórico de Bienes Adjudicados en el Sistema Bancario (2003 - 2026)'}
+                  ? 'Bienes adjudicados por mes (dic-2022 a mar-2026)'
+                  : 'Bienes adjudicados por año en el sistema bancario (2003 - 2026)'}
               </h3>
               <span className="citrino-card-hint">Expresado en Millones de Bolivianos (Bs)</span>
             </div>
@@ -232,7 +211,7 @@ export default function BienesAdjudicadosPanel() {
       {activeSubTab === 'remates' && (
         <div className="citrino-card-box">
           <div className="citrino-card-header">
-            <h3 className="citrino-card-title">04-A Volumen de Remates Judiciales y Tasa de Descuento sobre Avalúo</h3>
+            <h3 className="citrino-card-title">Volumen de remates y descuento sobre avalúo</h3>
             <span className="citrino-card-hint">Presión de liquidación forzosa en estrados judiciales</span>
           </div>
           <ReactECharts option={getRematesChart()} style={{ height: 360 }} />

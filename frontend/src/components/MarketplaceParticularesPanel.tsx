@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import ReactECharts from 'echarts-for-react'
 import './CitrinoInstitutionalPanels.css'
+import './TopTabs.css'
 import { MARKETPLACE_DATA } from '../data/citrinoDataStudioData'
 import { useChartTheme } from '../lib/chartTheme'
 
@@ -85,29 +86,37 @@ export default function MarketplaceParticularesPanel() {
 
   return (
     <div className="citrino-panel-wrap">
-      {/* Header */}
-      <div className="citrino-panel-header">
-        <div className="citrino-title-area">
-          <div className="citrino-badge-row">
-            <span className="citrino-badge">Módulo 03</span>
-            <span className="citrino-sample-badge">Relevamiento Mercado Secundario & Portales</span>
-          </div>
-          <h1 className="citrino-panel-title">Oferta de Particulares (Marketplace)</h1>
-          <p className="citrino-panel-subtitle">
-            Monitoreo y cuantificación del mercado secundario de reventa inmobiliaria entre particulares compitiendo con la oferta nueva.
-          </p>
-        </div>
+      {/* Pestañas superiores */}
+      <div className="top-tabs">
+        <button
+          className={`top-tab ${activeSubTab === 'stock' ? 'active' : ''}`}
+          onClick={() => setActiveSubTab('stock')}
+        >
+          Cuantificación de la Oferta informal
+        </button>
+        <button
+          className={`top-tab ${activeSubTab === 'zonificacion' ? 'active' : ''}`}
+          onClick={() => setActiveSubTab('zonificacion')}
+        >
+          Zonificación de la Reventa
+        </button>
+        <button
+          className={`top-tab ${activeSubTab === 'evolutivo' ? 'active' : ''}`}
+          onClick={() => setActiveSubTab('evolutivo')}
+        >
+          Evolutivo de Marketplace
+        </button>
       </div>
 
       {/* KPIs Grid */}
       <div className="citrino-kpis-grid">
         <div className="citrino-kpi-card">
-          <span className="citrino-kpi-label">Stock Total Particulares</span>
+          <span className="citrino-kpi-label">Stock total de particulares</span>
           <span className="citrino-kpi-val">${kpis.stockTotalUsd} M USD</span>
           <span className="citrino-kpi-sub">Total: {kpis.unidadesTotales.toLocaleString()} Unidades</span>
         </div>
         <div className="citrino-kpi-card blue">
-          <span className="citrino-kpi-label">Departamentos Reventa</span>
+          <span className="citrino-kpi-label">Departamentos en reventa</span>
           <span className="citrino-kpi-val">${kpis.deptosUsd} M USD</span>
           <span className="citrino-kpi-sub">{kpis.deptosUnds.toLocaleString()} departamentos</span>
         </div>
@@ -123,34 +132,12 @@ export default function MarketplaceParticularesPanel() {
         </div>
       </div>
 
-      {/* Nav Pills */}
-      <div className="citrino-nav-pills">
-        <button
-          className={`citrino-nav-pill-btn ${activeSubTab === 'stock' ? 'active' : ''}`}
-          onClick={() => setActiveSubTab('stock')}
-        >
-          03-A Stock y Tipología
-        </button>
-        <button
-          className={`citrino-nav-pill-btn ${activeSubTab === 'zonificacion' ? 'active' : ''}`}
-          onClick={() => setActiveSubTab('zonificacion')}
-        >
-          03-B Zonificación Territorial
-        </button>
-        <button
-          className={`citrino-nav-pill-btn ${activeSubTab === 'evolutivo' ? 'active' : ''}`}
-          onClick={() => setActiveSubTab('evolutivo')}
-        >
-          03-C Evolutivo Marketplace
-        </button>
-      </div>
-
       {/* ── 03-A STOCK Y TIPOLOGÍA ── */}
       {activeSubTab === 'stock' && (
         <div className="citrino-card-box">
           <div className="citrino-card-header">
-            <h3 className="citrino-card-title">Matriz de Tipologías en Reventa: Superficies y Precios / m²</h3>
-            <span className="citrino-card-hint">Muestra representativa de clasificados activos</span>
+            <h3 className="citrino-card-title">Tipologías en reventa: superficie y precio por m²</h3>
+            <span className="citrino-card-hint">Muestra de anuncios activos</span>
           </div>
           <div className="citrino-table-wrap">
             <table className="citrino-table">
@@ -158,12 +145,12 @@ export default function MarketplaceParticularesPanel() {
                 <tr>
                   <th>Tipología</th>
                   <th className="num">Unidades</th>
-                  <th className="num">Sup. Mínima</th>
-                  <th className="num">Sup. Máxima</th>
-                  <th className="num">Sup. Promedio</th>
-                  <th className="num">Precio/m² Mín.</th>
-                  <th className="num">Precio/m² Máx.</th>
-                  <th className="num">Precio/m² Promedio</th>
+                  <th className="num">Superficie mínima</th>
+                  <th className="num">Superficie máxima</th>
+                  <th className="num">Superficie promedio</th>
+                  <th className="num">Precio por m² mínimo</th>
+                  <th className="num">Precio por m² máximo</th>
+                  <th className="num">Precio por m² promedio</th>
                 </tr>
               </thead>
               <tbody>
@@ -190,21 +177,21 @@ export default function MarketplaceParticularesPanel() {
         <div className="citrino-charts-grid">
           <div className="citrino-card-box">
             <div className="citrino-card-header">
-              <h3 className="citrino-card-title">Concentración Territorial de la Reventa (%)</h3>
+              <h3 className="citrino-card-title">Dónde se concentra la reventa (%)</h3>
             </div>
             <ReactECharts option={getZonificacionChart()} style={{ height: 340 }} />
           </div>
 
           <div className="citrino-card-box">
             <div className="citrino-card-header">
-              <h3 className="citrino-card-title">Distribución por Zona Urbana</h3>
+              <h3 className="citrino-card-title">Reventa por zona</h3>
             </div>
             <div className="citrino-table-wrap">
               <table className="citrino-table">
                 <thead>
                   <tr>
                     <th>Zona</th>
-                    <th className="num">% Oferta</th>
+                    <th className="num">% de la oferta</th>
                     <th className="num">Unidades</th>
                     <th className="num">Volumen ($US M)</th>
                   </tr>
@@ -230,7 +217,7 @@ export default function MarketplaceParticularesPanel() {
         <div className="citrino-card-box">
           <div className="citrino-card-header">
             <h3 className="citrino-card-title">Evolución Histórica de la Reventa (Oct-2022 a Mar-2026)</h3>
-            <span className="citrino-card-hint">Crecimiento del stock ofertado por particulares</span>
+            <span className="citrino-card-hint">Unidades que ofrecen los particulares, mes a mes</span>
           </div>
           <ReactECharts option={getEvolutivoChart()} style={{ height: 360 }} />
         </div>

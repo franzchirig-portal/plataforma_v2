@@ -3,6 +3,7 @@ import ReactECharts from 'echarts-for-react'
 import './CitrinoInstitutionalPanels.css'
 import { ENDEUDAMIENTO_DATA } from '../data/citrinoDataStudioData'
 import { useChartTheme } from '../lib/chartTheme'
+import TopTabBar from './TopTabBar'
 
 interface Props {
   initialChapter?: '4.1' | '4.2' | '4.3'
@@ -10,7 +11,7 @@ interface Props {
 
 export default function EndeudamientoHipotecarioPanel({ initialChapter = '4.1' }: Props) {
   const ct = useChartTheme()
-  const [activeChapter, setActiveChapter] = useState<'4.1' | '4.2' | '4.3'>(initialChapter)
+  const [activeChapter] = useState<'4.1' | '4.2' | '4.3'>(initialChapter)
 
   // Sub-tabs y sub-pills para 4.1 Perfil del Consumidor
   const [perfilSubTab, setPerfilSubTab] = useState<'zona' | 'hogar' | 'laboral' | 'ingresos'>('zona')
@@ -86,79 +87,44 @@ export default function EndeudamientoHipotecarioPanel({ initialChapter = '4.1' }
 
   return (
     <div className="citrino-panel-wrap">
-      {/* Header */}
-      <div className="citrino-panel-header">
-        <div className="citrino-title-area">
-          <div className="citrino-badge-row">
-            <span className="citrino-badge">Módulo 08</span>
-            <span className="citrino-sample-badge">Encuesta Especializada n = 796 Deudores Hipotecarios</span>
-          </div>
-          <h1 className="citrino-panel-title">Endeudamiento Hipotecario y Sentimiento del Comprador</h1>
-          <p className="citrino-panel-subtitle">
-            Perfil del prestatario, origen territorial, estrés financiero, reprogramaciones bancarias y expectativas futuras de precios.
-          </p>
-        </div>
-      </div>
-
-      {/* Selector de Capítulo */}
-      <div className="citrino-nav-pills">
-        <button
-          className={`citrino-nav-pill-btn ${activeChapter === '4.1' ? 'active' : ''}`}
-          onClick={() => setActiveChapter('4.1')}
-        >
-          4.1 Perfil del Consumidor (n=796)
-        </button>
-        <button
-          className={`citrino-nav-pill-btn ${activeChapter === '4.2' ? 'active' : ''}`}
-          onClick={() => setActiveChapter('4.2')}
-        >
-          4.2 Estado de la Cartera Hipotecaria
-        </button>
-        <button
-          className={`citrino-nav-pill-btn ${activeChapter === '4.3' ? 'active' : ''}`}
-          onClick={() => setActiveChapter('4.3')}
-        >
-          4.3 Perspectivas del Comprador
-        </button>
-      </div>
+      {/* Pestañas superiores del capítulo activo */}
+      {activeChapter === '4.1' && (
+        <TopTabBar
+          tabs={[
+            { label: 'Zona de Otorgación de Créditos', active: perfilSubTab === 'zona', onClick: () => setPerfilSubTab('zona') },
+            { label: 'Características de Hogar', active: perfilSubTab === 'hogar', onClick: () => setPerfilSubTab('hogar') },
+            { label: 'Situación Laboral', active: perfilSubTab === 'laboral', onClick: () => setPerfilSubTab('laboral') },
+            { label: 'Evolutivo Ingresos', active: perfilSubTab === 'ingresos', onClick: () => setPerfilSubTab('ingresos') },
+          ]}
+        />
+      )}
+      {activeChapter === '4.2' && (
+        <TopTabBar
+          tabs={[
+            { label: 'Bancos Financiadores', active: carteraSubTab === 'bancos', onClick: () => setCarteraSubTab('bancos') },
+            { label: 'Estado de Préstamo', active: carteraSubTab === 'prestamo', onClick: () => setCarteraSubTab('prestamo') },
+            { label: 'Estado del Prestatario', active: carteraSubTab === 'prestatario', onClick: () => setCarteraSubTab('prestatario') },
+            { label: 'Evolutivo del Endeudamiento', active: carteraSubTab === 'endeudamiento', onClick: () => setCarteraSubTab('endeudamiento') },
+          ]}
+        />
+      )}
+      {activeChapter === '4.3' && (
+        <TopTabBar
+          tabs={[
+            { label: 'Percepción del Pasado', active: perspectivasSubTab === 'pasado', onClick: () => setPerspectivasSubTab('pasado') },
+            { label: 'Percepción del Futuro', active: perspectivasSubTab === 'futuro', onClick: () => setPerspectivasSubTab('futuro') },
+          ]}
+        />
+      )}
 
       {/* ── 4.1 PERFIL DEL CONSUMIDOR (n=796) ── */}
       {activeChapter === '4.1' && (
         <div>
-          {/* Sub-tabs nivel 2 */}
-          <div className="citrino-subpills-row" style={{ marginBottom: 14 }}>
-            <span className="citrino-subpill-label">Dimensión:</span>
-            <button
-              className={`citrino-subpill-btn ${perfilSubTab === 'zona' ? 'active' : ''}`}
-              onClick={() => setPerfilSubTab('zona')}
-            >
-              01-A Zona y Tipo Otorgación
-            </button>
-            <button
-              className={`citrino-subpill-btn ${perfilSubTab === 'hogar' ? 'active' : ''}`}
-              onClick={() => setPerfilSubTab('hogar')}
-            >
-              01-B Características de Hogar
-            </button>
-            <button
-              className={`citrino-subpill-btn ${perfilSubTab === 'laboral' ? 'active' : ''}`}
-              onClick={() => setPerfilSubTab('laboral')}
-            >
-              01-C Situación Laboral (n=690)
-            </button>
-            <button
-              className={`citrino-subpill-btn ${perfilSubTab === 'ingresos' ? 'active' : ''}`}
-              onClick={() => setPerfilSubTab('ingresos')}
-            >
-              01-D Evolutivo Ingresos (n=490)
-            </button>
-          </div>
-
           {/* 01-A Zona y Financiación */}
           {perfilSubTab === 'zona' && (
             <div>
               <div className="citrino-subpills-row">
-                <span className="citrino-subpill-label">Sub-pestaña auditada:</span>
+                <span className="citrino-subpill-label">Ver:</span>
                 <button
                   className={`citrino-subpill-btn ${zonaSubPill === 'zona' ? 'active' : ''}`}
                   onClick={() => setZonaSubPill('zona')}
@@ -200,7 +166,7 @@ export default function EndeudamientoHipotecarioPanel({ initialChapter = '4.1' }
           {perfilSubTab === 'hogar' && (
             <div>
               <div className="citrino-subpills-row">
-                <span className="citrino-subpill-label">Sub-pestaña auditada:</span>
+                <span className="citrino-subpill-label">Ver:</span>
                 <button
                   className={`citrino-subpill-btn ${hogarSubPill === 'valor' ? 'active' : ''}`}
                   onClick={() => setHogarSubPill('valor')}
@@ -330,34 +296,6 @@ export default function EndeudamientoHipotecarioPanel({ initialChapter = '4.1' }
       {/* ── 4.2 ESTADO DE CARTERA HIPOTECARIA (n=796) ── */}
       {activeChapter === '4.2' && (
         <div>
-          <div className="citrino-subpills-row" style={{ marginBottom: 14 }}>
-            <span className="citrino-subpill-label">Dimensión:</span>
-            <button
-              className={`citrino-subpill-btn ${carteraSubTab === 'bancos' ? 'active' : ''}`}
-              onClick={() => setCarteraSubTab('bancos')}
-            >
-              02-A Bancos Financiadores
-            </button>
-            <button
-              className={`citrino-subpill-btn ${carteraSubTab === 'prestamo' ? 'active' : ''}`}
-              onClick={() => setCarteraSubTab('prestamo')}
-            >
-              02-B Estado del Préstamo (5 Sub-pestañas)
-            </button>
-            <button
-              className={`citrino-subpill-btn ${carteraSubTab === 'prestatario' ? 'active' : ''}`}
-              onClick={() => setCarteraSubTab('prestatario')}
-            >
-              02-C Estado del Prestatario (Reprogramación)
-            </button>
-            <button
-              className={`citrino-subpill-btn ${carteraSubTab === 'endeudamiento' ? 'active' : ''}`}
-              onClick={() => setCarteraSubTab('endeudamiento')}
-            >
-              02-D Evolutivo del Endeudamiento (Default)
-            </button>
-          </div>
-
           {/* 02-A Bancos Financiadores */}
           {carteraSubTab === 'bancos' && (
             <div className="citrino-card-box">
@@ -375,7 +313,7 @@ export default function EndeudamientoHipotecarioPanel({ initialChapter = '4.1' }
           {carteraSubTab === 'prestamo' && (
             <div>
               <div className="citrino-subpills-row">
-                <span className="citrino-subpill-label">Sub-pestaña auditada:</span>
+                <span className="citrino-subpill-label">Ver:</span>
                 <button
                   className={`citrino-subpill-btn ${prestamoSubPill === 'deuda' ? 'active' : ''}`}
                   onClick={() => setPrestamoSubPill('deuda')}
@@ -484,7 +422,7 @@ export default function EndeudamientoHipotecarioPanel({ initialChapter = '4.1' }
                         <td><b>{r.ano}</b></td>
                         <td className="num" style={{ color: 'var(--text-success)' }}>{r.no}%</td>
                         <td className="num" style={{ color: 'var(--color-rojo-500)' }}><b>{r.si}%</b></td>
-                        <td>{r.ano === '2023' ? 'Pico pos-pandemia' : r.ano === '2026' ? 'Reactivación leve de reprogramaciones' : 'Baja morosidad declarada'}</td>
+                        <td>{r.ano === '2023' ? 'Pico después de la pandemia' : r.ano === '2026' ? 'Leve repunte de reprogramaciones' : 'Baja morosidad declarada'}</td>
                       </tr>
                     ))}
                   </tbody>
@@ -508,7 +446,7 @@ export default function EndeudamientoHipotecarioPanel({ initialChapter = '4.1' }
 
               <div className="citrino-card-box">
                 <div className="citrino-card-header">
-                  <h3 className="citrino-card-title">¿Qué tan probable es que deje de pagar su crédito? (Default)</h3>
+                  <h3 className="citrino-card-title">¿Qué tan probable es que deje de pagar su crédito?</h3>
                 </div>
                 <ReactECharts
                   option={getBarH(probabilidadDefault.map((p) => p.nivel), probabilidadDefault.map((p) => p.pct), '#38bdf8')}
@@ -523,22 +461,6 @@ export default function EndeudamientoHipotecarioPanel({ initialChapter = '4.1' }
       {/* ── 4.3 PERSPECTIVAS DEL COMPRADOR (n=796) ── */}
       {activeChapter === '4.3' && (
         <div>
-          <div className="citrino-subpills-row" style={{ marginBottom: 14 }}>
-            <span className="citrino-subpill-label">Dimensión:</span>
-            <button
-              className={`citrino-subpill-btn ${perspectivasSubTab === 'pasado' ? 'active' : ''}`}
-              onClick={() => setPerspectivasSubTab('pasado')}
-            >
-              03-A Percepción del Pasado (12 Meses Atrás)
-            </button>
-            <button
-              className={`citrino-subpill-btn ${perspectivasSubTab === 'futuro' ? 'active' : ''}`}
-              onClick={() => setPerspectivasSubTab('futuro')}
-            >
-              03-B Percepción del Futuro
-            </button>
-          </div>
-
           {/* 03-A Percepción Pasado */}
           {perspectivasSubTab === 'pasado' && (
             <div className="citrino-card-box">
@@ -575,7 +497,7 @@ export default function EndeudamientoHipotecarioPanel({ initialChapter = '4.1' }
           {perspectivasSubTab === 'futuro' && (
             <div>
               <div className="citrino-subpills-row">
-                <span className="citrino-subpill-label">Sub-pestaña auditada:</span>
+                <span className="citrino-subpill-label">Ver:</span>
                 <button
                   className={`citrino-subpill-btn ${futuroSubPill === 'expectativa' ? 'active' : ''}`}
                   onClick={() => setFuturoSubPill('expectativa')}
