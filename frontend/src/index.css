@@ -76,6 +76,29 @@
   --radius-sm: 4px;
   --radius-md: 6px;
   --radius-lg: 6px;
+
+  /* Paleta de colores usados en la plataforma sin token previo (#13).
+     Nombres por familia (Tailwind como referencia). Mismo valor en ambos temas,
+     así que estos colores no cambian al alternar el tema. */
+  --color-blanco:          #ffffff;
+  --color-pizarra-100:     #f1f5f9;
+  --color-pizarra-600:     #475569;
+  --color-gris-100:        #f3f3f3;
+  --color-gris-400:        #a1a1aa;
+  --color-azul-400:        #60a5fa;
+  --color-azul-500:        #3b82f6;
+  --color-azul-700:        #1565c0;
+  --color-cian-700:        #00838f;
+  --color-rojo-300:        #fca5a5;
+  --color-rojo-400:        #f87171;
+  --color-rojo-500:        #ef4444;
+  --color-rosa-300:        #fda4af;
+  --color-verde-300:       #86efac;
+  --color-esmeralda-400:   #34d399;
+  --color-ambar-100:       #fef3c7;
+  --color-ambar-400:       #fbbf24;
+  --color-fondo-profundo:  #040e12;
+  --color-fondo-profundo-2:#091b22;
 }
 
 /* ─── Light Theme — Antigravity Crisp Light ─────────────────────────────── */
