@@ -3,6 +3,7 @@ import ReactECharts from 'echarts-for-react'
 import './CitrinoInstitutionalPanels.css'
 import { SISTEMA_FINANCIERO_DATA } from '../data/citrinoDataStudioData'
 import { useChartTheme } from '../lib/chartTheme'
+import TopTabBar from './TopTabBar'
 
 interface Props {
   initialChapter?: '3.1' | '3.2'
@@ -10,15 +11,17 @@ interface Props {
 
 export default function SistemaFinancieroPanel({ initialChapter = '3.1' }: Props) {
   const ct = useChartTheme()
-  const [activeChapter, setActiveChapter] = useState<'3.1' | '3.2'>(initialChapter)
+  const [activeChapter] = useState<'3.1' | '3.2'>(initialChapter)
+  // Pestaña activa dentro del capítulo: "uno" = primera pestaña, "dos" = segunda
+  const [tab, setTab] = useState<'uno' | 'dos'>('uno')
 
-  // Sub-pills auditados en Looker Studio para Mora (3.2)
+  // Sub-pills de Mora
   const [moraHipotecariaPill, setMoraHipotecariaPill] = useState<'monto' | 'ratio'>('monto')
   const [moraConstruccionPill, setMoraConstruccionPill] = useState<'porcentajes' | 'monto'>('porcentajes')
 
   const { carteraHipotecaria, moraHipotecaria, moraConstruccion } = SISTEMA_FINANCIERO_DATA
 
-  // Chart Option: Cartera Hipotecaria vs VIS (2015 - 2026)
+  // Chart Option: Cartera Hipotecaria vs Vivienda Social (2015 - 2026)
   const getCarteraChart = () => ({
     aria: { enabled: true },
     backgroundColor: 'transparent',
@@ -38,7 +41,7 @@ export default function SistemaFinancieroPanel({ initialChapter = '3.1' }: Props
     },
     series: [
       {
-        name: 'Cartera Hipotecaria Total',
+        name: 'Cartera hipotecaria total',
         type: 'line',
         smooth: true,
         data: carteraHipotecaria.map((c) => c.totalUsd),
@@ -46,7 +49,7 @@ export default function SistemaFinancieroPanel({ initialChapter = '3.1' }: Props
         lineStyle: { width: 3 },
       },
       {
-        name: 'Vivienda Social (VIS Regualada)',
+        name: 'Vivienda social regulada (VIS)',
         type: 'line',
         smooth: true,
         data: carteraHipotecaria.map((c) => c.visUsd),
@@ -76,14 +79,14 @@ export default function SistemaFinancieroPanel({ initialChapter = '3.1' }: Props
     },
     series: [
       {
-        name: 'Mora Reprogramada',
+        name: 'Mora reprogramada',
         type: 'bar',
         stack: 'total',
         data: moraHipotecaria.serie.map((s) => s.reprogramadaUsd),
         itemStyle: { color: '#f59e0b' },
       },
       {
-        name: 'Mora Vencida No Reprogramada',
+        name: 'Mora vencida no reprogramada',
         type: 'bar',
         stack: 'total',
         data: moraHipotecaria.serie.map((s) => s.noReprogramadaUsd),
@@ -105,13 +108,13 @@ export default function SistemaFinancieroPanel({ initialChapter = '3.1' }: Props
     },
     yAxis: {
       type: 'value',
-      name: moraConstruccionPill === 'porcentajes' ? 'Tasa de Mora (%)' : 'Millones $US',
+      name: moraConstruccionPill === 'porcentajes' ? 'Tasa de mora (%)' : 'Millones $US',
       axisLabel: { color: ct.muted },
       splitLine: { lineStyle: { color: ct.grid } },
     },
     series: [
       {
-        name: moraConstruccionPill === 'porcentajes' ? 'Ratio de Mora Constructora' : 'Monto en Mora ($US M)',
+        name: moraConstruccionPill === 'porcentajes' ? 'Tasa de mora de constructoras' : 'Monto en mora ($US M)',
         type: 'line',
         smooth: true,
         data: moraConstruccion.serie.map((s) => (moraConstruccionPill === 'porcentajes' ? s.ratioPct : s.montoUsd)),
@@ -123,38 +126,17 @@ export default function SistemaFinancieroPanel({ initialChapter = '3.1' }: Props
 
   return (
     <div className="citrino-panel-wrap">
-      {/* Header */}
-      <div className="citrino-panel-header">
-        <div className="citrino-title-area">
-          <div className="citrino-badge-row">
-            <span className="citrino-badge">Módulo 06</span>
-            <span className="citrino-sample-badge">Finanzas Bancarias ASFI / ASOBAN</span>
-          </div>
-          <h1 className="citrino-panel-title">Sistema Financiero y Liquidez Hipotecaria</h1>
-          <p className="citrino-panel-subtitle">
-            Cartera de crédito inmobiliario, Vivienda Social (VIS), ratios de morosidad y estrés crediticio en la construcción.
-          </p>
-        </div>
-      </div>
-
-      {/* Selector de Capítulo */}
-      <div className="citrino-nav-pills">
-        <button
-          className={`citrino-nav-pill-btn ${activeChapter === '3.1' ? 'active' : ''}`}
-          onClick={() => setActiveChapter('3.1')}
-        >
-          3.1 Financiamiento al Sector Inmobiliario
-        </button>
-        <button
-          className={`citrino-nav-pill-btn ${activeChapter === '3.2' ? 'active' : ''}`}
-          onClick={() => setActiveChapter('3.2')}
-        >
-          3.2 Evolución y Análisis de la Mora
-        </button>
-      </div>
-
-      {/* ── 3.1 FINANCIAMIENTO SECTOR INMOBILIARIO ── */}
+      {/* ── CAPÍTULO 3.1: FINANCIAMIENTO AL SECTOR INMOBILIARIO ── */}
       {activeChapter === '3.1' && (
+        <TopTabBar
+          tabs={[
+            { label: 'Evolución del Crédito Hipotecario', active: tab === 'uno', onClick: () => setTab('uno') },
+            { label: 'La Construcción y su Financiamiento', active: tab === 'dos', onClick: () => setTab('dos') },
+          ]}
+        />
+      )}
+
+      {activeChapter === '3.1' && tab === 'uno' && (
         <div>
           <div className="citrino-kpis-grid">
             <div className="citrino-kpi-card blue">
@@ -167,37 +149,93 @@ export default function SistemaFinancieroPanel({ initialChapter = '3.1' }: Props
               <span className="citrino-kpi-val">$5.320 M USD</span>
               <span className="citrino-kpi-sub">68% del saldo hipotecario nacional</span>
             </div>
-            <div className="citrino-kpi-card purple">
-              <span className="citrino-kpi-label">Crédito a la Construcción</span>
-              <span className="citrino-kpi-val">$2.140 M USD</span>
-              <span className="citrino-kpi-sub">54% concentrado en Santa Cruz</span>
-            </div>
           </div>
 
           <div className="citrino-card-box">
             <div className="citrino-card-header">
-              <h3 className="citrino-card-title">Evolución de la Cartera Hipotecaria Total vs Cartera VIS (2015 - 2026)</h3>
-              <span className="citrino-card-hint">Expresado en Millones de $US</span>
+              <h3 className="citrino-card-title">Cartera hipotecaria total vs vivienda social (2015 - 2026)</h3>
+              <span className="citrino-card-hint">Expresado en millones de $US</span>
             </div>
             <ReactECharts option={getCarteraChart()} style={{ height: 350 }} />
           </div>
         </div>
       )}
 
-      {/* ── 3.2 ANÁLISIS DE LA MORA ── */}
+      {activeChapter === '3.1' && tab === 'dos' && (
+        <div>
+          <div className="citrino-kpis-grid">
+            <div className="citrino-kpi-card purple">
+              <span className="citrino-kpi-label">Crédito a la Construcción</span>
+              <span className="citrino-kpi-val">$2.140 M USD</span>
+              <span className="citrino-kpi-sub">Saldo actual de préstamos a constructoras</span>
+            </div>
+            <div className="citrino-kpi-card amber">
+              <span className="citrino-kpi-label">Concentración en Santa Cruz</span>
+              <span className="citrino-kpi-val">54%</span>
+              <span className="citrino-kpi-sub">Del crédito a la construcción</span>
+            </div>
+          </div>
+
+          <div className="citrino-card-box">
+            <div className="citrino-card-header">
+              <h3 className="citrino-card-title">Evolución del crédito a la construcción</h3>
+              <span className="citrino-card-hint">Serie histórica pendiente de carga</span>
+            </div>
+            <p style={{ color: 'var(--text-muted)', fontSize: 'var(--fs-cuerpo)', margin: '8px 0 0' }}>
+              Todavía no hay datos históricos de este indicador en la plataforma. Cuando se carguen, aparecerán aquí.
+            </p>
+          </div>
+        </div>
+      )}
+
+      {/* ── CAPÍTULO 3.2: EVOLUCIÓN DE LA MORA ── */}
       {activeChapter === '3.2' && (
+        <TopTabBar
+          tabs={[
+            { label: 'Mora Hipotecaria', active: tab === 'uno', onClick: () => setTab('uno') },
+            { label: 'Mora de la Construcción', active: tab === 'dos', onClick: () => setTab('dos') },
+          ]}
+        />
+      )}
+
+      {activeChapter === '3.2' && tab === 'uno' && (
         <div>
           <div className="citrino-kpis-grid">
             <div className="citrino-kpi-card amber">
               <span className="citrino-kpi-label">Mora Hipotecaria Total</span>
               <span className="citrino-kpi-val">$132 M USD</span>
-              <span className="citrino-kpi-sub">Ratio del 3.2% de la cartera</span>
+              <span className="citrino-kpi-sub">Tasa del 3.2% de la cartera</span>
             </div>
             <div className="citrino-kpi-card red">
               <span className="citrino-kpi-label">Mora Reprogramada Hipotecaria</span>
               <span className="citrino-kpi-val">$75.2 M USD</span>
-              <span className="citrino-kpi-sub">57% de la morosidad total</span>
+              <span className="citrino-kpi-sub">57% de la mora total</span>
             </div>
+          </div>
+
+          <div className="citrino-card-box">
+            <div className="citrino-card-header">
+              <div>
+                <h3 className="citrino-card-title">Mora hipotecaria por tipo</h3>
+                <span className="citrino-card-hint">Mora reprogramada vs mora vencida sin reprogramar</span>
+              </div>
+              <div className="citrino-subpills-row" style={{ margin: 0 }}>
+                <button
+                  className={`citrino-subpill-btn ${moraHipotecariaPill === 'monto' ? 'active' : ''}`}
+                  onClick={() => setMoraHipotecariaPill('monto')}
+                >
+                  💵 Monto en USD
+                </button>
+              </div>
+            </div>
+            <ReactECharts option={getMoraHipotecariaMontoChart()} style={{ height: 320 }} />
+          </div>
+        </div>
+      )}
+
+      {activeChapter === '3.2' && tab === 'dos' && (
+        <div>
+          <div className="citrino-kpis-grid">
             <div className="citrino-kpi-card purple">
               <span className="citrino-kpi-label">Mora Sector Construcción</span>
               <span className="citrino-kpi-val">$47 M USD</span>
@@ -205,50 +243,28 @@ export default function SistemaFinancieroPanel({ initialChapter = '3.1' }: Props
             </div>
           </div>
 
-          <div className="citrino-charts-grid">
-            {/* 02-A Mora Hipotecaria con Sub-pill Monto USD */}
-            <div className="citrino-card-box">
-              <div className="citrino-card-header">
-                <div>
-                  <h3 className="citrino-card-title">02-A Mora Hipotecaria: Desglose por Tipo</h3>
-                  <span className="citrino-card-hint">Mora Reprogramada vs Mora Vencida Pura</span>
-                </div>
-                <div className="citrino-subpills-row" style={{ margin: 0 }}>
-                  <button
-                    className={`citrino-subpill-btn ${moraHipotecariaPill === 'monto' ? 'active' : ''}`}
-                    onClick={() => setMoraHipotecariaPill('monto')}
-                  >
-                    💵 Monto en USD
-                  </button>
-                </div>
+          <div className="citrino-card-box">
+            <div className="citrino-card-header">
+              <div>
+                <h3 className="citrino-card-title">Mora de la construcción</h3>
+                <span className="citrino-card-hint">Cómo evoluciona el atraso de pagos de las constructoras</span>
               </div>
-              <ReactECharts option={getMoraHipotecariaMontoChart()} style={{ height: 320 }} />
-            </div>
-
-            {/* 02-B Mora de la Construcción con Sub-pills Porcentajes y Monto en USD */}
-            <div className="citrino-card-box">
-              <div className="citrino-card-header">
-                <div>
-                  <h3 className="citrino-card-title">02-B Mora de la Construcción</h3>
-                  <span className="citrino-card-hint">Evolución de estrés crediticio promotor</span>
-                </div>
-                <div className="citrino-subpills-row" style={{ margin: 0 }}>
-                  <button
-                    className={`citrino-subpill-btn ${moraConstruccionPill === 'porcentajes' ? 'active' : ''}`}
-                    onClick={() => setMoraConstruccionPill('porcentajes')}
-                  >
-                    % Porcentajes
-                  </button>
-                  <button
-                    className={`citrino-subpill-btn ${moraConstruccionPill === 'monto' ? 'active' : ''}`}
-                    onClick={() => setMoraConstruccionPill('monto')}
-                  >
-                    💵 Monto USD
-                  </button>
-                </div>
+              <div className="citrino-subpills-row" style={{ margin: 0 }}>
+                <button
+                  className={`citrino-subpill-btn ${moraConstruccionPill === 'porcentajes' ? 'active' : ''}`}
+                  onClick={() => setMoraConstruccionPill('porcentajes')}
+                >
+                  % Tasa
+                </button>
+                <button
+                  className={`citrino-subpill-btn ${moraConstruccionPill === 'monto' ? 'active' : ''}`}
+                  onClick={() => setMoraConstruccionPill('monto')}
+                >
+                  💵 Monto USD
+                </button>
               </div>
-              <ReactECharts option={getMoraConstruccionChart()} style={{ height: 320 }} />
             </div>
+            <ReactECharts option={getMoraConstruccionChart()} style={{ height: 320 }} />
           </div>
         </div>
       )}
