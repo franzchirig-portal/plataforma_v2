@@ -3,6 +3,7 @@ import ReactECharts from 'echarts-for-react'
 import './CitrinoInstitutionalPanels.css'
 import { DEMANDA_DATA } from '../data/citrinoDataStudioData'
 import { useChartTheme } from '../lib/chartTheme'
+import TopTabBar from './TopTabBar'
 
 interface Props {
   initialChapter?: '2.1' | '2.2' | '2.3'
@@ -10,7 +11,8 @@ interface Props {
 
 export default function AnalisisDemandaPanel({ initialChapter = '2.1' }: Props) {
   const ct = useChartTheme()
-  const [activeChapter, setActiveChapter] = useState<'2.1' | '2.2' | '2.3'>(initialChapter)
+  const [activeChapter] = useState<'2.1' | '2.2' | '2.3'>(initialChapter)
+  const [compTab, setCompTab] = useState<'composicion' | 'voluntad'>('composicion')
 
   // Sub-pills internos auditados para Compra Inversión (2.2)
   const [invSubTab, setInvSubTab] = useState<'motivadores' | 'tipologia' | 'zonas' | 'amenidades'>('motivadores')
@@ -70,46 +72,75 @@ export default function AnalisisDemandaPanel({ initialChapter = '2.1' }: Props) 
     ],
   })
 
+  // Chart Option: Intención de compra 2025 vs 2026 (vivienda propia vs inversión)
+  const getVoluntadChart = () => ({
+    aria: { enabled: true },
+    backgroundColor: 'transparent',
+    tooltip: { trigger: 'axis', axisPointer: { type: 'shadow' } },
+    legend: { textStyle: { color: ct.muted }, top: 0 },
+    grid: { left: '3%', right: '4%', bottom: '3%', containLabel: true },
+    xAxis: {
+      type: 'category',
+      data: general.voluntadComparativa.map((v) => v.ano),
+      axisLabel: { color: ct.muted },
+    },
+    yAxis: {
+      type: 'value',
+      name: '% de encuestados',
+      axisLabel: { color: ct.muted, formatter: '{value}%' },
+      splitLine: { lineStyle: { color: ct.grid } },
+    },
+    series: [
+      {
+        name: 'Vivienda propia',
+        type: 'bar',
+        data: general.voluntadComparativa.map((v) => v.viviendaPropia),
+        itemStyle: { color: '#10b981', borderRadius: [4, 4, 0, 0] },
+      },
+      {
+        name: 'Inversión',
+        type: 'bar',
+        data: general.voluntadComparativa.map((v) => v.inversion),
+        itemStyle: { color: '#38bdf8', borderRadius: [4, 4, 0, 0] },
+      },
+    ],
+  })
+
   return (
     <div className="citrino-panel-wrap">
-      {/* Header */}
-      <div className="citrino-panel-header">
-        <div className="citrino-title-area">
-          <div className="citrino-badge-row">
-            <span className="citrino-badge">Módulo 05</span>
-            <span className="citrino-sample-badge">Estudio de Mercado Censal de Demanda</span>
-          </div>
-          <h1 className="citrino-panel-title">Análisis de la Demanda Inmobiliaria</h1>
-          <p className="citrino-panel-subtitle">
-            Capacidad económica, motivadores de inversión y preferencias de vivienda en Santa Cruz.
-          </p>
-        </div>
-      </div>
-
-      {/* Selector de Capítulo de Demanda */}
-      <div className="citrino-nav-pills">
-        <button
-          className={`citrino-nav-pill-btn ${activeChapter === '2.1' ? 'active' : ''}`}
-          onClick={() => setActiveChapter('2.1')}
-        >
-          2.1 Composición Económica y Voluntad
-        </button>
-        <button
-          className={`citrino-nav-pill-btn ${activeChapter === '2.2' ? 'active' : ''}`}
-          onClick={() => setActiveChapter('2.2')}
-        >
-          2.2 Compra como Inversión (n=459)
-        </button>
-        <button
-          className={`citrino-nav-pill-btn ${activeChapter === '2.3' ? 'active' : ''}`}
-          onClick={() => setActiveChapter('2.3')}
-        >
-          2.3 Compra Vivienda Propia (n=441)
-        </button>
-      </div>
+      {/* Pestañas superiores del capítulo activo */}
+      {activeChapter === '2.1' && (
+        <TopTabBar
+          tabs={[
+            { label: 'Composición Económica', active: compTab === 'composicion', onClick: () => setCompTab('composicion') },
+            { label: 'Voluntad de Compra', active: compTab === 'voluntad', onClick: () => setCompTab('voluntad') },
+          ]}
+        />
+      )}
+      {activeChapter === '2.2' && (
+        <TopTabBar
+          tabs={[
+            { label: 'Motivadores', active: invSubTab === 'motivadores', onClick: () => setInvSubTab('motivadores') },
+            { label: 'Tipología y Precio', active: invSubTab === 'tipologia', onClick: () => setInvSubTab('tipologia') },
+            { label: 'Preferencias de Zonas', active: invSubTab === 'zonas', onClick: () => setInvSubTab('zonas') },
+            { label: 'Valores Agregados', active: invSubTab === 'amenidades', onClick: () => setInvSubTab('amenidades') },
+          ]}
+        />
+      )}
+      {activeChapter === '2.3' && (
+        <TopTabBar
+          tabs={[
+            { label: 'Tipologías y Precio', active: vivSubTab === 'tipologia', onClick: () => setVivSubTab('tipologia') },
+            { label: 'Preferencias de Zona', active: vivSubTab === 'zonas', onClick: () => setVivSubTab('zonas') },
+            { label: 'Valores Agregados', active: vivSubTab === 'amenidades', onClick: () => setVivSubTab('amenidades') },
+            { label: 'Preferencia casa', active: vivSubTab === 'casa', onClick: () => setVivSubTab('casa') },
+            { label: 'Preferencia Departamento', active: vivSubTab === 'depto', onClick: () => setVivSubTab('depto') },
+          ]}
+        />
+      )}
 
       {/* ── 2.1 COMPOSICIÓN ECONÓMICA ── */}
-      {activeChapter === '2.1' && (
+      {activeChapter === '2.1' && compTab === 'voluntad' && (
         <div>
           <div className="citrino-kpis-grid">
             <div className="citrino-kpi-card green">
@@ -122,6 +153,20 @@ export default function AnalisisDemandaPanel({ initialChapter = '2.1' }: Props) 
               <span className="citrino-kpi-val">45%</span>
               <span className="citrino-kpi-sub">Baja de 58% en 2025</span>
             </div>
+          </div>
+
+          <div className="citrino-card-box">
+            <div className="citrino-card-header">
+              <h3 className="citrino-card-title">Intención de compra: vivienda propia vs inversión (2025 - 2026)</h3>
+            </div>
+            <ReactECharts option={getVoluntadChart()} style={{ height: 320 }} />
+          </div>
+        </div>
+      )}
+
+      {activeChapter === '2.1' && compTab === 'composicion' && (
+        <div>
+          <div className="citrino-kpis-grid">
             <div className="citrino-kpi-card amber">
               <span className="citrino-kpi-label">Estrato Ingreso Mediano</span>
               <span className="citrino-kpi-val">3k - 7k Bs/mes</span>
@@ -161,35 +206,6 @@ export default function AnalisisDemandaPanel({ initialChapter = '2.1' }: Props) 
       {/* ── 2.2 COMPRA COMO INVERSIÓN (n=459) ── */}
       {activeChapter === '2.2' && (
         <div>
-          {/* Sub-tabs nivel 2 */}
-          <div className="citrino-subpills-row" style={{ marginBottom: 16 }}>
-            <span className="citrino-subpill-label">Dimensión:</span>
-            <button
-              className={`citrino-subpill-btn ${invSubTab === 'motivadores' ? 'active' : ''}`}
-              onClick={() => setInvSubTab('motivadores')}
-            >
-              02-A Motivadores de Inversión
-            </button>
-            <button
-              className={`citrino-subpill-btn ${invSubTab === 'tipologia' ? 'active' : ''}`}
-              onClick={() => setInvSubTab('tipologia')}
-            >
-              02-B Tipología y Precio
-            </button>
-            <button
-              className={`citrino-subpill-btn ${invSubTab === 'zonas' ? 'active' : ''}`}
-              onClick={() => setInvSubTab('zonas')}
-            >
-              02-C Preferencias de Zonas
-            </button>
-            <button
-              className={`citrino-subpill-btn ${invSubTab === 'amenidades' ? 'active' : ''}`}
-              onClick={() => setInvSubTab('amenidades')}
-            >
-              02-D Valores Agregados
-            </button>
-          </div>
-
           {/* 02-A Motivadores */}
           {invSubTab === 'motivadores' && (
             <div className="citrino-card-box">
@@ -207,18 +223,18 @@ export default function AnalisisDemandaPanel({ initialChapter = '2.1' }: Props) 
           {invSubTab === 'tipologia' && (
             <div>
               <div className="citrino-subpills-row">
-                <span className="citrino-subpill-label">Sub-pestaña auditada:</span>
+                <span className="citrino-subpill-label">Ver:</span>
                 <button
                   className={`citrino-subpill-btn ${invPillTipologia === 'decision' ? 'active' : ''}`}
                   onClick={() => setInvPillTipologia('decision')}
                 >
-                  🎯 Decisión de Compra (1er y 2do Factor)
+                  🎯 Factores que deciden la compra
                 </button>
                 <button
                   className={`citrino-subpill-btn ${invPillTipologia === 'valor' ? 'active' : ''}`}
                   onClick={() => setInvPillTipologia('valor')}
                 >
-                  💵 Valor del Inmueble (Ticket Objetivo)
+                  💵 Valor del inmueble (precio objetivo)
                 </button>
               </div>
 
@@ -261,7 +277,7 @@ export default function AnalisisDemandaPanel({ initialChapter = '2.1' }: Props) 
           {invSubTab === 'zonas' && (
             <div>
               <div className="citrino-subpills-row">
-                <span className="citrino-subpill-label">Sub-pestaña auditada:</span>
+                <span className="citrino-subpill-label">Ver:</span>
                 <button
                   className={`citrino-subpill-btn ${invPillZonas === 'zona' ? 'active' : ''}`}
                   onClick={() => setInvPillZonas('zona')}
@@ -304,7 +320,7 @@ export default function AnalisisDemandaPanel({ initialChapter = '2.1' }: Props) 
           {invSubTab === 'amenidades' && (
             <div className="citrino-card-box">
               <div className="citrino-card-header">
-                <h3 className="citrino-card-title">02-D Filosofía de Áreas Comunes vs Costo de Expensas en Inversión</h3>
+                <h3 className="citrino-card-title">Áreas comunes vs costo de expensas (inversión)</h3>
               </div>
               <ReactECharts
                 option={getPieSimple(inversion.preferenciaAmenidades.map((a) => ({ name: a.concepto, value: a.pct })))}
@@ -318,45 +334,11 @@ export default function AnalisisDemandaPanel({ initialChapter = '2.1' }: Props) 
       {/* ── 2.3 COMPRA VIVIENDA PROPIA (n=441) ── */}
       {activeChapter === '2.3' && (
         <div>
-          <div className="citrino-subpills-row" style={{ marginBottom: 16 }}>
-            <span className="citrino-subpill-label">Dimensión:</span>
-            <button
-              className={`citrino-subpill-btn ${vivSubTab === 'tipologia' ? 'active' : ''}`}
-              onClick={() => setVivSubTab('tipologia')}
-            >
-              03-A Tipología y Precio
-            </button>
-            <button
-              className={`citrino-subpill-btn ${vivSubTab === 'zonas' ? 'active' : ''}`}
-              onClick={() => setVivSubTab('zonas')}
-            >
-              03-B Preferencias de Zonas
-            </button>
-            <button
-              className={`citrino-subpill-btn ${vivSubTab === 'amenidades' ? 'active' : ''}`}
-              onClick={() => setVivSubTab('amenidades')}
-            >
-              03-C Valores Agregados
-            </button>
-            <button
-              className={`citrino-subpill-btn ${vivSubTab === 'casa' ? 'active' : ''}`}
-              onClick={() => setVivSubTab('casa')}
-            >
-              03-D Preferencia Casa
-            </button>
-            <button
-              className={`citrino-subpill-btn ${vivSubTab === 'depto' ? 'active' : ''}`}
-              onClick={() => setVivSubTab('depto')}
-            >
-              03-E Preferencia Depto
-            </button>
-          </div>
-
           {/* 03-A Tipología y Precio (con Aspectos, Valor, Decisión) */}
           {vivSubTab === 'tipologia' && (
             <div>
               <div className="citrino-subpills-row">
-                <span className="citrino-subpill-label">Sub-pestaña auditada:</span>
+                <span className="citrino-subpill-label">Ver:</span>
                 <button
                   className={`citrino-subpill-btn ${vivPillTipologia === 'decision' ? 'active' : ''}`}
                   onClick={() => setVivPillTipologia('decision')}
@@ -419,7 +401,7 @@ export default function AnalisisDemandaPanel({ initialChapter = '2.1' }: Props) 
           {vivSubTab === 'zonas' && (
             <div>
               <div className="citrino-subpills-row">
-                <span className="citrino-subpill-label">Sub-pestaña auditada:</span>
+                <span className="citrino-subpill-label">Ver:</span>
                 <button
                   className={`citrino-subpill-btn ${vivPillZonas === 'zona' ? 'active' : ''}`}
                   onClick={() => setVivPillZonas('zona')}
@@ -459,7 +441,7 @@ export default function AnalisisDemandaPanel({ initialChapter = '2.1' }: Props) 
           {vivSubTab === 'amenidades' && (
             <div>
               <div className="citrino-subpills-row">
-                <span className="citrino-subpill-label">Sub-pestaña auditada:</span>
+                <span className="citrino-subpill-label">Ver:</span>
                 <button
                   className={`citrino-subpill-btn ${vivPillAmenidades === 'preferencia' ? 'active' : ''}`}
                   onClick={() => setVivPillAmenidades('preferencia')}
@@ -490,7 +472,7 @@ export default function AnalisisDemandaPanel({ initialChapter = '2.1' }: Props) 
           {vivSubTab === 'casa' && (
             <div>
               <div className="citrino-subpills-row">
-                <span className="citrino-subpill-label">Sub-pestaña auditada:</span>
+                <span className="citrino-subpill-label">Ver:</span>
                 <button
                   className={`citrino-subpill-btn ${vivPillCasa === 'por_que' ? 'active' : ''}`}
                   onClick={() => setVivPillCasa('por_que')}
@@ -533,7 +515,7 @@ export default function AnalisisDemandaPanel({ initialChapter = '2.1' }: Props) 
           {vivSubTab === 'depto' && (
             <div>
               <div className="citrino-subpills-row">
-                <span className="citrino-subpill-label">Sub-pestaña auditada:</span>
+                <span className="citrino-subpill-label">Ver:</span>
                 <button
                   className={`citrino-subpill-btn ${vivPillDepto === 'por_que' ? 'active' : ''}`}
                   onClick={() => setVivPillDepto('por_que')}

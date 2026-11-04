@@ -3,6 +3,7 @@ import ReactECharts from 'echarts-for-react'
 import './CitrinoInstitutionalPanels.css'
 import { CICLO_INMOBILIARIO_DATA } from '../data/citrinoDataStudioData'
 import { useChartTheme } from '../lib/chartTheme'
+import TopTabBar from './TopTabBar'
 
 export default function CicloInmobiliarioPanel() {
   const ct = useChartTheme()
@@ -130,19 +131,13 @@ export default function CicloInmobiliarioPanel() {
 
   return (
     <div className="citrino-panel-wrap">
-      {/* Header */}
-      <div className="citrino-panel-header">
-        <div className="citrino-title-area">
-          <div className="citrino-badge-row">
-            <span className="citrino-badge">Módulo 07</span>
-            <span className="citrino-sample-badge">Modelo Econométrico Glenn Mueller 2002 - 2026</span>
-          </div>
-          <h1 className="citrino-panel-title">Ciclo Inmobiliario Físico Residencial</h1>
-          <p className="citrino-panel-subtitle">
-            Reloj del ciclo inmobiliario cruceño, tasa de ocupación de largo plazo y variación de precios de alquiler residencial.
-          </p>
-        </div>
-      </div>
+      {/* Pestañas superiores */}
+      <TopTabBar
+        tabs={[
+          { label: 'Tasa de Ocupación', active: activeSubTab === 'reloj', onClick: () => setActiveSubTab('reloj') },
+          { label: 'Variación de Alquileres', active: activeSubTab === 'alquileres', onClick: () => setActiveSubTab('alquileres') },
+        ]}
+      />
 
       {/* KPIs Grid */}
       <div className="citrino-kpis-grid">
@@ -161,22 +156,6 @@ export default function CicloInmobiliarioPanel() {
           <span className="citrino-kpi-val">{faseActual.ocupacionActual}%</span>
           <span className="citrino-kpi-sub">Brecha de -2.8% vs equilibrio</span>
         </div>
-      </div>
-
-      {/* Nav Pills */}
-      <div className="citrino-nav-pills">
-        <button
-          className={`citrino-nav-pill-btn ${activeSubTab === 'reloj' ? 'active' : ''}`}
-          onClick={() => setActiveSubTab('reloj')}
-        >
-          ⏰ Reloj del Ciclo y Ocupación
-        </button>
-        <button
-          className={`citrino-nav-pill-btn ${activeSubTab === 'alquileres' ? 'active' : ''}`}
-          onClick={() => setActiveSubTab('alquileres')}
-        >
-          🏠 Variación de Alquileres a Largo Plazo
-        </button>
       </div>
 
       {activeSubTab === 'reloj' && (
@@ -219,8 +198,8 @@ export default function CicloInmobiliarioPanel() {
       {activeSubTab === 'alquileres' && (
         <div className="citrino-card-box">
           <div className="citrino-card-header">
-            <h3 className="citrino-card-title">Variación Anual de Precios Reales de Alquiler Residencial (2002 - 2026)</h3>
-            <span className="citrino-card-hint">Tasa de variación interanual deflactada</span>
+            <h3 className="citrino-card-title">Variación anual del precio real de alquiler (2002 - 2026)</h3>
+            <span className="citrino-card-hint">Cambio de un año a otro, descontando la inflación</span>
           </div>
           <ReactECharts option={getAlquileresChart()} style={{ height: 350 }} />
         </div>
@@ -229,7 +208,7 @@ export default function CicloInmobiliarioPanel() {
       {/* Tabla explicativa de las 4 fases */}
       <div className="citrino-card-box">
         <div className="citrino-card-header">
-          <h3 className="citrino-card-title">Las 4 Fases Históricas del Ciclo Inmobiliario Cruceño</h3>
+          <h3 className="citrino-card-title">Las 4 fases históricas del ciclo en Santa Cruz</h3>
         </div>
         <div className="citrino-table-wrap">
           <table className="citrino-table">
@@ -237,7 +216,7 @@ export default function CicloInmobiliarioPanel() {
               <tr>
                 <th>Fase</th>
                 <th>Periodo</th>
-                <th>Rango de Ocupación</th>
+                <th>Nivel de ocupación</th>
                 <th>Comportamiento de Mercado</th>
               </tr>
             </thead>

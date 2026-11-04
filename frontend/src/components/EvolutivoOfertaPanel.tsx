@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import ReactECharts from 'echarts-for-react'
 import './CitrinoInstitutionalPanels.css'
-import './EvolutivoOfertaPanel.css'
+import './TopTabs.css'
 import {
   EVOLUTIVO_OFERTA_SNAPSHOTS,
   RITMO_VENTAS_HISTORICO_MENSUAL,
@@ -197,21 +197,21 @@ export default function EvolutivoOfertaPanel() {
   return (
     <div className="citrino-panel-wrap">
       {/* Nav Pills principales (3 pestañas) */}
-      <div className="evo-tabs">
+      <div className="top-tabs">
         <button
-          className={`evo-tab ${activeTab === 'cuantificacion' ? 'active' : ''}`}
+          className={`top-tab ${activeTab === 'cuantificacion' ? 'active' : ''}`}
           onClick={() => setActiveTab('cuantificacion')}
         >
           Cuantificación Evolutiva de la Oferta
         </button>
         <button
-          className={`evo-tab ${activeTab === 'precio_ritmo' ? 'active' : ''}`}
+          className={`top-tab ${activeTab === 'precio_ritmo' ? 'active' : ''}`}
           onClick={() => setActiveTab('precio_ritmo')}
         >
           Evolutivo Precio & Ritmo de Venta
         </button>
         <button
-          className={`evo-tab ${activeTab === 'proyectos' ? 'active' : ''}`}
+          className={`top-tab ${activeTab === 'proyectos' ? 'active' : ''}`}
           onClick={() => setActiveTab('proyectos')}
         >
           Evolutivo por Proyectos
