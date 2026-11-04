@@ -311,7 +311,7 @@ export default function AuthScreen({ onSuccess }: AuthScreenProps) {
               fontSize: 'var(--fs-cuerpo)',
               fontWeight: 600,
               background: '#f3f3f3',
-              color: '#181818',
+              color: 'var(--bg-base)',
               border: 'none',
               borderRadius: 6,
               cursor: loading ? 'not-allowed' : 'pointer',
