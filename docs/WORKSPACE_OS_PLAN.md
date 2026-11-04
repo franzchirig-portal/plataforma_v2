@@ -1,5 +1,7 @@
 # Workspace OS de Inteligencia Inmobiliaria — Plan y Arquitectura
 
+> **Documento histórico.** Describe `WorkspaceOSPanel`, un panel que fue eliminado del código: dejó de mostrarse en los rediseños de layout de septiembre de 2026 y se borró después por no tener uso. Se conserva como referencia de diseño. El código sigue disponible en el historial de git, en el commit anterior a «refactor(frontend): elimina 5 componentes sin uso».
+
 ## 1. Visión General
 Transformación de Citrino Intelligence Platform en un **Workspace OS (Sistema Operativo de Inteligencia Inmobiliaria)** de nivel institucional, combinando un Command Palette global (`Cmd+K`), un entorno de aplicaciones con OS Dock, Comparador Multidimensional (Head-to-Head), Generador de Reportes & Dossiers Ejecutivos listos para exportar/imprimir, y Data & Pipeline Control con telemetría del flujo ETL Medallion.
 

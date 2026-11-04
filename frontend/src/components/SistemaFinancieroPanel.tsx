@@ -2,12 +2,14 @@ import { useState } from 'react'
 import ReactECharts from 'echarts-for-react'
 import './CitrinoInstitutionalPanels.css'
 import { SISTEMA_FINANCIERO_DATA } from '../data/citrinoDataStudioData'
+import { useChartTheme } from '../lib/chartTheme'
 
 interface Props {
   initialChapter?: '3.1' | '3.2'
 }
 
 export default function SistemaFinancieroPanel({ initialChapter = '3.1' }: Props) {
+  const ct = useChartTheme()
   const [activeChapter, setActiveChapter] = useState<'3.1' | '3.2'>(initialChapter)
 
   // Sub-pills auditados en Looker Studio para Mora (3.2)
@@ -18,20 +20,21 @@ export default function SistemaFinancieroPanel({ initialChapter = '3.1' }: Props
 
   // Chart Option: Cartera Hipotecaria vs VIS (2015 - 2026)
   const getCarteraChart = () => ({
+    aria: { enabled: true },
     backgroundColor: 'transparent',
     tooltip: { trigger: 'axis' },
-    legend: { textStyle: { color: '#94a3b8' }, top: 0 },
+    legend: { textStyle: { color: ct.muted }, top: 0 },
     grid: { left: '3%', right: '4%', bottom: '3%', containLabel: true },
     xAxis: {
       type: 'category',
       data: carteraHipotecaria.map((c) => c.periodo),
-      axisLabel: { color: '#94a3b8' },
+      axisLabel: { color: ct.muted },
     },
     yAxis: {
       type: 'value',
       name: 'Millones $US',
-      axisLabel: { color: '#94a3b8' },
-      splitLine: { lineStyle: { color: 'rgba(255,255,255,0.06)' } },
+      axisLabel: { color: ct.muted },
+      splitLine: { lineStyle: { color: ct.grid } },
     },
     series: [
       {
@@ -55,20 +58,21 @@ export default function SistemaFinancieroPanel({ initialChapter = '3.1' }: Props
 
   // Chart Option: Mora Hipotecaria Monto USD (Reprogramada vs No Reprogramada)
   const getMoraHipotecariaMontoChart = () => ({
+    aria: { enabled: true },
     backgroundColor: 'transparent',
     tooltip: { trigger: 'axis', axisPointer: { type: 'shadow' } },
-    legend: { textStyle: { color: '#94a3b8' }, top: 0 },
+    legend: { textStyle: { color: ct.muted }, top: 0 },
     grid: { left: '3%', right: '4%', bottom: '3%', containLabel: true },
     xAxis: {
       type: 'category',
       data: moraHipotecaria.serie.map((s) => s.periodo),
-      axisLabel: { color: '#94a3b8' },
+      axisLabel: { color: ct.muted },
     },
     yAxis: {
       type: 'value',
       name: 'Millones $US en Mora',
-      axisLabel: { color: '#94a3b8' },
-      splitLine: { lineStyle: { color: 'rgba(255,255,255,0.06)' } },
+      axisLabel: { color: ct.muted },
+      splitLine: { lineStyle: { color: ct.grid } },
     },
     series: [
       {
@@ -90,19 +94,20 @@ export default function SistemaFinancieroPanel({ initialChapter = '3.1' }: Props
 
   // Chart Option: Mora Construcción Porcentajes vs Monto
   const getMoraConstruccionChart = () => ({
+    aria: { enabled: true },
     backgroundColor: 'transparent',
     tooltip: { trigger: 'axis' },
     grid: { left: '3%', right: '4%', bottom: '3%', containLabel: true },
     xAxis: {
       type: 'category',
       data: moraConstruccion.serie.map((s) => s.periodo),
-      axisLabel: { color: '#94a3b8' },
+      axisLabel: { color: ct.muted },
     },
     yAxis: {
       type: 'value',
       name: moraConstruccionPill === 'porcentajes' ? 'Tasa de Mora (%)' : 'Millones $US',
-      axisLabel: { color: '#94a3b8' },
-      splitLine: { lineStyle: { color: 'rgba(255,255,255,0.06)' } },
+      axisLabel: { color: ct.muted },
+      splitLine: { lineStyle: { color: ct.grid } },
     },
     series: [
       {

@@ -314,11 +314,11 @@ export default function ResumenEtapasMap({
       {/* Header */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 2 }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-          <span style={{ fontSize: 13, fontWeight: 700, color: 'var(--text-primary)' }}>
+          <span style={{ fontSize: 'var(--fs-cuerpo)', fontWeight: 700, color: 'var(--text-primary)' }}>
             Localización por Etapa
           </span>
           <span style={{
-            fontSize: 10,
+            fontSize: 'var(--fs-etiqueta)',
             fontWeight: 600,
             background: isDark ? 'rgba(161, 161, 170, 0.12)' : 'rgba(161, 161, 170, 0.18)',
             color: isDark ? '#cbd5e1' : '#475569',
@@ -339,7 +339,7 @@ export default function ResumenEtapasMap({
               border: '1px solid var(--border-subtle)',
               borderRadius: 12,
               padding: '2px 8px',
-              fontSize: 10.5,
+              fontSize: 'var(--fs-etiqueta)',
               fontWeight: 600,
               cursor: 'pointer',
               display: 'flex',
@@ -357,7 +357,7 @@ export default function ResumenEtapasMap({
               background: 'transparent',
               color: 'var(--text-muted)',
               border: 'none',
-              fontSize: 10.5,
+              fontSize: 'var(--fs-etiqueta)',
               fontWeight: 500,
               cursor: 'pointer',
               display: 'flex',
@@ -371,7 +371,7 @@ export default function ResumenEtapasMap({
         )}
       </div>
 
-      <div style={{ fontSize: 10.5, color: 'var(--text-muted)', marginBottom: 6 }}>
+      <div style={{ fontSize: 'var(--fs-etiqueta)', color: 'var(--text-muted)', marginBottom: 6 }}>
         {selectedStage
           ? `Visualizando oferta de la etapa "${selectedStage}" sobre el plano urbano`
           : 'Puntos de proyectos censados clasificados y codificados por etapa'}
@@ -419,10 +419,10 @@ export default function ResumenEtapasMap({
                 display: 'flex',
                 alignItems: 'center',
                 gap: 5,
-                fontSize: 10.5,
+                fontSize: 'var(--fs-etiqueta)',
                 color: isSel ? 'var(--text-primary)' : 'var(--text-secondary)',
                 fontWeight: isSel ? 700 : 500,
-                transition: 'all 0.15s ease',
+                transition: 'background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease, opacity 0.15s ease, transform 0.15s ease, box-shadow 0.15s ease',
               }}>
               <span style={{
                 width: 8,
@@ -433,7 +433,7 @@ export default function ResumenEtapasMap({
                 boxShadow: isSel ? `0 0 6px ${s.color}` : 'none',
               }} />
               <span>{s.name}</span>
-              <span style={{ color: 'var(--text-muted)', fontSize: 10 }}>({s.count})</span>
+              <span style={{ color: 'var(--text-muted)', fontSize: 'var(--fs-etiqueta)' }}>({s.count})</span>
             </button>
           )
         })}

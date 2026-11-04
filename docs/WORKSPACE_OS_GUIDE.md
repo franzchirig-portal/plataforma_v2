@@ -1,5 +1,7 @@
 # Guía de Usuario & Referencia Operativa — Citrino Workspace OS
 
+> **Documento histórico.** Describe `WorkspaceOSPanel`, un panel que fue eliminado del código: dejó de mostrarse en los rediseños de layout de septiembre de 2026 y se borró después por no tener uso. Se conserva como referencia de diseño. El código sigue disponible en el historial de git, en el commit anterior a «refactor(frontend): elimina 5 componentes sin uso».
+
 Bienvenido a la guía oficial de **Citrino Workspace OS (Operating System de Inteligencia Inmobiliaria)** para el mercado de Bolivia (Santa Cruz, La Paz, Cochabamba y consolidado nacional).
 
 ---

@@ -26,7 +26,7 @@
 }
 
 .cmp-title {
-  font-size: 13px;
+  font-size: var(--fs-cuerpo);
   font-weight: 800;
   color: var(--text-primary);
   text-transform: uppercase;
@@ -37,7 +37,7 @@
 }
 
 .cmp-tag-badge {
-  font-size: 10px;
+  font-size: var(--fs-etiqueta);
   font-weight: 700;
   padding: 2px 7px;
   border-radius: 4px;
@@ -59,13 +59,13 @@
   color: var(--text-secondary);
   padding: 5px 12px;
   border-radius: var(--radius-sm);
-  font-size: 11px;
+  font-size: var(--fs-etiqueta);
   font-weight: 600;
   cursor: pointer;
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  transition: all 0.15s ease;
+  transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease, opacity 0.15s ease, transform 0.15s ease, box-shadow 0.15s ease;
 }
 
 .cmp-btn:hover {
@@ -128,7 +128,7 @@
 }
 
 .cmp-slot-label {
-  font-size: 10.5px;
+  font-size: var(--fs-etiqueta);
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.5px;
@@ -152,16 +152,17 @@
   border: 1px solid var(--border-subtle);
   border-radius: var(--radius-sm);
   color: var(--text-primary);
-  font-size: 12.5px;
+  font-size: var(--fs-cuerpo);
   font-weight: 600;
   padding: 7px 10px;
-  outline: none;
   cursor: pointer;
   transition: border-color 0.15s ease;
 }
 
-.cmp-select:focus {
+.cmp-select:focus-visible {
   border-color: #10b981;
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 2px;
 }
 
 .cmp-vs-badge-wrap {
@@ -180,7 +181,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 12px;
+  font-size: var(--fs-cuerpo);
   font-weight: 900;
   color: #ffffff;
   box-shadow: 0 0 15px rgba(16, 185, 129, 0.35);
@@ -194,7 +195,7 @@
   cursor: pointer;
   padding: 2px 6px;
   border-radius: 4px;
-  font-size: 10px;
+  font-size: var(--fs-etiqueta);
   font-weight: 600;
   display: inline-flex;
   align-items: center;
@@ -247,7 +248,7 @@
 
 .cmp-hero-name {
   margin: 0;
-  font-size: 20px;
+  font-size: var(--fs-titulo);
   font-weight: 800;
   color: var(--text-primary);
   text-transform: uppercase;
@@ -255,12 +256,14 @@
 }
 
 .cmp-hero-loc {
-  font-size: 11.5px;
+  font-size: var(--fs-etiqueta);
   color: var(--text-muted);
   margin-top: 3px;
   display: flex;
   align-items: center;
-  gap: 4px;
+  gap: 6px;
+  row-gap: 3px;
+  flex-wrap: wrap;
 }
 
 .cmp-hero-badges {
@@ -285,7 +288,7 @@
 }
 
 .cmp-hero-kpi-label {
-  font-size: 9px;
+  font-size: var(--fs-etiqueta);
   font-weight: 700;
   color: var(--text-muted);
   text-transform: uppercase;
@@ -293,7 +296,7 @@
 }
 
 .cmp-hero-kpi-val {
-  font-size: 14px;
+  font-size: var(--fs-cuerpo);
   font-weight: 800;
   color: var(--text-primary);
   margin-top: 2px;
@@ -304,7 +307,7 @@
   display: inline-flex;
   align-items: center;
   gap: 4px;
-  font-size: 10px;
+  font-size: var(--fs-etiqueta);
   font-weight: 700;
   padding: 2px 7px;
   border-radius: 4px;
@@ -317,7 +320,7 @@
   display: inline-flex;
   align-items: center;
   gap: 4px;
-  font-size: 10px;
+  font-size: var(--fs-etiqueta);
   font-weight: 700;
   padding: 2px 7px;
   border-radius: 4px;
@@ -327,47 +330,6 @@
 }
 
 /* ── Diagnóstico Comparativo Directo Grid ── */
-.cmp-diagnostico-grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 12px;
-}
-
-@media (max-width: 1200px) {
-  .cmp-diagnostico-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
-
-@media (max-width: 650px) {
-  .cmp-diagnostico-grid {
-    grid-template-columns: 1fr;
-  }
-}
-
-.cmp-diagnostico-item {
-  padding: 10px 14px;
-  background: var(--bg-surface);
-  border: 1px solid var(--border-subtle);
-  border-radius: var(--radius-md);
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-}
-
-.cmp-diagnostico-label {
-  font-size: 11px;
-  font-weight: 600;
-  color: var(--text-muted);
-  text-transform: uppercase;
-  letter-spacing: 0.4px;
-}
-
-.cmp-diagnostico-val {
-  font-size: 12.5px;
-  font-weight: 700;
-  line-height: 1.35;
-}
 
 .cmp-panel-card {
   background: var(--bg-card);
@@ -379,16 +341,8 @@
   gap: 12px;
 }
 
-.cmp-card-title-row {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  border-bottom: 1px solid var(--border-subtle);
-  padding-bottom: 8px;
-}
-
 .cmp-card-title {
-  font-size: 12.5px;
+  font-size: var(--fs-cuerpo);
   font-weight: 700;
   color: var(--text-primary);
   text-transform: uppercase;
@@ -396,8 +350,63 @@
 }
 
 .cmp-card-subtitle {
-  font-size: 11px;
+  font-size: var(--fs-etiqueta);
   color: var(--text-muted);
+}
+
+/* ── Secciones desplegables ── */
+.cmp-collapse-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  background: none;
+  border: none;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.cmp-collapse-toggle.is-open {
+  border-bottom: 1px solid var(--border-subtle);
+  padding-bottom: 8px;
+}
+
+.cmp-collapse-toggle:focus-visible {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 4px;
+  border-radius: var(--radius-sm);
+}
+
+.cmp-collapse-head-side {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-shrink: 0;
+}
+
+.cmp-collapse-chevron {
+  display: inline-flex;
+  color: var(--text-muted);
+  transition: transform 0.2s ease, color 0.2s ease;
+}
+
+.cmp-collapse-toggle:hover .cmp-collapse-chevron {
+  color: var(--text-primary);
+}
+
+.cmp-collapse-toggle.is-open .cmp-collapse-chevron {
+  transform: rotate(180deg);
+}
+
+.cmp-collapse-body {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
 }
 
 /* ── Matrix Head-to-Head Table ── */
@@ -411,7 +420,7 @@
 .cmp-table {
   width: 100%;
   border-collapse: collapse;
-  font-size: 11.5px;
+  font-size: var(--fs-etiqueta);
 }
 
 .cmp-table th,
@@ -422,7 +431,7 @@
 
 .cmp-table thead th {
   background: var(--bg-surface);
-  font-size: 11px;
+  font-size: var(--fs-etiqueta);
   font-weight: 700;
   color: var(--text-muted);
   text-transform: uppercase;
@@ -435,7 +444,7 @@
 
 .cmp-table-section-row td {
   background: var(--bg-surface);
-  font-size: 11px;
+  font-size: var(--fs-etiqueta);
   font-weight: 800;
   color: var(--text-secondary);
   text-transform: uppercase;
@@ -468,7 +477,7 @@
 }
 
 .cmp-amenity-name {
-  font-size: 11.5px;
+  font-size: var(--fs-etiqueta);
   font-weight: 600;
   color: var(--text-primary);
 }
@@ -480,7 +489,7 @@
 }
 
 .cmp-amenity-pill {
-  font-size: 10px;
+  font-size: var(--fs-etiqueta);
   font-weight: 700;
   padding: 2px 6px;
   border-radius: 4px;

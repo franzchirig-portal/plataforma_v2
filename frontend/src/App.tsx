@@ -1,6 +1,5 @@
 import { useState, useEffect, useRef } from 'react'
 import './index.css'
-import { IconAssistant } from './components/LeftSidebar'
 import ChatPanel from './components/ChatPanel'
 import AnalysisPanel from './components/AnalysisPanel'
 import WorkspacePanel from './components/WorkspacePanel'
@@ -8,7 +7,6 @@ import TipologiasPanel from './components/TipologiasPanel'
 import AnalisisProductoPanel from './components/AnalisisProductoPanel'
 import ComparacionProyectosPanel from './components/ComparacionProyectosPanel'
 import GeoespacialPanel from './components/GeoespacialPanel'
-import WorkspaceOSPanel from './components/WorkspaceOSPanel'
 import AuthScreen from './components/AuthScreen'
 import LeftAnalyticsBar from './components/LeftAnalyticsBar'
 import SubHeader, { type Tab } from './components/SubHeader'
@@ -22,6 +20,7 @@ import AnalisisDemandaPanel from './components/AnalisisDemandaPanel'
 import SistemaFinancieroPanel from './components/SistemaFinancieroPanel'
 import CicloInmobiliarioPanel from './components/CicloInmobiliarioPanel'
 import EndeudamientoHipotecarioPanel from './components/EndeudamientoHipotecarioPanel'
+import ErrorBoundary from './components/ErrorBoundary'
 import { supabase } from './lib/supabase'
 import { fetchPeriodos } from './lib/supabase'
 import type { IndicadorFull } from './lib/supabase'
@@ -54,13 +53,26 @@ const IconLogout = () => (
   </svg>
 )
 
-const IconAnalysis = () => (
-  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round">
-    <rect x="3" y="3" width="18" height="18" rx="2" />
-    <path d="M3 9h18" />
-    <path d="M9 21V9" />
-  </svg>
-)
+/* ─── Theme helpers ──────────────────────────────────────────────────────── */
+const THEME_STORAGE_KEY = 'citrino_theme_v2'
+
+// Tema guardado explícitamente por el usuario (null = nunca lo eligió, sigue al sistema)
+function readSavedTheme(): 'dark' | 'light' | null {
+  try {
+    const saved = localStorage.getItem(THEME_STORAGE_KEY)
+    return saved === 'light' || saved === 'dark' ? saved : null
+  } catch {
+    return null
+  }
+}
+
+function getSystemTheme(): 'dark' | 'light' {
+  try {
+    return window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark'
+  } catch {
+    return 'light'
+  }
+}
 
 /* ─── Types ──────────────────────────────────────────────────────────────── */
 type Ciudad = 'SCZ' | 'LPZ' | 'CBB' | 'ALL'
@@ -99,10 +111,7 @@ export default function App() {
   const [selectedEtapas, setSelectedEtapas] = useState<string[]>([])
 
   // Theme
-  const [theme, setTheme] = useState<'dark' | 'light'>(() => {
-    const saved = localStorage.getItem('citrino_theme_v2')
-    return (saved === 'light' || saved === 'dark') ? saved : 'light'
-  })
+  const [theme, setTheme] = useState<'dark' | 'light'>(() => readSavedTheme() ?? getSystemTheme())
 
   // Chat
   const [chatOpen, setChatOpen] = useState(false)
@@ -135,8 +144,24 @@ export default function App() {
 
   useEffect(() => {
     document.documentElement.setAttribute('data-theme', theme)
-    localStorage.setItem('citrino_theme_v2', theme)
   }, [theme])
+
+  // Sin preferencia guardada, el tema sigue al sistema (prefers-color-scheme)
+  useEffect(() => {
+    let mql: MediaQueryList | null = null
+    const handleSystemChange = (e: MediaQueryListEvent) => {
+      if (readSavedTheme() === null) setTheme(e.matches ? 'light' : 'dark')
+    }
+    try {
+      mql = window.matchMedia('(prefers-color-scheme: light)')
+      mql.addEventListener('change', handleSystemChange)
+    } catch {
+      mql = null
+    }
+    return () => {
+      mql?.removeEventListener('change', handleSystemChange)
+    }
+  }, [])
 
   // Load periodo options whenever city changes
   useEffect(() => {
@@ -182,7 +207,16 @@ export default function App() {
     setSelectedEtapas([])
   }
 
-  const toggleTheme = () => setTheme((prev) => (prev === 'dark' ? 'light' : 'dark'))
+  // Alternar manualmente guarda la preferencia y deja de seguir al sistema
+  const toggleTheme = () => {
+    const next = theme === 'dark' ? 'light' : 'dark'
+    setTheme(next)
+    try {
+      localStorage.setItem(THEME_STORAGE_KEY, next)
+    } catch {
+      /* sin almacenamiento disponible: el tema se mantiene solo en memoria */
+    }
+  }
 
   const handleSelectChapter = (chapterId: string, _sectionId: string) => {
     setActiveChapter(chapterId)
@@ -240,12 +274,12 @@ export default function App() {
   // ── Loading & Auth guards ─────────────────────────────────────────────────
   if (authLoading) {
     return (
-      <div style={{
+      <div role="status" aria-live="polite" aria-busy="true" style={{
         height: '100vh', width: '100vw', display: 'flex', flexDirection: 'column',
         alignItems: 'center', justifyContent: 'center', background: 'var(--bg-base)', gap: 12,
       }}>
         <div className="loading-shimmer" style={{ width: 180, height: 18 }} />
-        <div style={{ fontSize: 11, color: 'var(--text-muted)' }}>Iniciando Citrino…</div>
+        <div style={{ fontSize: 'var(--fs-etiqueta)', color: 'var(--text-muted)' }}>Iniciando Citrino…</div>
       </div>
     )
   }
@@ -518,6 +552,7 @@ export default function App() {
 
               {/* Panel content */}
               <div className="workspace">
+                <ErrorBoundary resetKey={`${activeChapter}/${activeTab}`}>
                 {/* ── CAPÍTULO 1.1: CUANTIFICACIÓN OFERTA NUEVA (100% BLINDADA E INTOCABLE) ── */}
                 {activeChapter === '1.1' && activeTab === 'proyectos' && (
                   <WorkspacePanel
@@ -741,6 +776,7 @@ export default function App() {
                 {activeTab === 'chapter_dossier' && (
                   <ChapterDossierPanel chapterId={activeChapter} />
                 )}
+                </ErrorBoundary>
               </div>
             </div>
 

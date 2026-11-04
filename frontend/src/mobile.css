@@ -27,7 +27,7 @@
     background: transparent;
     border: none;
     color: #ffffff;
-    font-size: 18px;
+    font-size: var(--fs-subtitulo);
     cursor: pointer;
   }
 
@@ -145,7 +145,7 @@
     min-height: 24px;
     padding: 4px 12px calc(4px + env(safe-area-inset-bottom));
     gap: 8px;
-    font-size: 11px;
+    font-size: var(--fs-etiqueta);
     white-space: nowrap;
     overflow: hidden;
   }
@@ -184,7 +184,7 @@
     border-radius: 6px;
     color: #ffffff;
     font: inherit;
-    font-size: 13px;
+    font-size: var(--fs-cuerpo);
     cursor: pointer;
   }
   .mobile-drawer-btn.active {
@@ -287,9 +287,9 @@
     border: none;
     border-radius: 999px;
     background: #ff7a00;
-    color: #ffffff;
+    color: #181818; /* blanco sobre #ff7a00 daba 2,6:1 */
     font: inherit;
-    font-size: 13px;
+    font-size: var(--fs-cuerpo);
     font-weight: 700;
     box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35);
     cursor: pointer;
@@ -332,7 +332,7 @@
     width: 100%;
     max-width: none;
     min-height: 40px;
-    font-size: 14px;
+    font-size: var(--fs-cuerpo);
   }
 }
 

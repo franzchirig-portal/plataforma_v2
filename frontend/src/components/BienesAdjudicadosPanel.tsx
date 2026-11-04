@@ -2,10 +2,12 @@ import { useState } from 'react'
 import ReactECharts from 'echarts-for-react'
 import './CitrinoInstitutionalPanels.css'
 import { BIENES_ADJUDICADOS_DATA } from '../data/citrinoDataStudioData'
+import { useChartTheme } from '../lib/chartTheme'
 
 type SubTab = 'remates' | 'adjudicados'
 
 export default function BienesAdjudicadosPanel() {
+  const ct = useChartTheme()
   const [activeSubTab, setActiveSubTab] = useState<SubTab>('adjudicados')
   // Sub-pill auditado de Data Studio: Mensual vs Anual
   const [subPillAdjudicados, setSubPillAdjudicados] = useState<'mensual' | 'anual'>('mensual')
@@ -14,21 +16,22 @@ export default function BienesAdjudicadosPanel() {
 
   // Chart Option: Remates Judiciales (Volumen $US M y Tasa de Descuento %)
   const getRematesChart = () => ({
+    aria: { enabled: true },
     backgroundColor: 'transparent',
     tooltip: { trigger: 'axis' },
-    legend: { textStyle: { color: '#94a3b8' }, top: 0 },
+    legend: { textStyle: { color: ct.muted }, top: 0 },
     grid: { left: '3%', right: '4%', bottom: '3%', containLabel: true },
     xAxis: {
       type: 'category',
       data: rematesMensuales.map((r) => r.periodo),
-      axisLabel: { color: '#94a3b8' },
+      axisLabel: { color: ct.muted },
     },
     yAxis: [
       {
         type: 'value',
         name: 'Volumen ($US M)',
         axisLabel: { color: '#ef4444' },
-        splitLine: { lineStyle: { color: 'rgba(255,255,255,0.06)' } },
+        splitLine: { lineStyle: { color: ct.grid } },
       },
       {
         type: 'value',
@@ -58,6 +61,7 @@ export default function BienesAdjudicadosPanel() {
 
   // Chart Option: Adjudicados Anual ASFI 2003-2026
   const getAdjudicadosAnualChart = () => ({
+    aria: { enabled: true },
     backgroundColor: 'transparent',
     tooltip: {
       trigger: 'axis',
@@ -67,13 +71,13 @@ export default function BienesAdjudicadosPanel() {
     xAxis: {
       type: 'category',
       data: adjudicadosAsfiAnual.map((a) => a.periodo),
-      axisLabel: { color: '#94a3b8' },
+      axisLabel: { color: ct.muted },
     },
     yAxis: {
       type: 'value',
       name: 'Millones de Bs.',
-      axisLabel: { color: '#94a3b8' },
-      splitLine: { lineStyle: { color: 'rgba(255,255,255,0.06)' } },
+      axisLabel: { color: ct.muted },
+      splitLine: { lineStyle: { color: ct.grid } },
     },
     series: [
       {
@@ -105,21 +109,22 @@ export default function BienesAdjudicadosPanel() {
 
   // Chart Option: Adjudicados Mensual dic-2022 a mar-2026
   const getAdjudicadosMensualChart = () => ({
+    aria: { enabled: true },
     backgroundColor: 'transparent',
     tooltip: { trigger: 'axis' },
     grid: { left: '3%', right: '4%', bottom: '3%', containLabel: true },
     xAxis: {
       type: 'category',
       data: adjudicadosAsfiMensual.map((m) => m.periodo),
-      axisLabel: { color: '#94a3b8', rotate: 30 },
+      axisLabel: { color: ct.muted, rotate: 30 },
     },
     yAxis: {
       type: 'value',
       name: 'Millones de Bs.',
       min: 400,
       max: 1400,
-      axisLabel: { color: '#94a3b8' },
-      splitLine: { lineStyle: { color: 'rgba(255,255,255,0.06)' } },
+      axisLabel: { color: ct.muted },
+      splitLine: { lineStyle: { color: ct.grid } },
     },
     series: [
       {

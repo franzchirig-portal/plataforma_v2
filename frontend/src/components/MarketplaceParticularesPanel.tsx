@@ -2,27 +2,30 @@ import { useState } from 'react'
 import ReactECharts from 'echarts-for-react'
 import './CitrinoInstitutionalPanels.css'
 import { MARKETPLACE_DATA } from '../data/citrinoDataStudioData'
+import { useChartTheme } from '../lib/chartTheme'
 
 type SubTab = 'stock' | 'zonificacion' | 'evolutivo'
 
 export default function MarketplaceParticularesPanel() {
+  const ct = useChartTheme()
   const [activeSubTab, setActiveSubTab] = useState<SubTab>('stock')
   const { kpis, tipologias, zonas, serieMensual } = MARKETPLACE_DATA
 
   // Chart Option: Zonificación Barras Horizontales
   const getZonificacionChart = () => ({
+    aria: { enabled: true },
     backgroundColor: 'transparent',
     tooltip: { trigger: 'axis', axisPointer: { type: 'shadow' } },
     grid: { left: '3%', right: '4%', bottom: '3%', top: '3%', containLabel: true },
     xAxis: {
       type: 'value',
-      axisLabel: { color: '#94a3b8', formatter: '{value}%' },
-      splitLine: { lineStyle: { color: 'rgba(255,255,255,0.06)' } },
+      axisLabel: { color: ct.muted, formatter: '{value}%' },
+      splitLine: { lineStyle: { color: ct.grid } },
     },
     yAxis: {
       type: 'category',
       data: [...zonas].reverse().map((z) => z.zona),
-      axisLabel: { color: '#cbd5e1' },
+      axisLabel: { color: ct.text },
       axisLine: { lineStyle: { color: 'rgba(255,255,255,0.15)' } },
     },
     series: [
@@ -37,21 +40,22 @@ export default function MarketplaceParticularesPanel() {
 
   // Chart Option: Evolutivo Mensual (Unidades vs $US M)
   const getEvolutivoChart = () => ({
+    aria: { enabled: true },
     backgroundColor: 'transparent',
     tooltip: { trigger: 'axis' },
-    legend: { textStyle: { color: '#94a3b8' }, top: 0 },
+    legend: { textStyle: { color: ct.muted }, top: 0 },
     grid: { left: '3%', right: '4%', bottom: '3%', containLabel: true },
     xAxis: {
       type: 'category',
       data: serieMensual.map((p) => p.periodo),
-      axisLabel: { color: '#94a3b8' },
+      axisLabel: { color: ct.muted },
     },
     yAxis: [
       {
         type: 'value',
         name: 'Unidades',
-        axisLabel: { color: '#94a3b8' },
-        splitLine: { lineStyle: { color: 'rgba(255,255,255,0.06)' } },
+        axisLabel: { color: ct.muted },
+        splitLine: { lineStyle: { color: ct.grid } },
       },
       {
         type: 'value',
@@ -172,7 +176,7 @@ export default function MarketplaceParticularesPanel() {
                     <td className="num"><b>{t.supAvg} m²</b></td>
                     <td className="num">${t.precioM2Min}</td>
                     <td className="num">${t.precioM2Max}</td>
-                    <td className="num" style={{ color: '#38bdf8' }}><b>${t.precioM2Avg}</b></td>
+                    <td className="num" style={{ color: 'var(--citrino-sky)' }}><b>${t.precioM2Avg}</b></td>
                   </tr>
                 ))}
               </tbody>
@@ -209,7 +213,7 @@ export default function MarketplaceParticularesPanel() {
                   {zonas.map((z) => (
                     <tr key={z.zona}>
                       <td><b>{z.zona}</b></td>
-                      <td className="num" style={{ color: '#38bdf8' }}>{z.pct}%</td>
+                      <td className="num" style={{ color: 'var(--citrino-sky)' }}>{z.pct}%</td>
                       <td className="num">{z.unds}</td>
                       <td className="num">${z.volumenUsd} M</td>
                     </tr>

@@ -563,7 +563,7 @@ export default function GeoespacialPanel({
               padding: 6px 12px;
               border-radius: 4px;
               cursor: pointer;
-              transition: all 0.15s;
+              transition: background-color 0.15s, border-color 0.15s, color 0.15s, opacity 0.15s, transform 0.15s, box-shadow 0.15s;
               display: flex;
               align-items: center;
               justify-content: center;
@@ -799,11 +799,11 @@ export default function GeoespacialPanel({
       }}>
         {/* Left: Title & Count */}
         <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-          <span style={{ fontWeight: 600, fontSize: 12, color: 'var(--text-primary)' }}>
+          <span style={{ fontWeight: 600, fontSize: 'var(--fs-cuerpo)', color: 'var(--text-primary)' }}>
             Vista Geoespacial
           </span>
           <span style={{
-            fontSize: 10,
+            fontSize: 'var(--fs-etiqueta)',
             background: 'var(--bg-card)',
             color: 'var(--text-muted)',
             padding: '2px 8px',
@@ -830,7 +830,7 @@ export default function GeoespacialPanel({
             title="Marcadores estándar con información métrica"
             style={{
               padding: '4px 9px',
-              fontSize: 11,
+              fontSize: 'var(--fs-etiqueta)',
               fontWeight: mapMode === 'markers' ? 600 : 500,
               background: mapMode === 'markers' ? 'var(--bg-active)' : 'transparent',
               color: mapMode === 'markers' ? 'var(--text-primary)' : 'var(--text-muted)',
@@ -840,7 +840,7 @@ export default function GeoespacialPanel({
               display: 'flex',
               alignItems: 'center',
               gap: 5,
-              transition: 'all 0.12s',
+              transition: 'background-color 0.12s, border-color 0.12s, color 0.12s, opacity 0.12s, transform 0.12s, box-shadow 0.12s',
             }}>
             <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>
             <span>Puntos</span>
@@ -851,7 +851,7 @@ export default function GeoespacialPanel({
             title="Mapa de burbujas proporcionales a volumen o velocidad"
             style={{
               padding: '4px 9px',
-              fontSize: 11,
+              fontSize: 'var(--fs-etiqueta)',
               fontWeight: mapMode === 'bubbles' ? 600 : 500,
               background: mapMode === 'bubbles' ? 'var(--bg-active)' : 'transparent',
               color: mapMode === 'bubbles' ? 'var(--text-primary)' : 'var(--text-muted)',
@@ -861,7 +861,7 @@ export default function GeoespacialPanel({
               display: 'flex',
               alignItems: 'center',
               gap: 5,
-              transition: 'all 0.12s',
+              transition: 'background-color 0.12s, border-color 0.12s, color 0.12s, opacity 0.12s, transform 0.12s, box-shadow 0.12s',
             }}>
             <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4"/></svg>
             <span>Burbujas</span>
@@ -872,7 +872,7 @@ export default function GeoespacialPanel({
             title="Mapa de calor térmico continuo de densidad"
             style={{
               padding: '4px 9px',
-              fontSize: 11,
+              fontSize: 'var(--fs-etiqueta)',
               fontWeight: mapMode === 'heatmap' ? 600 : 500,
               background: mapMode === 'heatmap' ? 'var(--bg-active)' : 'transparent',
               color: mapMode === 'heatmap' ? 'var(--text-primary)' : 'var(--text-muted)',
@@ -882,7 +882,7 @@ export default function GeoespacialPanel({
               display: 'flex',
               alignItems: 'center',
               gap: 5,
-              transition: 'all 0.12s',
+              transition: 'background-color 0.12s, border-color 0.12s, color 0.12s, opacity 0.12s, transform 0.12s, box-shadow 0.12s',
             }}>
             <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M12 2c0 0-6 4.5-6 10a6 6 0 0 0 12 0c0-5.5-6-10-6-10z"/><path d="M12 18a2 2 0 0 0 2-2c0-1.5-2-3-2-3s-2 1.5-2 3a2 2 0 0 0 2 2z"/></svg>
             <span>Mapa de Calor</span>
@@ -893,7 +893,7 @@ export default function GeoespacialPanel({
         <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
           {/* Mode: Markers / Bubbles Color Selector */}
           {(mapMode === 'markers' || mapMode === 'bubbles') && (
-            <div style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 11, color: 'var(--text-muted)' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 'var(--fs-etiqueta)', color: 'var(--text-muted)' }}>
               <span>Color:</span>
               <select
                 value={colorMetric}
@@ -904,9 +904,8 @@ export default function GeoespacialPanel({
                   border: '1px solid var(--border-default)',
                   padding: '3px 8px',
                   borderRadius: 4,
-                  fontSize: 11,
+                  fontSize: 'var(--fs-etiqueta)',
                   fontWeight: 500,
-                  outline: 'none',
                   cursor: 'pointer',
                 }}>
                 <option value="meses_stock">Meses Stock (Riesgo)</option>
@@ -918,7 +917,7 @@ export default function GeoespacialPanel({
 
           {/* Mode: Bubbles Size Selector */}
           {mapMode === 'bubbles' && (
-            <div style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 11, color: 'var(--text-muted)' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 'var(--fs-etiqueta)', color: 'var(--text-muted)' }}>
               <span>Burbuja por:</span>
               <select
                 value={bubbleMetric}
@@ -929,9 +928,8 @@ export default function GeoespacialPanel({
                   border: '1px solid var(--border-default)',
                   padding: '3px 8px',
                   borderRadius: 4,
-                  fontSize: 11,
+                  fontSize: 'var(--fs-etiqueta)',
                   fontWeight: 500,
-                  outline: 'none',
                   cursor: 'pointer',
                 }}>
                 <option value="und_por_vender">Stock en Oferta (Unds)</option>
@@ -943,7 +941,7 @@ export default function GeoespacialPanel({
 
           {/* Mode: Heatmap Intensity Selector */}
           {mapMode === 'heatmap' && (
-            <div style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 11, color: 'var(--text-muted)' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 'var(--fs-etiqueta)', color: 'var(--text-muted)' }}>
               <span>Densidad por:</span>
               <select
                 value={heatmapMetric}
@@ -954,9 +952,8 @@ export default function GeoespacialPanel({
                   border: '1px solid var(--border-default)',
                   padding: '3px 8px',
                   borderRadius: 4,
-                  fontSize: 11,
+                  fontSize: 'var(--fs-etiqueta)',
                   fontWeight: 500,
-                  outline: 'none',
                   cursor: 'pointer',
                 }}>
                 <option value="stock">Oferta Acumulada (Stock)</option>
@@ -975,7 +972,7 @@ export default function GeoespacialPanel({
               color: showProjectList ? '#ffffff' : 'var(--text-secondary)',
               padding: '4px 10px',
               borderRadius: 4,
-              fontSize: 11,
+              fontSize: 'var(--fs-etiqueta)',
               fontWeight: 500,
               cursor: 'pointer',
               display: 'flex',
@@ -993,10 +990,10 @@ export default function GeoespacialPanel({
 
         {/* Loading Overlay */}
         {loading && (
-          <div style={{
+          <div role="status" aria-live="polite" aria-busy="true" style={{
             position: 'absolute',
             inset: 0,
-            background: 'rgba(24, 24, 24, 0.8)',
+            background: 'color-mix(in srgb, var(--bg-base) 80%, transparent)',
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
@@ -1006,7 +1003,7 @@ export default function GeoespacialPanel({
             backdropFilter: 'blur(3px)',
           }}>
             <div className="loading-shimmer" style={{ width: 140, height: 16 }} />
-            <div style={{ fontSize: 11, color: 'var(--text-muted)' }}>Cargando motor geoespacial...</div>
+            <div style={{ fontSize: 'var(--fs-etiqueta)', color: 'var(--text-muted)' }}>Cargando motor geoespacial...</div>
           </div>
         )}
 
@@ -1039,9 +1036,8 @@ export default function GeoespacialPanel({
               background: 'transparent',
               border: 'none',
               color: 'var(--text-primary)',
-              fontSize: 11.5,
+              fontSize: 'var(--fs-etiqueta)',
               width: '100%',
-              outline: 'none',
             }}
           />
           {searchQuery && (
@@ -1052,7 +1048,7 @@ export default function GeoespacialPanel({
                 border: 'none',
                 color: 'var(--text-muted)',
                 cursor: 'pointer',
-                fontSize: 11,
+                fontSize: 'var(--fs-etiqueta)',
               }}>
               ✕
             </button>
@@ -1071,7 +1067,7 @@ export default function GeoespacialPanel({
           borderRadius: 6,
           padding: '8px 12px',
           boxShadow: 'var(--shadow-panel)',
-          fontSize: 10.5,
+          fontSize: 'var(--fs-etiqueta)',
           minWidth: 170,
           maxHeight: 'calc(100% - 60px)',
           overflowY: 'auto',
@@ -1079,7 +1075,7 @@ export default function GeoespacialPanel({
           {/* Mode: Heatmap Legend */}
           {mapMode === 'heatmap' && (
             <div>
-              <div style={{ fontWeight: 700, color: 'var(--text-secondary)', marginBottom: 6, textTransform: 'uppercase', fontSize: 9.5, letterSpacing: 0.5 }}>
+              <div style={{ fontWeight: 700, color: 'var(--text-secondary)', marginBottom: 6, textTransform: 'uppercase', fontSize: 'var(--fs-etiqueta)', letterSpacing: 0.5 }}>
                 Gradiente Térmico ({heatmapMetric === 'stock' ? 'Oferta' : heatmapMetric === 'ritmo' ? 'Velocidad' : 'Densidad'})
               </div>
               <div style={{
@@ -1088,7 +1084,7 @@ export default function GeoespacialPanel({
                 background: 'linear-gradient(to right, #2563eb 0%, #06b6d4 25%, #10b981 50%, #f59e0b 75%, #ef4444 100%)',
                 marginBottom: 4,
               }} />
-              <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 9.5, color: 'var(--text-muted)' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 'var(--fs-etiqueta)', color: 'var(--text-muted)' }}>
                 <span>Baja</span>
                 <span>Media</span>
                 <span>Muy Alta</span>
@@ -1099,21 +1095,21 @@ export default function GeoespacialPanel({
           {/* Mode: Bubble Scale Legend */}
           {mapMode === 'bubbles' && (
             <div style={{ marginBottom: 8 }}>
-              <div style={{ fontWeight: 700, color: 'var(--text-secondary)', marginBottom: 6, textTransform: 'uppercase', fontSize: 9.5, letterSpacing: 0.5 }}>
+              <div style={{ fontWeight: 700, color: 'var(--text-secondary)', marginBottom: 6, textTransform: 'uppercase', fontSize: 'var(--fs-etiqueta)', letterSpacing: 0.5 }}>
                 Escala de Burbuja ({bubbleMetric === 'und_por_vender' ? 'Unds Stock' : bubbleMetric === 'ritmo_venta' ? 'Unds/mes' : 'Unds Totales'})
               </div>
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 10, padding: '4px 0' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
                   <div style={{ width: 10, height: 10, borderRadius: '50%', border: '1px solid var(--text-primary)', opacity: 0.7 }} />
-                  <span style={{ fontSize: 9.5, color: 'var(--text-muted)' }}>Menor</span>
+                  <span style={{ fontSize: 'var(--fs-etiqueta)', color: 'var(--text-muted)' }}>Menor</span>
                 </div>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
                   <div style={{ width: 18, height: 18, borderRadius: '50%', border: '1px solid var(--text-primary)', opacity: 0.7 }} />
-                  <span style={{ fontSize: 9.5, color: 'var(--text-muted)' }}>Medio</span>
+                  <span style={{ fontSize: 'var(--fs-etiqueta)', color: 'var(--text-muted)' }}>Medio</span>
                 </div>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
                   <div style={{ width: 26, height: 26, borderRadius: '50%', border: '1px solid var(--text-primary)', opacity: 0.7 }} />
-                  <span style={{ fontSize: 9.5, color: 'var(--text-muted)' }}>Mayor</span>
+                  <span style={{ fontSize: 'var(--fs-etiqueta)', color: 'var(--text-muted)' }}>Mayor</span>
                 </div>
               </div>
               <div style={{ height: 1, background: 'var(--border-subtle)', margin: '6px 0' }} />
@@ -1123,7 +1119,7 @@ export default function GeoespacialPanel({
           {/* Color Categories Legend (Markers or Bubbles) */}
           {(mapMode === 'markers' || mapMode === 'bubbles') && (
             <div>
-              <div style={{ fontWeight: 700, color: 'var(--text-secondary)', marginBottom: 6, textTransform: 'uppercase', fontSize: 9.5, letterSpacing: 0.5 }}>
+              <div style={{ fontWeight: 700, color: 'var(--text-secondary)', marginBottom: 6, textTransform: 'uppercase', fontSize: 'var(--fs-etiqueta)', letterSpacing: 0.5 }}>
                 {colorMetric === 'meses_stock' && 'Meses de Stock (Riesgo)'}
                 {colorMetric === 'ritmo_venta' && 'Ritmo de Venta (und/mes)'}
                 {colorMetric === 'etapa' && 'Etapas de Obra'}
@@ -1176,7 +1172,7 @@ export default function GeoespacialPanel({
                   {ETAPAS_CITRINO.map(({ label, color }) => (
                     <div key={label} style={{ display: 'flex', alignItems: 'center', gap: 7 }}>
                       <div style={{ width: 10, height: 10, borderRadius: 2, background: color, flexShrink: 0 }} />
-                      <span style={{ color: 'var(--text-primary)', fontSize: 10.5 }}>{label}</span>
+                      <span style={{ color: 'var(--text-primary)', fontSize: 'var(--fs-etiqueta)' }}>{label}</span>
                     </div>
                   ))}
                 </div>
@@ -1216,13 +1212,13 @@ export default function GeoespacialPanel({
                   <polyline points="2 17 12 22 22 17" />
                   <polyline points="2 12 12 17 22 12" />
                 </svg>
-                <span style={{ fontSize: 12, fontWeight: 700, color: 'var(--text-primary)' }}>
+                <span style={{ fontSize: 'var(--fs-cuerpo)', fontWeight: 700, color: 'var(--text-primary)' }}>
                   Integración QGIS & Capas GIS
                 </span>
               </div>
               <button
                 onClick={() => setShowQgisPanel(false)}
-                style={{ background: 'transparent', border: 'none', color: 'var(--text-muted)', cursor: 'pointer', fontSize: 13 }}>
+                style={{ background: 'transparent', border: 'none', color: 'var(--text-muted)', cursor: 'pointer', fontSize: 'var(--fs-cuerpo)' }}>
                 ✕
               </button>
             </div>
@@ -1232,7 +1228,7 @@ export default function GeoespacialPanel({
 
               {/* SECTION 1: Basemap Selector */}
               <div>
-                <div style={{ fontSize: 11, fontWeight: 600, color: 'var(--text-secondary)', textTransform: 'uppercase', marginBottom: 8 }}>
+                <div style={{ fontSize: 'var(--fs-etiqueta)', fontWeight: 600, color: 'var(--text-secondary)', textTransform: 'uppercase', marginBottom: 8 }}>
                   Mapa Base (Basemap)
                 </div>
                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 6 }}>
@@ -1242,7 +1238,7 @@ export default function GeoespacialPanel({
                       onClick={() => setBasemap(bm)}
                       style={{
                         padding: '6px 8px',
-                        fontSize: 10.5,
+                        fontSize: 'var(--fs-etiqueta)',
                         fontWeight: basemap === bm ? 600 : 400,
                         background: basemap === bm ? 'var(--bg-card)' : 'var(--bg-base)',
                         border: `1px solid ${basemap === bm ? 'var(--border-bright)' : 'var(--border-subtle)'}`,
@@ -1263,9 +1259,9 @@ export default function GeoespacialPanel({
 
               {/* SECTION 2: Active QGIS Layers list */}
               <div>
-                <div style={{ fontSize: 11, fontWeight: 600, color: 'var(--text-secondary)', textTransform: 'uppercase', marginBottom: 8, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                <div style={{ fontSize: 'var(--fs-etiqueta)', fontWeight: 600, color: 'var(--text-secondary)', textTransform: 'uppercase', marginBottom: 8, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                   <span>Capas Vectoriales Activas</span>
-                  <span style={{ fontSize: 9.5, color: 'var(--text-muted)' }}>{qgisLayers.length} disponibles</span>
+                  <span style={{ fontSize: 'var(--fs-etiqueta)', color: 'var(--text-muted)' }}>{qgisLayers.length} disponibles</span>
                 </div>
 
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
@@ -1280,7 +1276,7 @@ export default function GeoespacialPanel({
                         background: 'var(--bg-card)',
                         border: '1px solid var(--border-subtle)',
                         borderRadius: 6,
-                        fontSize: 11,
+                        fontSize: 'var(--fs-etiqueta)',
                       }}>
                       <label style={{ display: 'flex', alignItems: 'center', gap: 8, cursor: 'pointer', flex: 1, overflow: 'hidden' }}>
                         <input
@@ -1293,7 +1289,7 @@ export default function GeoespacialPanel({
                           <span style={{ fontWeight: 600, color: 'var(--text-primary)', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
                             {l.name}
                           </span>
-                          <span style={{ fontSize: 9.5, color: 'var(--text-muted)' }}>
+                          <span style={{ fontSize: 'var(--fs-etiqueta)', color: 'var(--text-muted)' }}>
                             {l.featureCount != null ? `${l.featureCount} entidades` : l.type.toUpperCase()}
                           </span>
                         </div>
@@ -1320,10 +1316,10 @@ export default function GeoespacialPanel({
                 borderRadius: 6,
                 textAlign: 'center',
               }}>
-                <div style={{ fontSize: 11, fontWeight: 600, color: 'var(--text-primary)', marginBottom: 4 }}>
+                <div style={{ fontSize: 'var(--fs-etiqueta)', fontWeight: 600, color: 'var(--text-primary)', marginBottom: 4 }}>
                   Importar Capa de QGIS (GeoJSON / KML)
                 </div>
-                <div style={{ fontSize: 10, color: 'var(--text-muted)', marginBottom: 10, lineHeight: 1.4 }}>
+                <div style={{ fontSize: 'var(--fs-etiqueta)', color: 'var(--text-muted)', marginBottom: 10, lineHeight: 1.4 }}>
                   Carga polígonos de zonificación, avenidas o áreas de influencia exportadas desde QGIS Desktop.
                 </div>
                 <label style={{
@@ -1335,10 +1331,10 @@ export default function GeoespacialPanel({
                   color: 'var(--text-primary)',
                   padding: '6px 14px',
                   borderRadius: 4,
-                  fontSize: 11,
+                  fontSize: 'var(--fs-etiqueta)',
                   fontWeight: 600,
                   cursor: 'pointer',
-                  transition: 'all 0.15s',
+                  transition: 'background-color 0.15s, border-color 0.15s, color 0.15s, opacity 0.15s, transform 0.15s, box-shadow 0.15s',
                 }}>
                   <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
                   <span>Seleccionar Archivo</span>
@@ -1353,7 +1349,7 @@ export default function GeoespacialPanel({
 
               {/* SECTION 4: Connect WMS / XYZ Web GIS Service */}
               <div>
-                <div style={{ fontSize: 11, fontWeight: 600, color: 'var(--text-secondary)', textTransform: 'uppercase', marginBottom: 8 }}>
+                <div style={{ fontSize: 'var(--fs-etiqueta)', fontWeight: 600, color: 'var(--text-secondary)', textTransform: 'uppercase', marginBottom: 8 }}>
                   Conectar Servicio Web GIS (WMS / XYZ)
                 </div>
                 <form onSubmit={handleAddWmsLayer} style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
@@ -1367,9 +1363,8 @@ export default function GeoespacialPanel({
                       border: '1px solid var(--border-subtle)',
                       borderRadius: 4,
                       padding: '6px 10px',
-                      fontSize: 11,
+                      fontSize: 'var(--fs-etiqueta)',
                       color: 'var(--text-primary)',
-                      outline: 'none',
                     }}
                   />
                   <input
@@ -1382,9 +1377,8 @@ export default function GeoespacialPanel({
                       border: '1px solid var(--border-subtle)',
                       borderRadius: 4,
                       padding: '6px 10px',
-                      fontSize: 11,
+                      fontSize: 'var(--fs-etiqueta)',
                       color: 'var(--text-primary)',
-                      outline: 'none',
                     }}
                   />
                   <button
@@ -1396,7 +1390,7 @@ export default function GeoespacialPanel({
                       color: wmsUrl.trim() ? 'var(--text-primary)' : 'var(--text-muted)',
                       padding: '6px 10px',
                       borderRadius: 4,
-                      fontSize: 11,
+                      fontSize: 'var(--fs-etiqueta)',
                       fontWeight: 600,
                       cursor: wmsUrl.trim() ? 'pointer' : 'not-allowed',
                     }}>
@@ -1411,10 +1405,10 @@ export default function GeoespacialPanel({
                 paddingTop: 14,
                 borderTop: '1px solid var(--border-subtle)',
               }}>
-                <div style={{ fontSize: 11, fontWeight: 600, color: 'var(--text-secondary)', marginBottom: 4 }}>
+                <div style={{ fontSize: 'var(--fs-etiqueta)', fontWeight: 600, color: 'var(--text-secondary)', marginBottom: 4 }}>
                   Exportar a QGIS Desktop
                 </div>
-                <div style={{ fontSize: 10, color: 'var(--text-muted)', marginBottom: 10 }}>
+                <div style={{ fontSize: 'var(--fs-etiqueta)', color: 'var(--text-muted)', marginBottom: 10 }}>
                   Descarga un archivo GeoJSON con todos los {filteredProjects.length} proyectos y atributos para abrir en QGIS con un clic.
                 </div>
                 <button
@@ -1426,14 +1420,14 @@ export default function GeoespacialPanel({
                     color: '#181818',
                     border: 'none',
                     borderRadius: 4,
-                    fontSize: 11.5,
+                    fontSize: 'var(--fs-etiqueta)',
                     fontWeight: 600,
                     cursor: 'pointer',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
                     gap: 6,
-                    transition: 'all 0.15s ease',
+                    transition: 'background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease, opacity 0.15s ease, transform 0.15s ease, box-shadow 0.15s ease',
                   }}>
                   <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
                   <span>Exportar Capa GeoJSON</span>
@@ -1467,7 +1461,7 @@ export default function GeoespacialPanel({
               justifyContent: 'space-between',
               background: 'var(--bg-base)',
             }}>
-              <span style={{ fontSize: 11, fontWeight: 700, color: 'var(--text-primary)', textTransform: 'uppercase', letterSpacing: 0.5 }}>
+              <span style={{ fontSize: 'var(--fs-etiqueta)', fontWeight: 700, color: 'var(--text-primary)', textTransform: 'uppercase', letterSpacing: 0.5 }}>
                 Proyectos ({filteredProjects.length})
               </span>
               <button
@@ -1477,7 +1471,7 @@ export default function GeoespacialPanel({
                   border: 'none',
                   color: 'var(--text-muted)',
                   cursor: 'pointer',
-                  fontSize: 12,
+                  fontSize: 'var(--fs-cuerpo)',
                 }}>
                 ✕
               </button>
@@ -1502,15 +1496,15 @@ export default function GeoespacialPanel({
                       background: isSelected ? 'var(--bg-active)' : 'var(--bg-card)',
                       border: `1px solid ${isSelected ? 'var(--border-bright)' : 'var(--border-subtle)'}`,
                       cursor: 'pointer',
-                      transition: 'all 0.12s',
+                      transition: 'background-color 0.12s, border-color 0.12s, color 0.12s, opacity 0.12s, transform 0.12s, box-shadow 0.12s',
                     }}>
                     <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 6, marginBottom: 3 }}>
-                      <span style={{ fontWeight: 600, fontSize: 11.5, color: 'var(--text-primary)', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                      <span style={{ fontWeight: 600, fontSize: 'var(--fs-etiqueta)', color: 'var(--text-primary)', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
                         {p.proyecto}
                       </span>
                     </div>
 
-                    <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 10, color: 'var(--text-muted)' }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 'var(--fs-etiqueta)', color: 'var(--text-muted)' }}>
                       <span>{p.ZONAS || '—'}</span>
                       <span style={{ fontFamily: "'JetBrains Mono', monospace", color: 'var(--text-primary)' }}>
                         {p.und_por_vender ?? '0'} disp

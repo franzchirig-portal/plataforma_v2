@@ -8,6 +8,7 @@ import {
   getLatestPerProject,
 } from '../lib/supabase'
 import type { IndicadorFull, AvgTipologia, TipologiaBenchmark } from '../lib/supabase'
+import { useChartTheme } from '../lib/chartTheme'
 
 interface Props {
   ciudad: string
@@ -34,12 +35,13 @@ interface ProductMatrixRow {
   count: number
 }
 
-const CHART_BASE = {
+const chartBase = (muted: string) => ({
+  aria: { enabled: true },
   backgroundColor: 'transparent',
-  textStyle: { fontFamily: 'Inter, sans-serif', color: '#94a3b8', fontSize: 11 },
+  textStyle: { fontFamily: 'Inter, sans-serif', color: muted, fontSize: 11 },
   animation: true,
   animationDuration: 500,
-}
+})
 
 function fmt(n: number | null | undefined, dec = 1): string {
   if (n == null) return '—'
@@ -72,6 +74,7 @@ export default function TipologiasPanel({
   selectedIndicador,
   onSelectIndicador,
 }: Props) {
+  const ct = useChartTheme()
   const [proyectos, setProyectos] = useState<IndicadorFull[]>([])
   const [tipologias, setTipologias] = useState<AvgTipologia[]>([])
   const [marketBenchmarks, setMarketBenchmarks] = useState<Record<string, TipologiaBenchmark>>({})
@@ -203,7 +206,7 @@ export default function TipologiasPanel({
 
   // ─── ECharts Configuration ──────────────────────────────────────────────
   const chartPriceM2 = tipologias.length > 0 ? {
-    ...CHART_BASE,
+    ...chartBase(ct.muted),
     grid: { left: 16, right: 16, top: 28, bottom: 24, containLabel: true },
     tooltip: {
       trigger: 'axis',
@@ -213,28 +216,28 @@ export default function TipologiasPanel({
     },
     legend: {
       data: ['Precio Promedio ($US)', 'Precio $/m²'],
-      textStyle: { color: '#94a3b8', fontSize: 10 },
+      textStyle: { color: ct.muted, fontSize: 11 },
       top: 2,
     },
     xAxis: {
       type: 'category',
       data: tipologias.map((t) => t.avg_tipologia),
-      axisLabel: { fontSize: 10, color: '#94a3b8', interval: 0 },
+      axisLabel: { fontSize: 11, color: ct.muted, interval: 0 },
     },
     yAxis: [
       {
         type: 'value',
         name: 'Precio $US',
-        nameTextStyle: { color: '#64748b', fontSize: 9 },
-        splitLine: { lineStyle: { color: '#182c48' } },
-        axisLabel: { fontSize: 9, formatter: (v: number) => `$${(v / 1000).toFixed(0)}k` },
+        nameTextStyle: { color: ct.muted, fontSize: 11 },
+        splitLine: { lineStyle: { color: ct.grid } },
+        axisLabel: { fontSize: 11, formatter: (v: number) => `$${(v / 1000).toFixed(0)}k` },
       },
       {
         type: 'value',
         name: '$US/m²',
-        nameTextStyle: { color: '#64748b', fontSize: 9 },
+        nameTextStyle: { color: ct.muted, fontSize: 11 },
         splitLine: { show: false },
-        axisLabel: { fontSize: 9, formatter: (v: number) => `$${v}` },
+        axisLabel: { fontSize: 11, formatter: (v: number) => `$${v}` },
       },
     ],
     series: [
@@ -266,7 +269,7 @@ export default function TipologiasPanel({
   } : null
 
   const chartInventory = tipologias.length > 0 ? {
-    ...CHART_BASE,
+    ...chartBase(ct.muted),
     grid: { left: 16, right: 16, top: 28, bottom: 24, containLabel: true },
     tooltip: {
       trigger: 'axis',
@@ -277,20 +280,20 @@ export default function TipologiasPanel({
     },
     legend: {
       data: ['Vendidas', 'Por Vender'],
-      textStyle: { color: '#94a3b8', fontSize: 10 },
+      textStyle: { color: ct.muted, fontSize: 11 },
       top: 2,
     },
     xAxis: {
       type: 'category',
       data: tipologias.map((t) => t.avg_tipologia),
-      axisLabel: { fontSize: 10, color: '#94a3b8', interval: 0 },
+      axisLabel: { fontSize: 11, color: ct.muted, interval: 0 },
     },
     yAxis: {
       type: 'value',
       name: 'Unidades',
-      nameTextStyle: { color: '#64748b', fontSize: 9 },
+      nameTextStyle: { color: ct.muted, fontSize: 11 },
       splitLine: { lineStyle: { color: '#133340' } },
-      axisLabel: { fontSize: 9 },
+      axisLabel: { fontSize: 11 },
     },
     series: [
       {
@@ -318,7 +321,7 @@ export default function TipologiasPanel({
       <div className="panel-header">
         <div className="panel-title-dot" style={{ background: 'var(--citrino-teal-light)', boxShadow: 'none' }} />
         <span style={{ fontWeight: 700 }}>01-E ANÁLISIS DE TIPOLOGÍAS</span>
-        <span style={{ marginLeft: 8, fontSize: 10, color: 'var(--text-muted)' }}>
+        <span style={{ marginLeft: 8, fontSize: 'var(--fs-etiqueta)', color: 'var(--text-muted)' }}>
           — Producto Inmobiliario (Área, Precios y Absorción)
         </span>
 
@@ -351,7 +354,7 @@ export default function TipologiasPanel({
         gap: 12,
         flexWrap: 'wrap',
       }}>
-        <div style={{ fontSize: 11, fontWeight: 700, color: 'var(--citrino-teal-light)', display: 'flex', alignItems: 'center', gap: 6 }}>
+        <div style={{ fontSize: 'var(--fs-etiqueta)', fontWeight: 700, color: 'var(--citrino-teal-light)', display: 'flex', alignItems: 'center', gap: 6 }}>
           <span>Proyecto:</span>
         </div>
 
@@ -365,13 +368,12 @@ export default function TipologiasPanel({
             style={{
               width: '100%',
               padding: '6px 10px',
-              fontSize: 12,
+              fontSize: 'var(--fs-cuerpo)',
               fontWeight: 600,
               background: 'var(--bg-card)',
               color: 'var(--text-primary)',
               border: '1px solid var(--border-default)',
               borderRadius: 'var(--radius-md)',
-              outline: 'none',
               cursor: 'pointer',
               boxShadow: 'none',
             }}>
@@ -384,7 +386,7 @@ export default function TipologiasPanel({
         </div>
 
         {selectedIndicador && (
-          <div style={{ display: 'flex', gap: 8, alignItems: 'center', fontSize: 11 }}>
+          <div style={{ display: 'flex', gap: 8, alignItems: 'center', fontSize: 'var(--fs-etiqueta)' }}>
             {selectedIndicador.ZONAS && (
               <span style={{
                 background: 'var(--bg-card)',
@@ -415,7 +417,7 @@ export default function TipologiasPanel({
           <div className="empty-state" style={{ padding: '40px 0' }}>
             <div className="loading-shimmer" style={{ width: 180, height: 16, marginBottom: 8 }} />
             <div className="loading-shimmer" style={{ width: 260, height: 12 }} />
-            <div style={{ marginTop: 12, fontSize: 11, color: 'var(--text-muted)' }}>
+            <div style={{ marginTop: 12, fontSize: 'var(--fs-etiqueta)', color: 'var(--text-muted)' }}>
               Cargando modelos y precios de tipologías…
             </div>
           </div>
@@ -426,11 +428,11 @@ export default function TipologiasPanel({
               <div>
                 {tipologias.length === 0 ? (
                   <div className="empty-state" style={{ padding: '30px 16px', textAlign: 'center' }}>
-                    <div style={{ fontSize: 20, marginBottom: 8, color: 'var(--text-muted)' }}>—</div>
-                    <div style={{ fontSize: 13, fontWeight: 600, color: 'var(--text-secondary)' }}>
+                    <div style={{ fontSize: 'var(--fs-titulo)', marginBottom: 8, color: 'var(--text-muted)' }}>—</div>
+                    <div style={{ fontSize: 'var(--fs-cuerpo)', fontWeight: 600, color: 'var(--text-secondary)' }}>
                       Sin tipologías individuales en este censo
                     </div>
-                    <div style={{ fontSize: 11, color: 'var(--text-muted)', marginTop: 4 }}>
+                    <div style={{ fontSize: 'var(--fs-etiqueta)', color: 'var(--text-muted)', marginTop: 4 }}>
                       Revisa la pestaña <strong>Matriz Oficial 01-E</strong> arriba para ver los benchmarks de plaza.
                     </div>
                   </div>
@@ -463,12 +465,12 @@ export default function TipologiasPanel({
                           {/* Card Header */}
                           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                             <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                              <span style={{ fontSize: 20 }}>{getBedIcon(t.avg_tipologia)}</span>
+                              <span style={{ fontSize: 'var(--fs-titulo)' }}>{getBedIcon(t.avg_tipologia)}</span>
                               <div>
-                                <div style={{ fontSize: 13, fontWeight: 700, color: 'var(--text-primary)' }}>
+                                <div style={{ fontSize: 'var(--fs-cuerpo)', fontWeight: 700, color: 'var(--text-primary)' }}>
                                   {t.avg_tipologia}
                                 </div>
-                                <div style={{ fontSize: 10, color: 'var(--text-muted)' }}>
+                                <div style={{ fontSize: 'var(--fs-etiqueta)', color: 'var(--text-muted)' }}>
                                   {t.avg_construccion_m2 ? `${fmt(t.avg_construccion_m2)} m² constr.` : 'Área no disp.'}
                                 </div>
                               </div>
@@ -488,13 +490,13 @@ export default function TipologiasPanel({
                             padding: '10px 12px',
                             border: '1px solid var(--border-default)',
                           }}>
-                            <div style={{ fontSize: 9.5, color: 'var(--text-muted)', marginBottom: 2 }}>
+                            <div style={{ fontSize: 'var(--fs-etiqueta)', color: 'var(--text-muted)', marginBottom: 2 }}>
                               PRECIO PROMEDIO MODELO
                             </div>
-                            <div style={{ fontSize: 20, fontWeight: 800, color: 'var(--citrino-accent)', letterSpacing: -0.5 }}>
+                            <div style={{ fontSize: 'var(--fs-titulo)', fontWeight: 800, color: 'var(--citrino-accent)', letterSpacing: -0.5 }}>
                               {fmtUSD(t.avg_precio)}
                             </div>
-                            <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: 4, fontSize: 11 }}>
+                            <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: 4, fontSize: 'var(--fs-etiqueta)' }}>
                               <span style={{ color: 'var(--text-secondary)' }}>
                                 $/m²: <strong style={{ color: 'var(--text-primary)' }}>{fmt(t.avg_sus_m2)} $US</strong>
                               </span>
@@ -508,7 +510,7 @@ export default function TipologiasPanel({
 
                           {/* Inventory & Progress */}
                           <div>
-                            <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 11, marginBottom: 4 }}>
+                            <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 'var(--fs-etiqueta)', marginBottom: 4 }}>
                               <span style={{ color: 'var(--text-muted)' }}>Avance Comercial</span>
                               <span style={{ color: 'var(--text-primary)', fontWeight: 600 }}>
                                 {t.und_vendidas ?? 0} de {t.und_totales ?? 0} unds
@@ -517,7 +519,7 @@ export default function TipologiasPanel({
                             <div className="progress-bar" style={{ height: 6, background: 'var(--bg-surface)' }}>
                               <div className="progress-bar-fill green" style={{ width: `${pctVend ?? 0}%` }} />
                             </div>
-                            <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 10, color: 'var(--text-muted)', marginTop: 4 }}>
+                            <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 'var(--fs-etiqueta)', color: 'var(--text-muted)', marginTop: 4 }}>
                               <span>Vendidas: <strong style={{ color: 'var(--color-positive)' }}>{t.und_vendidas ?? 0}</strong></span>
                               <span>Disponibles: <strong style={{ color: 'var(--text-secondary)' }}>{t.und_por_vender ?? 0}</strong></span>
                             </div>
@@ -530,16 +532,16 @@ export default function TipologiasPanel({
                             gap: 8,
                             paddingTop: 6,
                             borderTop: '1px solid var(--border-subtle)',
-                            fontSize: 11,
+                            fontSize: 'var(--fs-etiqueta)',
                           }}>
                             <div>
-                              <div style={{ fontSize: 9.5, color: 'var(--text-muted)' }}>Ritmo absorción</div>
+                              <div style={{ fontSize: 'var(--fs-etiqueta)', color: 'var(--text-muted)' }}>Ritmo absorción</div>
                               <div style={{ fontWeight: 700, color: (t.ritmo_venta ?? 0) > 0 ? 'var(--color-positive)' : 'var(--text-muted)', marginTop: 1 }}>
                                 {t.ritmo_venta != null && t.ritmo_venta > 0 ? `${fmt(t.ritmo_venta)} und/mes` : '—'}
                               </div>
                             </div>
                             <div>
-                              <div style={{ fontSize: 9.5, color: 'var(--text-muted)' }}>Meses de stock</div>
+                              <div style={{ fontSize: 'var(--fs-etiqueta)', color: 'var(--text-muted)' }}>Meses de stock</div>
                               <div style={{
                                 fontWeight: 700,
                                 color: (t.meses_stock ?? 0) > 18 ? 'var(--color-negative)' : (t.meses_stock ?? 0) > 12 ? 'var(--color-warning)' : 'var(--color-positive)',
@@ -553,7 +555,7 @@ export default function TipologiasPanel({
                           {/* Benchmark Comparison Tag */}
                           {bench && t.avg_sus_m2 && bench.avgSusM2 > 0 && (
                             <div style={{
-                              fontSize: 10,
+                              fontSize: 'var(--fs-etiqueta)',
                               color: 'var(--text-muted)',
                               background: 'rgba(255,255,255,0.02)',
                               padding: '4px 8px',
@@ -591,10 +593,10 @@ export default function TipologiasPanel({
                   border: '1px solid var(--border-subtle)',
                   borderRadius: 'var(--radius-md)',
                 }}>
-                  <div style={{ fontSize: 13, fontWeight: 700, color: 'var(--citrino-teal-light)', marginBottom: 2 }}>
+                  <div style={{ fontSize: 'var(--fs-cuerpo)', fontWeight: 700, color: 'var(--citrino-teal-light)', marginBottom: 2 }}>
                     01-E Características del producto inmobiliario
                   </div>
-                  <div style={{ fontSize: 11, color: 'var(--text-secondary)' }}>
+                  <div style={{ fontSize: 'var(--fs-etiqueta)', color: 'var(--text-secondary)' }}>
                     Matriz oficial consolidada de áreas, precios por metro cuadrado y tickets de venta en {ciudad === 'ALL' ? 'Bolivia' : ciudad}.
                   </div>
                 </div>
@@ -615,12 +617,12 @@ export default function TipologiasPanel({
                         </th>
                       </tr>
                       <tr>
-                        <th style={{ fontSize: 10 }}>Promedio</th>
-                        <th style={{ fontSize: 10 }}>Mínimo</th>
-                        <th style={{ fontSize: 10 }}>Máximo</th>
-                        <th style={{ fontSize: 10 }}>Promedio $</th>
-                        <th style={{ fontSize: 10 }}>Mínimo $</th>
-                        <th style={{ fontSize: 10 }}>Máximo $</th>
+                        <th style={{ fontSize: 'var(--fs-etiqueta)' }}>Promedio</th>
+                        <th style={{ fontSize: 'var(--fs-etiqueta)' }}>Mínimo</th>
+                        <th style={{ fontSize: 'var(--fs-etiqueta)' }}>Máximo</th>
+                        <th style={{ fontSize: 'var(--fs-etiqueta)' }}>Promedio $</th>
+                        <th style={{ fontSize: 'var(--fs-etiqueta)' }}>Mínimo $</th>
+                        <th style={{ fontSize: 'var(--fs-etiqueta)' }}>Máximo $</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -638,7 +640,7 @@ export default function TipologiasPanel({
                           <td className="td-num" style={{ color: 'var(--text-muted)' }}>${row.m2Min}</td>
                           <td className="td-num" style={{ color: 'var(--text-muted)' }}>${row.m2Max}</td>
 
-                          <td className="td-num" style={{ fontWeight: 800, color: 'var(--citrino-teal-light)', fontSize: 12 }}>
+                          <td className="td-num" style={{ fontWeight: 800, color: 'var(--citrino-teal-light)', fontSize: 'var(--fs-cuerpo)' }}>
                             {fmtUSD(row.precioAvg)}
                           </td>
                         </tr>

@@ -142,6 +142,7 @@ export default function ChatPanel({
       })
 
       const chartOption = {
+        aria: { enabled: true },
         backgroundColor: 'transparent',
         tooltip: {
           trigger: 'axis',
@@ -154,12 +155,14 @@ export default function ChatPanel({
         xAxis: {
           type: 'category',
           data: ['<12m\n(Rápido)', '12-18m\n(Equil.)', '18-24m\n(Presión)', '>24m\n(Riesgo)'],
-          axisLabel: { color: '#94a3b8', fontSize: 9.5, interval: 0 },
+          axisLabel: { color: '#94a3b8', fontSize: 11, interval: 0 },
           axisLine: { lineStyle: { color: '#163642' } },
         },
         yAxis: {
           type: 'value',
-          axisLabel: { color: '#64748b', fontSize: 9.5 },
+          name: 'Proyectos',
+          nameTextStyle: { color: '#94a3b8', fontSize: 11 },
+          axisLabel: { color: '#64748b', fontSize: 11 },
           splitLine: { lineStyle: { color: '#0d222b' } },
         },
         series: [
@@ -173,7 +176,7 @@ export default function ChatPanel({
               { value: sobreoferta, itemStyle: { color: '#ef4444', borderRadius: [4, 4, 0, 0] } },
             ],
             barMaxWidth: 32,
-            label: { show: true, position: 'top', color: '#f1f5f9', fontSize: 10, fontWeight: 'bold' },
+            label: { show: true, position: 'top', color: '#f1f5f9', fontSize: 11, fontWeight: 'bold' },
           },
         ],
       }
@@ -212,6 +215,7 @@ export default function ChatPanel({
       const topValues = sorted.map((p) => Number(p.ritmo_venta?.toFixed(1))).reverse()
 
       const chartOption = {
+        aria: { enabled: true },
         backgroundColor: 'transparent',
         tooltip: {
           trigger: 'axis',
@@ -228,13 +232,17 @@ export default function ChatPanel({
         grid: { left: 95, right: 35, top: 10, bottom: 20 },
         xAxis: {
           type: 'value',
-          axisLabel: { color: '#64748b', fontSize: 9.5 },
+          name: 'und/mes',
+          nameLocation: 'end',
+          nameGap: 6,
+          nameTextStyle: { color: '#94a3b8', fontSize: 11 },
+          axisLabel: { color: '#64748b', fontSize: 11 },
           splitLine: { lineStyle: { color: '#0d222b' } },
         },
         yAxis: {
           type: 'category',
           data: topNames,
-          axisLabel: { color: '#cbd5e1', fontSize: 10, fontWeight: 500 },
+          axisLabel: { color: '#cbd5e1', fontSize: 11, fontWeight: 500 },
           axisLine: { lineStyle: { color: '#163642' } },
         },
         series: [
@@ -253,7 +261,7 @@ export default function ChatPanel({
               },
               borderRadius: [0, 4, 4, 0],
             },
-            label: { show: true, position: 'right', color: '#f1f5f9', fontSize: 10.5, fontWeight: 'bold' },
+            label: { show: true, position: 'right', color: '#f1f5f9', fontSize: 11, fontWeight: 'bold' },
           },
         ],
       }
@@ -302,6 +310,7 @@ export default function ChatPanel({
       }))
 
       const chartOption = {
+        aria: { enabled: true },
         backgroundColor: 'transparent',
         tooltip: {
           trigger: 'item',
@@ -313,7 +322,7 @@ export default function ChatPanel({
         legend: {
           orient: 'horizontal',
           bottom: 0,
-          textStyle: { color: '#94a3b8', fontSize: 9.5 },
+          textStyle: { color: '#94a3b8', fontSize: 11 },
           itemWidth: 10,
           itemHeight: 10,
         },
@@ -376,6 +385,7 @@ export default function ChatPanel({
         .slice(0, 5)
 
       const chartOption = {
+        aria: { enabled: true },
         backgroundColor: 'transparent',
         tooltip: {
           trigger: 'axis',
@@ -387,13 +397,17 @@ export default function ChatPanel({
         grid: { left: 95, right: 25, top: 15, bottom: 20 },
         xAxis: {
           type: 'value',
-          axisLabel: { color: '#64748b', fontSize: 9.5 },
+          name: 'und',
+          nameLocation: 'end',
+          nameGap: 6,
+          nameTextStyle: { color: '#94a3b8', fontSize: 11 },
+          axisLabel: { color: '#64748b', fontSize: 11 },
           splitLine: { lineStyle: { color: '#0d222b' } },
         },
         yAxis: {
           type: 'category',
           data: topProjects.map((p) => p.proyecto.length > 14 ? p.proyecto.slice(0, 14) + '…' : p.proyecto).reverse(),
-          axisLabel: { color: '#cbd5e1', fontSize: 9.5 },
+          axisLabel: { color: '#cbd5e1', fontSize: 11 },
           axisLine: { lineStyle: { color: '#163642' } },
         },
         series: [
@@ -402,7 +416,7 @@ export default function ChatPanel({
             type: 'bar',
             data: topProjects.map((p) => p.und_por_vender ?? 0).reverse(),
             itemStyle: { color: '#a1a1aa', borderRadius: [0, 4, 4, 0] },
-            label: { show: true, position: 'right', color: '#f1f5f9', fontSize: 10 },
+            label: { show: true, position: 'right', color: '#f1f5f9', fontSize: 11 },
           },
         ],
       }
@@ -446,6 +460,7 @@ export default function ChatPanel({
         .slice(0, 6)
 
       const chartOption = {
+        aria: { enabled: true },
         backgroundColor: 'transparent',
         tooltip: {
           trigger: 'axis',
@@ -458,12 +473,14 @@ export default function ChatPanel({
         xAxis: {
           type: 'category',
           data: entries.map(([name]) => name.length > 9 ? name.slice(0, 9) + '…' : name),
-          axisLabel: { color: '#94a3b8', fontSize: 9, rotate: 25 },
+          axisLabel: { color: '#94a3b8', fontSize: 11, rotate: 25 },
           axisLine: { lineStyle: { color: '#163642' } },
         },
         yAxis: {
           type: 'value',
-          axisLabel: { color: '#64748b', fontSize: 9.5 },
+          name: 'Unidades disponibles',
+          nameTextStyle: { color: '#94a3b8', fontSize: 11 },
+          axisLabel: { color: '#64748b', fontSize: 11 },
           splitLine: { lineStyle: { color: '#0d222b' } },
         },
         series: [
@@ -483,7 +500,7 @@ export default function ChatPanel({
               borderRadius: [4, 4, 0, 0],
             },
             barMaxWidth: 26,
-            label: { show: true, position: 'top', color: '#f1f5f9', fontSize: 9.5 },
+            label: { show: true, position: 'top', color: '#f1f5f9', fontSize: 11 },
           },
         ],
       }
@@ -535,6 +552,7 @@ export default function ChatPanel({
       const dispData = cities.map((c) => cityMap[c]?.disp ?? 0)
 
       const chartOption = {
+        aria: { enabled: true },
         backgroundColor: 'transparent',
         tooltip: {
           trigger: 'axis',
@@ -547,12 +565,14 @@ export default function ChatPanel({
         xAxis: {
           type: 'category',
           data: ['Santa Cruz', 'La Paz', 'Cochabamba'],
-          axisLabel: { color: '#94a3b8', fontSize: 10 },
+          axisLabel: { color: '#94a3b8', fontSize: 11 },
           axisLine: { lineStyle: { color: '#163642' } },
         },
         yAxis: {
           type: 'value',
-          axisLabel: { color: '#64748b', fontSize: 9.5 },
+          name: 'Unidades disponibles',
+          nameTextStyle: { color: '#94a3b8', fontSize: 11 },
+          axisLabel: { color: '#64748b', fontSize: 11 },
           splitLine: { lineStyle: { color: '#0d222b' } },
         },
         series: [
@@ -565,7 +585,7 @@ export default function ChatPanel({
               borderRadius: [4, 4, 0, 0],
             },
             barMaxWidth: 35,
-            label: { show: true, position: 'top', color: '#f1f5f9', fontSize: 10, fontWeight: 'bold' },
+            label: { show: true, position: 'top', color: '#f1f5f9', fontSize: 11, fontWeight: 'bold' },
           },
         ],
       }
@@ -630,9 +650,9 @@ export default function ChatPanel({
       <div className="panel-header" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
           <div className="panel-title-dot" style={{ background: 'var(--accent-cyan)', boxShadow: '0 0 8px var(--accent-cyan)' }} />
-          <span style={{ fontWeight: 700, fontSize: 11.5 }}>IA Asistente</span>
+          <span style={{ fontWeight: 700, fontSize: 'var(--fs-etiqueta)' }}>IA Asistente</span>
         </div>
-        <span style={{ fontSize: 9.5, color: 'var(--text-muted)', background: 'var(--bg-card)', padding: '2px 6px', borderRadius: 4, border: '1px solid var(--border-subtle)' }}>
+        <span style={{ fontSize: 'var(--fs-etiqueta)', color: 'var(--text-muted)', background: 'var(--bg-card)', padding: '2px 6px', borderRadius: 4, border: '1px solid var(--border-subtle)' }}>
           NLP Analytics
         </span>
       </div>
@@ -651,7 +671,7 @@ export default function ChatPanel({
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
-                  fontSize: 10,
+                  fontSize: 'var(--fs-etiqueta)',
                   fontWeight: 700,
                   flexShrink: 0,
                   background: msg.role === 'ai' ? 'var(--bg-card-hover)' : 'var(--bg-card)',
@@ -675,7 +695,7 @@ export default function ChatPanel({
                   border: `1px solid var(--border-default)`,
                   borderRadius: 8,
                   padding: '10px 12px',
-                  fontSize: 11.5,
+                  fontSize: 'var(--fs-etiqueta)',
                   lineHeight: 1.5,
                   color: 'var(--text-secondary, #cbd5e1)',
                   boxShadow: '0 4px 14px rgba(0, 0, 0, 0.35)',
@@ -694,7 +714,7 @@ export default function ChatPanel({
                   }}>
                     {msg.chartTitle && (
                       <div style={{
-                        fontSize: 10,
+                        fontSize: 'var(--fs-etiqueta)',
                         fontWeight: 700,
                         color: 'var(--accent-cyan)',
                         textTransform: 'uppercase',
@@ -729,14 +749,14 @@ export default function ChatPanel({
                           color: '#ffffff',
                           padding: '4px 9px',
                           borderRadius: 6,
-                          fontSize: 10.5,
+                          fontSize: 'var(--fs-etiqueta)',
                           fontWeight: 600,
                           cursor: 'pointer',
                           display: 'flex',
                           alignItems: 'center',
                           gap: 5,
                           boxShadow: '0 2px 8px rgba(0,0,0,0.4)',
-                          transition: 'all 0.12s',
+                          transition: 'background-color 0.12s, border-color 0.12s, color 0.12s, opacity 0.12s, transform 0.12s, box-shadow 0.12s',
                         }}>
                         <span>{act.label}</span>
                       </button>
@@ -756,10 +776,10 @@ export default function ChatPanel({
                           border: '1px solid var(--border-default)',
                           borderRadius: 12,
                           padding: '2px 8px',
-                          fontSize: 10,
+                          fontSize: 'var(--fs-etiqueta)',
                           color: 'var(--text-primary)',
                           cursor: 'pointer',
-                          transition: 'all 0.12s',
+                          transition: 'background-color 0.12s, border-color 0.12s, color 0.12s, opacity 0.12s, transform 0.12s, box-shadow 0.12s',
                         }}>
                         {c}
                       </span>
@@ -785,7 +805,7 @@ export default function ChatPanel({
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                fontSize: 10,
+                fontSize: 'var(--fs-etiqueta)',
                 color: '#ffffff',
               }}>
               <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
@@ -814,7 +834,7 @@ export default function ChatPanel({
                   }}
                 />
               ))}
-              <span style={{ fontSize: 10.5, color: 'var(--text-muted)', marginLeft: 6 }}>
+              <span style={{ fontSize: 'var(--fs-etiqueta)', color: 'var(--text-muted)', marginLeft: 6 }}>
                 Procesando datos censales...
               </span>
             </div>
@@ -836,11 +856,11 @@ export default function ChatPanel({
                 border: '1px solid var(--border-subtle)',
                 borderRadius: 12,
                 padding: '2px 8px',
-                fontSize: 10,
+                fontSize: 'var(--fs-etiqueta)',
                 color: 'var(--text-secondary)',
                 cursor: 'pointer',
                 whiteSpace: 'nowrap',
-                transition: 'all 0.12s',
+                transition: 'background-color 0.12s, border-color 0.12s, color 0.12s, opacity 0.12s, transform 0.12s, box-shadow 0.12s',
               }}>
               {p}
             </button>
@@ -868,9 +888,8 @@ export default function ChatPanel({
               borderRadius: 6,
               color: '#f1f5f9',
               padding: '6px 10px',
-              fontSize: 11,
+              fontSize: 'var(--fs-etiqueta)',
               resize: 'none',
-              outline: 'none',
             }}
           />
           <button

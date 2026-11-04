@@ -2,13 +2,16 @@ import { useState } from 'react'
 import ReactECharts from 'echarts-for-react'
 import './CitrinoInstitutionalPanels.css'
 import { CICLO_INMOBILIARIO_DATA } from '../data/citrinoDataStudioData'
+import { useChartTheme } from '../lib/chartTheme'
 
 export default function CicloInmobiliarioPanel() {
+  const ct = useChartTheme()
   const [activeSubTab, setActiveSubTab] = useState<'reloj' | 'alquileres'>('reloj')
   const { tasaEquilibrio, faseActual, fases, serieHistoricaOcupacion } = CICLO_INMOBILIARIO_DATA
 
   // Chart Option: Gauge Reloj del Ciclo Inmobiliario
   const getClockGaugeChart = () => ({
+    aria: { enabled: true },
     backgroundColor: 'transparent',
     series: [
       {
@@ -40,14 +43,14 @@ export default function CicloInmobiliarioPanel() {
         },
         axisTick: { length: 8, lineStyle: { color: 'auto', width: 1 } },
         splitLine: { length: 14, lineStyle: { color: 'auto', width: 2 } },
-        axisLabel: { color: '#94a3b8', fontSize: 11, distance: -40, formatter: '{value}%' },
-        title: { offsetCenter: [0, '25%'], fontSize: 13, color: '#cbd5e1', fontWeight: 600 },
+        axisLabel: { color: ct.muted, fontSize: 11, distance: -40, formatter: '{value}%' },
+        title: { offsetCenter: [0, '25%'], fontSize: 13, color: ct.text, fontWeight: 600 },
         detail: {
-          fontSize: 24,
+          fontSize: 22,
           offsetCenter: [0, '-15%'],
           valueAnimation: true,
           formatter: '{value}%',
-          color: '#f8fafc',
+          color: ct.text,
           fontWeight: 700,
         },
         data: [{ value: faseActual.ocupacionActual, name: 'Ocupación 2026' }],
@@ -57,22 +60,23 @@ export default function CicloInmobiliarioPanel() {
 
   // Chart Option: Serie Histórica 2002-2026 vs Equilibrio
   const getSerieOcupacionChart = () => ({
+    aria: { enabled: true },
     backgroundColor: 'transparent',
     tooltip: { trigger: 'axis' },
-    legend: { textStyle: { color: '#94a3b8' }, top: 0 },
+    legend: { textStyle: { color: ct.muted }, top: 0 },
     grid: { left: '3%', right: '4%', bottom: '3%', containLabel: true },
     xAxis: {
       type: 'category',
       data: serieHistoricaOcupacion.map((s) => s.ano),
-      axisLabel: { color: '#94a3b8' },
+      axisLabel: { color: ct.muted },
     },
     yAxis: {
       type: 'value',
       name: 'Tasa de Ocupación (%)',
       min: 90,
       max: 100,
-      axisLabel: { color: '#94a3b8', formatter: '{value}%' },
-      splitLine: { lineStyle: { color: 'rgba(255,255,255,0.06)' } },
+      axisLabel: { color: ct.muted, formatter: '{value}%' },
+      splitLine: { lineStyle: { color: ct.grid } },
     },
     series: [
       {
@@ -94,19 +98,20 @@ export default function CicloInmobiliarioPanel() {
 
   // Chart Option: Variación Alquileres a Largo Plazo
   const getAlquileresChart = () => ({
+    aria: { enabled: true },
     backgroundColor: 'transparent',
     tooltip: { trigger: 'axis' },
     grid: { left: '3%', right: '4%', bottom: '3%', containLabel: true },
     xAxis: {
       type: 'category',
       data: serieHistoricaOcupacion.map((s) => s.ano),
-      axisLabel: { color: '#94a3b8' },
+      axisLabel: { color: ct.muted },
     },
     yAxis: {
       type: 'value',
       name: 'Variación Anual Alquiler (%)',
-      axisLabel: { color: '#94a3b8', formatter: '{value}%' },
-      splitLine: { lineStyle: { color: 'rgba(255,255,255,0.06)' } },
+      axisLabel: { color: ct.muted, formatter: '{value}%' },
+      splitLine: { lineStyle: { color: ct.grid } },
     },
     series: [
       {
@@ -182,7 +187,21 @@ export default function CicloInmobiliarioPanel() {
               <h3 className="citrino-card-title">Reloj del Ciclo Físico de Santa Cruz</h3>
             </div>
             <ReactECharts option={getClockGaugeChart()} style={{ height: 260 }} />
-            <div style={{ background: 'rgba(255,255,255,0.03)', padding: 12, borderRadius: 6, fontSize: 12, color: '#94a3b8' }}>
+            {/* Leyenda de zonas del reloj: nombre y rango, para no depender solo del color */}
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '4px 14px', justifyContent: 'center', margin: '4px 0 10px', fontSize: 'var(--fs-etiqueta)', color: 'var(--text-secondary)' }}>
+              {[
+                { color: '#ef4444', label: 'Ajuste / Recesión (< 93,5 %)' },
+                { color: '#f59e0b', label: 'Recuperación (93,5 – 95,8 %)' },
+                { color: '#10b981', label: 'Expansión (95,8 – 98,5 %)' },
+                { color: '#38bdf8', label: 'Sobreoferta (> 98,5 %)' },
+              ].map((z) => (
+                <span key={z.label} style={{ display: 'inline-flex', alignItems: 'center', gap: 5 }}>
+                  <span aria-hidden="true" style={{ width: 10, height: 10, borderRadius: 2, background: z.color, flexShrink: 0 }} />
+                  {z.label}
+                </span>
+              ))}
+            </div>
+            <div style={{ background: 'rgba(255,255,255,0.03)', padding: 12, borderRadius: 6, fontSize: 'var(--fs-cuerpo)', color: 'var(--text-muted)' }}>
               <b>Diagnóstico:</b> {faseActual.diagnostico}
             </div>
           </div>
@@ -227,7 +246,7 @@ export default function CicloInmobiliarioPanel() {
                 <tr key={f.fase}>
                   <td><b>{f.fase}</b></td>
                   <td>{f.periodo}</td>
-                  <td style={{ color: '#38bdf8' }}>{f.ocupacionRango}</td>
+                  <td style={{ color: 'var(--citrino-sky)' }}>{f.ocupacionRango}</td>
                   <td>{f.caracteristica}</td>
                 </tr>
               ))}

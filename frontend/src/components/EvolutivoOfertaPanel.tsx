@@ -6,10 +6,12 @@ import {
   RITMO_VENTAS_HISTORICO_MENSUAL,
   ETAPAS_COMERCIALES_EVOLUTIVO,
 } from '../data/citrinoDataStudioData'
+import { useChartTheme } from '../lib/chartTheme'
 
 type SubTab = 'cuantificacion' | 'etapas' | 'ritmo' | 'stock_brecha' | 'ficha'
 
 export default function EvolutivoOfertaPanel() {
+  const ct = useChartTheme()
   const [activeSubTab, setActiveSubTab] = useState<SubTab>('cuantificacion')
   // Pills internos
   const [subPillCuant, setSubPillCuant] = useState<'cuantificacion' | 'estadistica'>('estadistica')
@@ -22,22 +24,23 @@ export default function EvolutivoOfertaPanel() {
 
   // Chart Option: Cuantificación Agregada (Barras triples de Unds, Stock USD, m²)
   const getCuantificacionChart = () => ({
+    aria: { enabled: true },
     backgroundColor: 'transparent',
     tooltip: { trigger: 'axis', axisPointer: { type: 'shadow' } },
-    legend: { textStyle: { color: '#94a3b8' }, top: 0 },
+    legend: { textStyle: { color: ct.muted }, top: 0 },
     grid: { left: '3%', right: '4%', bottom: '3%', containLabel: true },
     xAxis: {
       type: 'category',
       data: EVOLUTIVO_OFERTA_SNAPSHOTS.map((s) => s.ano),
       axisLine: { lineStyle: { color: 'rgba(255,255,255,0.15)' } },
-      axisLabel: { color: '#94a3b8' },
+      axisLabel: { color: ct.muted },
     },
     yAxis: [
       {
         type: 'value',
         name: 'Unidades',
-        axisLabel: { color: '#94a3b8' },
-        splitLine: { lineStyle: { color: 'rgba(255,255,255,0.06)' } },
+        axisLabel: { color: ct.muted },
+        splitLine: { lineStyle: { color: ct.grid } },
       },
       {
         type: 'value',
@@ -67,6 +70,7 @@ export default function EvolutivoOfertaPanel() {
 
   // Chart Option: Ritmo de Venta Mensual Histórico feb-2021 a sep-2026
   const getRitmoChart = () => ({
+    aria: { enabled: true },
     backgroundColor: 'transparent',
     tooltip: {
       trigger: 'axis',
@@ -77,15 +81,15 @@ export default function EvolutivoOfertaPanel() {
       type: 'category',
       data: RITMO_VENTAS_HISTORICO_MENSUAL.map((p) => p.periodo),
       axisLine: { lineStyle: { color: 'rgba(255,255,255,0.15)' } },
-      axisLabel: { color: '#94a3b8', rotate: 30 },
+      axisLabel: { color: ct.muted, rotate: 30 },
     },
     yAxis: {
       type: 'value',
       name: '% Mensual',
       min: 0,
       max: 4.5,
-      axisLabel: { color: '#94a3b8', formatter: '{value}%' },
-      splitLine: { lineStyle: { color: 'rgba(255,255,255,0.06)' } },
+      axisLabel: { color: ct.muted, formatter: '{value}%' },
+      splitLine: { lineStyle: { color: ct.grid } },
     },
     series: [
       {
@@ -117,23 +121,24 @@ export default function EvolutivoOfertaPanel() {
 
   // Chart Option: Brecha Cambiaria Oficial vs Paralelo
   const getBrechaChart = () => ({
+    aria: { enabled: true },
     backgroundColor: 'transparent',
     tooltip: { trigger: 'axis' },
-    legend: { textStyle: { color: '#94a3b8' }, top: 0 },
+    legend: { textStyle: { color: ct.muted }, top: 0 },
     grid: { left: '3%', right: '4%', bottom: '3%', containLabel: true },
     xAxis: {
       type: 'category',
       data: EVOLUTIVO_OFERTA_SNAPSHOTS.map((s) => s.ano),
       axisLine: { lineStyle: { color: 'rgba(255,255,255,0.15)' } },
-      axisLabel: { color: '#94a3b8' },
+      axisLabel: { color: ct.muted },
     },
     yAxis: {
       type: 'value',
       name: '$US / m²',
       min: 600,
       max: 1500,
-      axisLabel: { color: '#94a3b8', formatter: '${value}' },
-      splitLine: { lineStyle: { color: 'rgba(255,255,255,0.06)' } },
+      axisLabel: { color: ct.muted, formatter: '${value}' },
+      splitLine: { lineStyle: { color: ct.grid } },
     },
     series: [
       {
@@ -155,9 +160,10 @@ export default function EvolutivoOfertaPanel() {
 
   // Chart Option: Etapas Comerciales Pie
   const getEtapasPieChart = () => ({
+    aria: { enabled: true },
     backgroundColor: 'transparent',
     tooltip: { trigger: 'item', formatter: '{b}: {c} proyectos ({d}%)' },
-    legend: { orient: 'vertical', right: '5%', top: 'center', textStyle: { color: '#94a3b8' } },
+    legend: { orient: 'vertical', right: '5%', top: 'center', textStyle: { color: ct.muted } },
     series: [
       {
         name: 'Etapas',
@@ -311,8 +317,8 @@ export default function EvolutivoOfertaPanel() {
                         <td className="num">{s.undPromedio}</td>
                         <td className="num">${s.stockTotalUsd} M</td>
                         <td className="num">${s.stockPromedioUsd} M</td>
-                        <td className="num" style={{ color: '#10b981' }}>{s.pctVendido}%</td>
-                        <td className="num" style={{ color: '#ff6b00' }}>{s.pctPorVender}%</td>
+                        <td className="num" style={{ color: 'var(--text-success)' }}>{s.pctVendido}%</td>
+                        <td className="num" style={{ color: 'var(--citrino-orange)' }}>{s.pctPorVender}%</td>
                         <td className="num">{s.mesesStockPromedio} m</td>
                       </tr>
                     ))}
@@ -536,8 +542,7 @@ export default function EvolutivoOfertaPanel() {
                 borderRadius: 6,
                 padding: '6px 12px',
                 color: '#f8fafc',
-                fontSize: 12,
-                outline: 'none',
+                fontSize: 'var(--fs-cuerpo)',
               }}
             />
           </div>
@@ -560,7 +565,7 @@ export default function EvolutivoOfertaPanel() {
                     <td>{p.zona}</td>
                     <td className="num">{p.cuotaIni}</td>
                     <td>{p.financiamiento}</td>
-                    <td className="num" style={{ color: '#10b981' }}>{p.dctoContado}</td>
+                    <td className="num" style={{ color: 'var(--text-success)' }}>{p.dctoContado}</td>
                     <td className="num">{p.velocidad}</td>
                   </tr>
                 ))}

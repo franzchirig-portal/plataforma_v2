@@ -2,12 +2,14 @@ import { useState } from 'react'
 import ReactECharts from 'echarts-for-react'
 import './CitrinoInstitutionalPanels.css'
 import { ENDEUDAMIENTO_DATA } from '../data/citrinoDataStudioData'
+import { useChartTheme } from '../lib/chartTheme'
 
 interface Props {
   initialChapter?: '4.1' | '4.2' | '4.3'
 }
 
 export default function EndeudamientoHipotecarioPanel({ initialChapter = '4.1' }: Props) {
+  const ct = useChartTheme()
   const [activeChapter, setActiveChapter] = useState<'4.1' | '4.2' | '4.3'>(initialChapter)
 
   // Sub-tabs y sub-pills para 4.1 Perfil del Consumidor
@@ -41,18 +43,19 @@ export default function EndeudamientoHipotecarioPanel({ initialChapter = '4.1' }
 
   // Charts
   const getBarH = (categories: string[], values: number[], color = '#38bdf8') => ({
+    aria: { enabled: true },
     backgroundColor: 'transparent',
     tooltip: { trigger: 'axis', formatter: '{b}: <b>{c}%</b>' },
     grid: { left: '3%', right: '4%', bottom: '3%', top: '5%', containLabel: true },
     xAxis: {
       type: 'value',
-      axisLabel: { color: '#94a3b8', formatter: '{value}%' },
-      splitLine: { lineStyle: { color: 'rgba(255,255,255,0.06)' } },
+      axisLabel: { color: ct.muted, formatter: '{value}%' },
+      splitLine: { lineStyle: { color: ct.grid } },
     },
     yAxis: {
       type: 'category',
       data: [...categories].reverse(),
-      axisLabel: { color: '#cbd5e1' },
+      axisLabel: { color: ct.text },
       axisLine: { lineStyle: { color: 'rgba(255,255,255,0.15)' } },
     },
     series: [
@@ -65,9 +68,10 @@ export default function EndeudamientoHipotecarioPanel({ initialChapter = '4.1' }
   })
 
   const getPie = (data: { name: string; value: number }[], colors?: string[]) => ({
+    aria: { enabled: true },
     backgroundColor: 'transparent',
     tooltip: { trigger: 'item', formatter: '{b}: {c}%' },
-    legend: { orient: 'vertical', right: '5%', top: 'center', textStyle: { color: '#94a3b8' } },
+    legend: { orient: 'vertical', right: '5%', top: 'center', textStyle: { color: ct.muted } },
     series: [
       {
         type: 'pie',
@@ -239,7 +243,7 @@ export default function EndeudamientoHipotecarioPanel({ initialChapter = '4.1' }
                   <div className="citrino-charts-grid" style={{ marginBottom: 0 }}>
                     <div style={{ flex: 1 }}>
                       <ReactECharts
-                        option={getPie(caracteristicasHogar.tipoVivienda.map((t) => ({ name: t.tipo, value: t.pct })), ['#ff6b00', '#38bdf8'])}
+                        option={getBarH(caracteristicasHogar.tipoVivienda.map((t) => t.tipo), caracteristicasHogar.tipoVivienda.map((t) => t.pct), '#ff6b00')}
                         style={{ height: 260 }}
                       />
                     </div>
@@ -310,7 +314,7 @@ export default function EndeudamientoHipotecarioPanel({ initialChapter = '4.1' }
                         <td><b>{r.rango}</b></td>
                         <td className="num">{r.y2024}%</td>
                         <td className="num">{r.y2025}%</td>
-                        <td className="num" style={{ color: r.rango.includes('0%') ? '#10b981' : '#ff6b00' }}>
+                        <td className="num" style={{ color: r.rango.includes('0%') ? 'var(--text-success)' : 'var(--citrino-orange)' }}>
                           <b>{r.y2026}%</b>
                         </td>
                       </tr>
@@ -478,7 +482,7 @@ export default function EndeudamientoHipotecarioPanel({ initialChapter = '4.1' }
                     {estadoPrestatarioReprogramacion.map((r) => (
                       <tr key={r.ano}>
                         <td><b>{r.ano}</b></td>
-                        <td className="num" style={{ color: '#10b981' }}>{r.no}%</td>
+                        <td className="num" style={{ color: 'var(--text-success)' }}>{r.no}%</td>
                         <td className="num" style={{ color: '#ef4444' }}><b>{r.si}%</b></td>
                         <td>{r.ano === '2023' ? 'Pico pos-pandemia' : r.ano === '2026' ? 'Reactivación leve de reprogramaciones' : 'Baja morosidad declarada'}</td>
                       </tr>
@@ -557,8 +561,8 @@ export default function EndeudamientoHipotecarioPanel({ initialChapter = '4.1' }
                       <tr key={p.ano}>
                         <td><b>{p.ano}</b></td>
                         <td className="num" style={{ color: '#ef4444' }}>{p.bajo}%</td>
-                        <td className="num" style={{ color: '#38bdf8' }}>{p.igual}%</td>
-                        <td className="num" style={{ color: '#10b981' }}><b>{p.subio}%</b></td>
+                        <td className="num" style={{ color: 'var(--citrino-sky)' }}>{p.igual}%</td>
+                        <td className="num" style={{ color: 'var(--text-success)' }}><b>{p.subio}%</b></td>
                       </tr>
                     ))}
                   </tbody>
@@ -616,8 +620,8 @@ export default function EndeudamientoHipotecarioPanel({ initialChapter = '4.1' }
                           <tr key={p.ano}>
                             <td><b>{p.ano}</b></td>
                             <td className="num" style={{ color: '#ef4444' }}>{p.bajara}%</td>
-                            <td className="num" style={{ color: '#38bdf8' }}>{p.igual}%</td>
-                            <td className="num" style={{ color: '#10b981' }}><b>{p.subira}%</b></td>
+                            <td className="num" style={{ color: 'var(--citrino-sky)' }}>{p.igual}%</td>
+                            <td className="num" style={{ color: 'var(--text-success)' }}><b>{p.subira}%</b></td>
                           </tr>
                         ))}
                       </tbody>
