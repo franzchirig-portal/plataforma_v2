@@ -475,7 +475,7 @@ export default function AnalysisPanel({
               background: 'rgba(255, 255, 255, 0.1)',
               border: '1px solid rgba(255, 255, 255, 0.2)',
               borderRadius: 4,
-              color: '#ffffff',
+              color: 'var(--color-blanco)',
               fontSize: 'var(--fs-etiqueta)',
               fontWeight: 600,
               padding: '3px 8px',
@@ -509,7 +509,7 @@ export default function AnalysisPanel({
                 borderRadius: 'var(--radius-sm)',
                 padding: '8px 10px',
                 fontSize: 'var(--fs-etiqueta)',
-                color: '#fef3c7',
+                color: 'var(--color-ambar-100)',
                 lineHeight: 1.45,
               }}>
                 ⚠️ Este proyecto no registró relevamiento en el censo <strong>{formatDate(periodoFilter)}</strong>. Mostrando su snapshot activo de <strong>{formatDate(ind.fecha_snapshot)}</strong>.
@@ -520,11 +520,11 @@ export default function AnalysisPanel({
             <div className="analysis-section" style={{ padding: 0 }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 8 }}>
                 <div>
-                  <div style={{ fontSize: 'var(--fs-subtitulo)', fontWeight: 800, color: '#ffffff', letterSpacing: -0.3 }}>
+                  <div style={{ fontSize: 'var(--fs-subtitulo)', fontWeight: 800, color: 'var(--color-blanco)', letterSpacing: -0.3 }}>
                     {ind.proyecto}
                   </div>
                   <div style={{ fontSize: 'var(--fs-etiqueta)', color: 'rgba(255, 255, 255, 0.65)', marginTop: 2 }}>
-                    Plaza: <strong style={{ color: '#ffffff' }}>{ind.ciudad}</strong> · Zona: <strong style={{ color: '#ffffff' }}>{ind.ZONAS || '—'}</strong> · Censo: {formatDate(ind.fecha_snapshot)}
+                    Plaza: <strong style={{ color: 'var(--color-blanco)' }}>{ind.ciudad}</strong> · Zona: <strong style={{ color: 'var(--color-blanco)' }}>{ind.ZONAS || '—'}</strong> · Censo: {formatDate(ind.fecha_snapshot)}
                   </div>
                 </div>
                 <div style={{
@@ -577,7 +577,7 @@ export default function AnalysisPanel({
                 padding: '12px 14px',
               }}>
                 <p style={{ margin: 0, marginBottom: 8 }}>
-                  <strong style={{ color: '#ffffff' }}>{ind.proyecto}</strong> cuenta con un total de <strong style={{ color: '#ffffff' }}>{ind.und_totales ?? '—'} unidades</strong> ({ind.etapa || 'En comercialización'}), habiendo comercializado <strong style={{ color: 'var(--accent-emerald)' }}>{ind.und_vendidas ?? 0} unidades</strong> ({ind.und_totales ? Math.round(((ind.und_vendidas ?? 0) / ind.und_totales) * 100) : 0}% de avance acumulado). Restan <strong style={{ color: 'var(--citrino-teal-light)' }}>{ind.und_por_vender ?? 0} unidades</strong> en inventario activo.
+                  <strong style={{ color: 'var(--color-blanco)' }}>{ind.proyecto}</strong> cuenta con un total de <strong style={{ color: 'var(--color-blanco)' }}>{ind.und_totales ?? '—'} unidades</strong> ({ind.etapa || 'En comercialización'}), habiendo comercializado <strong style={{ color: 'var(--accent-emerald)' }}>{ind.und_vendidas ?? 0} unidades</strong> ({ind.und_totales ? Math.round(((ind.und_vendidas ?? 0) / ind.und_totales) * 100) : 0}% de avance acumulado). Restan <strong style={{ color: 'var(--citrino-teal-light)' }}>{ind.und_por_vender ?? 0} unidades</strong> en inventario activo.
                 </p>
 
                 {ind.ritmo_venta != null && ind.ritmo_venta > 0 ? (
@@ -592,13 +592,13 @@ export default function AnalysisPanel({
 
                 {zoneContext && (
                   <p style={{ margin: 0, marginBottom: 8 }}>
-                    En su micro-zona (<strong style={{ color: '#ffffff' }}>{ind.ZONAS}</strong>), compite directamente con <strong style={{ color: '#ffffff' }}>{zoneContext.count} desarrollos</strong>, capturando el <strong style={{ color: 'var(--accent-cyan)' }}>{zoneContext.shareOfZone}% de la absorción mensual</strong> zonal.
+                    En su micro-zona (<strong style={{ color: 'var(--color-blanco)' }}>{ind.ZONAS}</strong>), compite directamente con <strong style={{ color: 'var(--color-blanco)' }}>{zoneContext.count} desarrollos</strong>, capturando el <strong style={{ color: 'var(--accent-cyan)' }}>{zoneContext.shareOfZone}% de la absorción mensual</strong> zonal.
                   </p>
                 )}
 
                 {ind.meses_stock != null && ind.meses_stock > 0 && (
                   <p style={{ margin: 0 }}>
-                    Al ritmo censado, el inventario remanente se liquidaría en aproximadamente <strong style={{ color: ind.meses_stock > 18 ? 'var(--text-danger)' : '#ffffff' }}>{ind.meses_stock.toFixed(1)} meses</strong> {projectedSoldOutDate ? `(horizonte hacia ${projectedSoldOutDate})` : ''}.
+                    Al ritmo censado, el inventario remanente se liquidaría en aproximadamente <strong style={{ color: ind.meses_stock > 18 ? 'var(--text-danger)' : 'var(--color-blanco)' }}>{ind.meses_stock.toFixed(1)} meses</strong> {projectedSoldOutDate ? `(horizonte hacia ${projectedSoldOutDate})` : ''}.
                   </p>
                 )}
               </div>
@@ -674,16 +674,16 @@ export default function AnalysisPanel({
                         padding: '8px 10px',
                       }}>
                         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 3 }}>
-                          <span style={{ fontSize: 'var(--fs-etiqueta)', fontWeight: 700, color: '#ffffff' }}>{t.avg_tipologia}</span>
-                          <span style={{ fontSize: 'var(--fs-etiqueta)', fontWeight: 700, color: '#ffffff' }}>{fmtMoney(t.avg_precio, moneda)}</span>
+                          <span style={{ fontSize: 'var(--fs-etiqueta)', fontWeight: 700, color: 'var(--color-blanco)' }}>{t.avg_tipologia}</span>
+                          <span style={{ fontSize: 'var(--fs-etiqueta)', fontWeight: 700, color: 'var(--color-blanco)' }}>{fmtMoney(t.avg_precio, moneda)}</span>
                         </div>
                         <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 'var(--fs-etiqueta)', color: 'rgba(255, 255, 255, 0.65)' }}>
                           <span>Área: {fmt(t.avg_construccion_m2)} m²</span>
-                          <span>$/m²: <strong style={{ color: '#ffffff' }}>{fmt(t.avg_sus_m2)} $US</strong></span>
+                          <span>$/m²: <strong style={{ color: 'var(--color-blanco)' }}>{fmt(t.avg_sus_m2)} $US</strong></span>
                           <span>Disp: {fmt(t.und_por_vender, 0)}</span>
                         </div>
                         {diffM2 != null && (
-                          <div style={{ fontSize: 'var(--fs-etiqueta)', marginTop: 4, color: diffM2 >= 0 ? '#34d399' : '#f87171', fontWeight: 600 }}>
+                          <div style={{ fontSize: 'var(--fs-etiqueta)', marginTop: 4, color: diffM2 >= 0 ? 'var(--color-esmeralda-400)' : 'var(--color-rojo-400)', fontWeight: 600 }}>
                             {diffM2 >= 0 ? `▲ +${diffM2.toFixed(1)}% vs media de plaza` : `▼ ${diffM2.toFixed(1)}% vs media de plaza`}
                           </div>
                         )}
@@ -723,7 +723,7 @@ export default function AnalysisPanel({
                         paddingBottom: i < history.length - 1 ? 5 : 0,
                       }}>
                         <div>
-                          <div style={{ fontWeight: 600, color: h.indicador_censo_id === ind.indicador_censo_id ? 'var(--accent-cyan)' : '#ffffff' }}>
+                          <div style={{ fontWeight: 600, color: h.indicador_censo_id === ind.indicador_censo_id ? 'var(--accent-cyan)' : 'var(--color-blanco)' }}>
                             {formatDate(h.fecha_snapshot)} {h.indicador_censo_id === ind.indicador_censo_id ? '(Activo)' : ''}
                           </div>
                           <div style={{ fontSize: 'var(--fs-etiqueta)', color: 'rgba(255, 255, 255, 0.55)' }}>
@@ -731,11 +731,11 @@ export default function AnalysisPanel({
                           </div>
                         </div>
                         <div style={{ textAlign: 'right' }}>
-                          <div style={{ fontWeight: 700, color: '#ffffff' }}>
+                          <div style={{ fontWeight: 700, color: 'var(--color-blanco)' }}>
                             {fmt(h.ritmo_venta)} und/mes
                           </div>
                           {diffVend != null && (
-                            <div style={{ fontSize: 'var(--fs-etiqueta)', color: diffVend >= 0 ? '#34d399' : '#f87171', fontWeight: 600 }}>
+                            <div style={{ fontSize: 'var(--fs-etiqueta)', color: diffVend >= 0 ? 'var(--color-esmeralda-400)' : 'var(--color-rojo-400)', fontWeight: 600 }}>
                               {diffVend >= 0 ? `▲ +${diffVend} unds` : `▼ ${diffVend} unds`}
                             </div>
                           )}
@@ -760,7 +760,7 @@ export default function AnalysisPanel({
               textAlign: 'center',
             }}>
               <div style={{ fontSize: 'var(--fs-titulo)', marginBottom: 6 }}>🔍</div>
-              <div style={{ fontSize: 'var(--fs-cuerpo)', fontWeight: 700, color: '#fca5a5', marginBottom: 4 }}>
+              <div style={{ fontSize: 'var(--fs-cuerpo)', fontWeight: 700, color: 'var(--color-rojo-300)', marginBottom: 4 }}>
                 Vacío de Oferta Censada (0 Proyectos)
               </div>
               <div style={{ fontSize: 'var(--fs-etiqueta)', color: 'rgba(255, 255, 255, 0.8)', lineHeight: 1.55 }}>
@@ -806,7 +806,7 @@ export default function AnalysisPanel({
               borderRadius: 'var(--radius-sm)',
               padding: '10px 12px',
             }}>
-              <div style={{ fontSize: 'var(--fs-cuerpo)', fontWeight: 800, color: '#ffffff', letterSpacing: -0.2, marginBottom: 2 }}>
+              <div style={{ fontSize: 'var(--fs-cuerpo)', fontWeight: 800, color: 'var(--color-blanco)', letterSpacing: -0.2, marginBottom: 2 }}>
                 {tabConfig.title}
               </div>
               <div style={{ fontSize: 'var(--fs-etiqueta)', color: 'rgba(255, 255, 255, 0.75)', lineHeight: 1.45 }}>
@@ -848,13 +848,13 @@ export default function AnalysisPanel({
                     padding: '12px 14px',
                   }}>
                     <p style={{ margin: 0, marginBottom: 8 }}>
-                      El mercado evaluado concentra un total de <strong style={{ color: '#ffffff' }}>{fmt(totalSampleUnidades, 0)} unidades</strong> distribuidas en <strong style={{ color: '#ffffff' }}>{totalSampleProyectos} desarrollos activos</strong>.
+                      El mercado evaluado concentra un total de <strong style={{ color: 'var(--color-blanco)' }}>{fmt(totalSampleUnidades, 0)} unidades</strong> distribuidas en <strong style={{ color: 'var(--color-blanco)' }}>{totalSampleProyectos} desarrollos activos</strong>.
                     </p>
                     <p style={{ margin: 0, marginBottom: 8 }}>
-                      A la fecha, el avance comercial alcanza el <strong style={{ color: 'var(--accent-emerald)' }}>{pctSampleVendido}%</strong> ({fmt(totalSampleVendidas, 0)} unidades vendidas), dejando un saldo de <strong style={{ color: 'var(--citrino-teal-light)' }}>{fmt(totalSampleDisp, 0)} unidades disponibles</strong> con una exposición total de <strong style={{ color: '#ffffff' }}>{fmtShortMoney(totalSampleStockUSD, moneda)}</strong>.
+                      A la fecha, el avance comercial alcanza el <strong style={{ color: 'var(--accent-emerald)' }}>{pctSampleVendido}%</strong> ({fmt(totalSampleVendidas, 0)} unidades vendidas), dejando un saldo de <strong style={{ color: 'var(--citrino-teal-light)' }}>{fmt(totalSampleDisp, 0)} unidades disponibles</strong> con una exposición total de <strong style={{ color: 'var(--color-blanco)' }}>{fmtShortMoney(totalSampleStockUSD, moneda)}</strong>.
                     </p>
                     <p style={{ margin: 0 }}>
-                      La tasa de absorción promedio se sitúa en <strong style={{ color: 'var(--accent-blue)' }}>{avgSampleRitmo.toFixed(2)} und/mes</strong> por proyecto, manteniendo un horizonte medio de liquidación de <strong style={{ color: '#ffffff' }}>{avgSampleMeses.toFixed(1)} meses</strong>.
+                      La tasa de absorción promedio se sitúa en <strong style={{ color: 'var(--accent-blue)' }}>{avgSampleRitmo.toFixed(2)} und/mes</strong> por proyecto, manteniendo un horizonte medio de liquidación de <strong style={{ color: 'var(--color-blanco)' }}>{avgSampleMeses.toFixed(1)} meses</strong>.
                     </p>
                   </div>
                 </div>
@@ -875,7 +875,7 @@ export default function AnalysisPanel({
                           alignItems: 'center',
                         }}>
                           <div>
-                            <div style={{ fontSize: 'var(--fs-etiqueta)', fontWeight: 700, color: '#ffffff' }}>{s.etapa}</div>
+                            <div style={{ fontSize: 'var(--fs-etiqueta)', fontWeight: 700, color: 'var(--color-blanco)' }}>{s.etapa}</div>
                             <div style={{ fontSize: 'var(--fs-etiqueta)', color: 'rgba(255, 255, 255, 0.6)' }}>
                               {s.count} {s.count === 1 ? 'proyecto' : 'proyectos'} · {s.undVendidas}/{s.undTotales} vendidas
                             </div>
@@ -910,7 +910,7 @@ export default function AnalysisPanel({
                   </div>
                   <div className="insight-card" style={{ margin: 0 }}>
                     <div style={{ fontSize: 'var(--fs-etiqueta)', color: 'rgba(255, 255, 255, 0.6)' }}>Inventario Remanente</div>
-                    <div style={{ fontSize: 'var(--fs-subtitulo)', fontWeight: 800, color: '#ffffff', marginTop: 2 }}>
+                    <div style={{ fontSize: 'var(--fs-subtitulo)', fontWeight: 800, color: 'var(--color-blanco)', marginTop: 2 }}>
                       {100 - pctSampleVendido}% <span style={{ fontSize: 'var(--fs-etiqueta)', fontWeight: 400, color: 'rgba(255, 255, 255, 0.6)' }}>del total</span>
                     </div>
                   </div>
@@ -928,12 +928,12 @@ export default function AnalysisPanel({
                     padding: '12px 14px',
                   }}>
                     <p style={{ margin: 0, marginBottom: 8 }}>
-                      El stock físico remanente asciende a <strong style={{ color: 'var(--accent-cyan)' }}>{fmt(totalSampleDisp, 0)} unidades</strong>, lo que representa un promedio de <strong style={{ color: '#ffffff' }}>{totalSampleProyectos > 0 ? Math.round(totalSampleDisp / totalSampleProyectos) : 0} unidades disponibles por desarrollo</strong>.
+                      El stock físico remanente asciende a <strong style={{ color: 'var(--accent-cyan)' }}>{fmt(totalSampleDisp, 0)} unidades</strong>, lo que representa un promedio de <strong style={{ color: 'var(--color-blanco)' }}>{totalSampleProyectos > 0 ? Math.round(totalSampleDisp / totalSampleProyectos) : 0} unidades disponibles por desarrollo</strong>.
                     </p>
                     <p style={{ margin: 0 }}>
                       {totalSampleDisp > 500 ? (
                         <span>
-                          Existe una <strong style={{ color: '#fbbf24' }}>elevada densidad de unidades en comercialización</strong>. Los desarrollos que no cuenten con tipologías de ticket accesible (&lt; $US 65k) requerirán mayor plazo de comercialización.
+                          Existe una <strong style={{ color: 'var(--color-ambar-400)' }}>elevada densidad de unidades en comercialización</strong>. Los desarrollos que no cuenten con tipologías de ticket accesible (&lt; $US 65k) requerirán mayor plazo de comercialización.
                         </span>
                       ) : (
                         <span>
@@ -973,7 +973,7 @@ export default function AnalysisPanel({
                           }}
                         >
                           <div>
-                            <div style={{ fontSize: 'var(--fs-etiqueta)', fontWeight: 700, color: '#ffffff' }}>{p.proyecto}</div>
+                            <div style={{ fontSize: 'var(--fs-etiqueta)', fontWeight: 700, color: 'var(--color-blanco)' }}>{p.proyecto}</div>
                             <div style={{ fontSize: 'var(--fs-etiqueta)', color: 'rgba(255, 255, 255, 0.6)' }}>
                               {p.ZONAS} · {p.und_vendidas ?? 0}/{p.und_totales ?? 0} vendidas
                             </div>
@@ -1008,7 +1008,7 @@ export default function AnalysisPanel({
                   </div>
                   <div className="insight-card" style={{ margin: 0 }}>
                     <div style={{ fontSize: 'var(--fs-etiqueta)', color: 'rgba(255, 255, 255, 0.6)' }}>Exposición Media / Proy.</div>
-                    <div style={{ fontSize: 'var(--fs-cuerpo)', fontWeight: 800, color: '#ffffff', marginTop: 2 }}>
+                    <div style={{ fontSize: 'var(--fs-cuerpo)', fontWeight: 800, color: 'var(--color-blanco)', marginTop: 2 }}>
                       {fmtShortMoney(totalSampleProyectos > 0 ? totalSampleStockUSD / totalSampleProyectos : 0, moneda)}
                     </div>
                   </div>
@@ -1029,7 +1029,7 @@ export default function AnalysisPanel({
                       El valor económico total de las unidades remanentes por comercializar en esta selección se estima en <strong style={{ color: 'var(--accent-emerald)' }}>{fmtMoney(totalSampleStockUSD, moneda)}</strong>.
                     </p>
                     <p style={{ margin: 0 }}>
-                      Este capital requiere un horizonte estimado de <strong style={{ color: '#ffffff' }}>{avgSampleMeses.toFixed(1)} meses</strong> para su monetización completa al ritmo de absorción actual, lo cual representa el plazo de retorno de liquidez esperado para desarrolladores y entidades financieras aportantes de crédito constructor.
+                      Este capital requiere un horizonte estimado de <strong style={{ color: 'var(--color-blanco)' }}>{avgSampleMeses.toFixed(1)} meses</strong> para su monetización completa al ritmo de absorción actual, lo cual representa el plazo de retorno de liquidez esperado para desarrolladores y entidades financieras aportantes de crédito constructor.
                     </p>
                   </div>
                 </div>
@@ -1063,7 +1063,7 @@ export default function AnalysisPanel({
                           }}
                         >
                           <div>
-                            <div style={{ fontSize: 'var(--fs-etiqueta)', fontWeight: 700, color: '#ffffff' }}>{p.proyecto}</div>
+                            <div style={{ fontSize: 'var(--fs-etiqueta)', fontWeight: 700, color: 'var(--color-blanco)' }}>{p.proyecto}</div>
                             <div style={{ fontSize: 'var(--fs-etiqueta)', color: 'rgba(255, 255, 255, 0.6)' }}>
                               {p.ZONAS} · {fmt(p.und_por_vender, 0)} unidades remanentes
                             </div>
@@ -1155,13 +1155,13 @@ export default function AnalysisPanel({
                           <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
                             <span style={{
                               width: 18, height: 18, borderRadius: 9,
-                              background: 'rgba(255,255,255,0.12)', color: '#ffffff',
+                              background: 'rgba(255,255,255,0.12)', color: 'var(--color-blanco)',
                               fontSize: 'var(--fs-etiqueta)', fontWeight: 800, display: 'flex', alignItems: 'center', justifyContent: 'center'
                             }}>
                               #{idx + 1}
                             </span>
                             <div>
-                              <div style={{ fontSize: 'var(--fs-etiqueta)', fontWeight: 700, color: '#ffffff' }}>{p.proyecto}</div>
+                              <div style={{ fontSize: 'var(--fs-etiqueta)', fontWeight: 700, color: 'var(--color-blanco)' }}>{p.proyecto}</div>
                               <div style={{ fontSize: 'var(--fs-etiqueta)', color: 'rgba(255, 255, 255, 0.6)' }}>
                                 {p.ZONAS} · {p.und_vendidas ?? 0} vendidas
                               </div>
@@ -1191,7 +1191,7 @@ export default function AnalysisPanel({
                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8 }}>
                   <div className="insight-card" style={{ margin: 0 }}>
                     <div style={{ fontSize: 'var(--fs-etiqueta)', color: 'rgba(255, 255, 255, 0.6)' }}>Meses de Stock Promedio</div>
-                    <div style={{ fontSize: 'var(--fs-subtitulo)', fontWeight: 800, color: avgSampleMeses > 18 ? 'var(--text-danger)' : '#ffffff', marginTop: 2 }}>
+                    <div style={{ fontSize: 'var(--fs-subtitulo)', fontWeight: 800, color: avgSampleMeses > 18 ? 'var(--text-danger)' : 'var(--color-blanco)', marginTop: 2 }}>
                       {avgSampleMeses.toFixed(1)} <span style={{ fontSize: 'var(--fs-etiqueta)', fontWeight: 400, color: 'rgba(255, 255, 255, 0.6)' }}>meses</span>
                     </div>
                   </div>
@@ -1217,7 +1217,7 @@ export default function AnalysisPanel({
                     <div>
                       <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 'var(--fs-etiqueta)', marginBottom: 3 }}>
                         <span style={{ color: 'var(--accent-emerald)', fontWeight: 600 }}>Alta Rotación (&lt;6 meses)</span>
-                        <span style={{ color: '#ffffff' }}>{riskLow.length} proy. ({totalSampleProyectos > 0 ? Math.round((riskLow.length / totalSampleProyectos) * 100) : 0}%)</span>
+                        <span style={{ color: 'var(--color-blanco)' }}>{riskLow.length} proy. ({totalSampleProyectos > 0 ? Math.round((riskLow.length / totalSampleProyectos) * 100) : 0}%)</span>
                       </div>
                       <div className="progress-bar" style={{ height: 5, background: 'rgba(255,255,255,0.1)' }}>
                         <div className="progress-bar-fill green" style={{ width: `${totalSampleProyectos > 0 ? (riskLow.length / totalSampleProyectos) * 100 : 0}%` }} />
@@ -1226,8 +1226,8 @@ export default function AnalysisPanel({
 
                     <div>
                       <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 'var(--fs-etiqueta)', marginBottom: 3 }}>
-                        <span style={{ color: '#60a5fa', fontWeight: 600 }}>Ritmo Equilibrado (6 - 12 meses)</span>
-                        <span style={{ color: '#ffffff' }}>{riskHealthy.length} proy. ({totalSampleProyectos > 0 ? Math.round((riskHealthy.length / totalSampleProyectos) * 100) : 0}%)</span>
+                        <span style={{ color: 'var(--color-azul-400)', fontWeight: 600 }}>Ritmo Equilibrado (6 - 12 meses)</span>
+                        <span style={{ color: 'var(--color-blanco)' }}>{riskHealthy.length} proy. ({totalSampleProyectos > 0 ? Math.round((riskHealthy.length / totalSampleProyectos) * 100) : 0}%)</span>
                       </div>
                       <div className="progress-bar" style={{ height: 5, background: 'rgba(255,255,255,0.1)' }}>
                         <div className="progress-bar-fill blue" style={{ width: `${totalSampleProyectos > 0 ? (riskHealthy.length / totalSampleProyectos) * 100 : 0}%` }} />
@@ -1237,7 +1237,7 @@ export default function AnalysisPanel({
                     <div>
                       <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 'var(--fs-etiqueta)', marginBottom: 3 }}>
                         <span style={{ color: 'var(--text-warning)', fontWeight: 600 }}>Presión Moderada (12 - 18 meses)</span>
-                        <span style={{ color: '#ffffff' }}>{riskModerate.length} proy. ({totalSampleProyectos > 0 ? Math.round((riskModerate.length / totalSampleProyectos) * 100) : 0}%)</span>
+                        <span style={{ color: 'var(--color-blanco)' }}>{riskModerate.length} proy. ({totalSampleProyectos > 0 ? Math.round((riskModerate.length / totalSampleProyectos) * 100) : 0}%)</span>
                       </div>
                       <div className="progress-bar" style={{ height: 5, background: 'rgba(255,255,255,0.1)' }}>
                         <div className="progress-bar-fill yellow" style={{ width: `${totalSampleProyectos > 0 ? (riskModerate.length / totalSampleProyectos) * 100 : 0}%` }} />
@@ -1247,7 +1247,7 @@ export default function AnalysisPanel({
                     <div>
                       <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 'var(--fs-etiqueta)', marginBottom: 3 }}>
                         <span style={{ color: 'var(--text-danger)', fontWeight: 600 }}>Sobreoferta Crítica (&gt;18 meses)</span>
-                        <span style={{ color: '#ffffff' }}>{riskHigh.length} proy. ({totalSampleProyectos > 0 ? Math.round((riskHigh.length / totalSampleProyectos) * 100) : 0}%)</span>
+                        <span style={{ color: 'var(--color-blanco)' }}>{riskHigh.length} proy. ({totalSampleProyectos > 0 ? Math.round((riskHigh.length / totalSampleProyectos) * 100) : 0}%)</span>
                       </div>
                       <div className="progress-bar" style={{ height: 5, background: 'rgba(255,255,255,0.1)' }}>
                         <div className="progress-bar-fill red" style={{ width: `${totalSampleProyectos > 0 ? (riskHigh.length / totalSampleProyectos) * 100 : 0}%` }} />
@@ -1276,7 +1276,7 @@ export default function AnalysisPanel({
                     marginBottom: 10,
                   }}>
                     <p style={{ margin: 0 }}>
-                      En el mercado de <strong style={{ color: '#ffffff' }}>{ciudad === 'ALL' ? 'Bolivia' : ciudad}</strong>, las tipologías compactas (1 Dormitorio y Monoambientes) concentran el <strong style={{ color: 'var(--accent-emerald)' }}>64% de la velocidad de colocación</strong> gracias a tickets de entrada más accesibles para inversores patrimoniales.
+                      En el mercado de <strong style={{ color: 'var(--color-blanco)' }}>{ciudad === 'ALL' ? 'Bolivia' : ciudad}</strong>, las tipologías compactas (1 Dormitorio y Monoambientes) concentran el <strong style={{ color: 'var(--accent-emerald)' }}>64% de la velocidad de colocación</strong> gracias a tickets de entrada más accesibles para inversores patrimoniales.
                     </p>
                   </div>
 
@@ -1293,13 +1293,13 @@ export default function AnalysisPanel({
                           alignItems: 'center',
                         }}>
                           <div>
-                            <div style={{ fontSize: 'var(--fs-etiqueta)', fontWeight: 700, color: '#ffffff' }}>{b.tipo}</div>
+                            <div style={{ fontSize: 'var(--fs-etiqueta)', fontWeight: 700, color: 'var(--color-blanco)' }}>{b.tipo}</div>
                             <div style={{ fontSize: 'var(--fs-etiqueta)', color: 'rgba(255, 255, 255, 0.6)' }}>
                               Área media: {fmt(b.avgArea)} m² constr.
                             </div>
                           </div>
                           <div style={{ textAlign: 'right' }}>
-                            <div style={{ fontSize: 'var(--fs-etiqueta)', fontWeight: 700, color: '#ffffff' }}>
+                            <div style={{ fontSize: 'var(--fs-etiqueta)', fontWeight: 700, color: 'var(--color-blanco)' }}>
                               {fmtMoney(b.avgPrecio, moneda)}
                             </div>
                             <div style={{ fontSize: 'var(--fs-etiqueta)', color: 'var(--accent-emerald)' }}>
@@ -1376,7 +1376,7 @@ export default function AnalysisPanel({
                         alignItems: 'center',
                       }}>
                         <div>
-                          <div style={{ fontSize: 'var(--fs-etiqueta)', fontWeight: 700, color: '#ffffff' }}>{z.zona}</div>
+                          <div style={{ fontSize: 'var(--fs-etiqueta)', fontWeight: 700, color: 'var(--color-blanco)' }}>{z.zona}</div>
                           <div style={{ fontSize: 'var(--fs-etiqueta)', color: 'rgba(255, 255, 255, 0.6)' }}>
                             {z.proyectos} {z.proyectos === 1 ? 'desarrollo' : 'desarrollos'} · {fmt(z.undDisp, 0)} disponibles
                           </div>
@@ -1414,7 +1414,7 @@ export default function AnalysisPanel({
                     marginBottom: 10,
                   }}>
                     <p style={{ margin: 0 }}>
-                      En esta muestra operan <strong style={{ color: '#ffffff' }}>{devStats.length} empresas desarrolladoras</strong> gestionando un promedio de <strong style={{ color: 'var(--accent-cyan)' }}>{totalSampleProyectos > 0 ? (totalSampleUnidades / totalSampleProyectos).toFixed(0) : 0} unidades por edificio</strong>.
+                      En esta muestra operan <strong style={{ color: 'var(--color-blanco)' }}>{devStats.length} empresas desarrolladoras</strong> gestionando un promedio de <strong style={{ color: 'var(--accent-cyan)' }}>{totalSampleProyectos > 0 ? (totalSampleUnidades / totalSampleProyectos).toFixed(0) : 0} unidades por edificio</strong>.
                     </p>
                   </div>
 
@@ -1430,7 +1430,7 @@ export default function AnalysisPanel({
                         alignItems: 'center',
                       }}>
                         <div>
-                          <div style={{ fontSize: 'var(--fs-etiqueta)', fontWeight: 700, color: '#ffffff' }}>{d.dev}</div>
+                          <div style={{ fontSize: 'var(--fs-etiqueta)', fontWeight: 700, color: 'var(--color-blanco)' }}>{d.dev}</div>
                           <div style={{ fontSize: 'var(--fs-etiqueta)', color: 'rgba(255, 255, 255, 0.6)' }}>
                             {d.count} {d.count === 1 ? 'proyecto activo' : 'proyectos activos'}
                           </div>
@@ -1490,7 +1490,7 @@ export default function AnalysisPanel({
                 color: 'rgba(255, 255, 255, 0.85)',
                 lineHeight: 1.6,
               }}>
-                <div style={{ fontWeight: 700, color: '#ffffff', marginBottom: 4 }}>
+                <div style={{ fontWeight: 700, color: 'var(--color-blanco)', marginBottom: 4 }}>
                   Conclusión para Directorio & Analistas:
                 </div>
                 {avgSampleMeses <= 10 ? (
