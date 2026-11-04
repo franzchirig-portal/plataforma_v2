@@ -1,9 +1,9 @@
 ---
 name: citrino-intelligence-workspace
 description: >
-  Mapa actual de la plataforma Citrino Intelligence: qué partes existen, cómo fluyen
-  los datos desde Google Sheets hasta la pantalla, qué pestañas y capítulos hay y
-  dónde está cada cosa en el código. Usar al empezar cualquier cambio para ubicarse.
+  Mapa completo de la plataforma Citrino Intelligence (Bolivia): cada área de la pantalla,
+  cada capítulo y pestaña con su archivo, de dónde sale cada dato (base de datos o archivo
+  fijo) y qué partes son provisionales. Usar al empezar cualquier cambio para ubicarse.
 tags:
   - intelligence-platform
   - real-estate-analytics
@@ -16,69 +16,111 @@ tags:
 
 # Mapa de la plataforma Citrino Intelligence
 
-Plataforma de inteligencia de mercado inmobiliario para Bolivia. Ciudades: Santa Cruz (`SCZ`), La Paz (`LPZ`) y Cochabamba (`CBB`).
+Plataforma de inteligencia de mercado inmobiliario en Bolivia. Ciudades: Santa Cruz (`SCZ`), La Paz (`LPZ`) y Cochabamba (`CBB`).
 
-Fuente de verdad: `CLAUDE.md` en la raíz del repositorio y el código. Si este documento contradice al código, manda el código.
+Fuente de verdad: `CLAUDE.md` en la raíz del repositorio y el código. Si esta guía contradice al código, manda el código.
 
-## 1. Dos mitades conectadas solo por Supabase
+## 1. Dos mitades conectadas solo por la base de datos
 
 | Mitad | Carpeta | Qué hace |
 |---|---|---|
-| Pipeline de datos | `pipeline/` | Lee Google Sheets, limpia y carga en Supabase (Python) |
-| Dashboard | `frontend/` | React 19 + TypeScript + Vite. Lee Supabase desde el navegador |
+| Pipeline de datos | `pipeline/` | Lee Google Sheets, limpia y carga en Supabase (Python). Corre cada 6 horas en GitHub Actions. |
+| Dashboard | `frontend/` | React 19 + TypeScript + Vite. Lee Supabase directamente desde el navegador. |
 
-El pipeline corre cada 6 horas en GitHub Actions (`.github/workflows/sync-pipeline.yml`). Ver la skill `sheets-supabase-pipeline`.
+Para cambiar la carga de datos, ver la skill `sheets-supabase-pipeline`.
 
-## 2. Modelo de datos actual ("Diamond")
+## 2. Pantalla: qué hay en cada zona
 
-Seis tablas `oferta_*` cargadas directamente, sin capas intermedias:
+- **Barra superior:** selector de ciudad (Santa Cruz, La Paz, Cochabamba, Bolivia), selector de periodo (fechas de corte), selector de moneda (USD; Bs aparece como "Próximamente"), botones "Análisis y Diagnóstico" (panel derecho) y "Asistente AI" (panel derecho), y acceso de usuario.
+- **Menú izquierdo (`LeftAnalyticsBar`):** 5 secciones con 13 capítulos. Elegir un capítulo cambia todo el centro de la pantalla.
+- **Barra de pestañas (`SubHeader`):** aparece solo en el capítulo 1.1. Tiene 8 pestañas (ver sección 3).
+- **Filtros inferiores (`FilterBar`):** zona, subzona, tipo de inmueble, etapa, tipología y periodo. Vienen de Supabase.
+- **Centro:** el panel del capítulo elegido.
+- **Panel derecho:** "Asistente AI" (`ChatPanel`) y "Análisis y Diagnóstico" (`AnalysisPanel`). Se abren y cierran desde la barra superior.
+- **Acceso:** inicio de sesión con correo (Supabase Auth) o "Acceso Rápido" en modo invitado.
+- **Tema:** claro u oscuro. Se guarda en el navegador con la clave `citrino_theme_v2`. Sin selección guardada, sigue el sistema.
 
-- `oferta_proyectos`
-- `oferta_indicadores_censo`
-- `oferta_tipologias`
-- `oferta_avg_tipologias`
-- `oferta_condiciones_financieras`
-- `oferta_amenidades`
+## 3. Capítulos y pestañas
 
-Los nombres y el orden de carga están en `pipeline/config.py` (`DIAMOND_TABLES`) y en `supabase/00*.sql`.
+### Capítulo 1.1 (barra de pestañas superior, 8 pestañas)
 
-Nota: los capítulos 1.2, 1.3, 1.4, 2.x, 3.x, 4.x y 5.1 NO leen Supabase. Leen un archivo fijo: `frontend/src/data/citrinoDataStudioData.ts`.
+| Pestaña | Componente | Fuente de datos |
+|---|---|---|
+| Resumen General | `WorkspacePanel` | Supabase |
+| Stock en Ventas | `WorkspacePanel` | Supabase |
+| Ritmo de Ventas | `WorkspacePanel` | Supabase |
+| Análisis de Producto | `AnalisisProductoPanel` | Supabase |
+| Comparación de Proyectos | `ComparacionProyectosPanel` | Supabase |
+| Proyectos | `WorkspacePanel` | Supabase |
+| Tipologías | `TipologiasPanel` | Supabase |
+| Mapa | `GeoespacialPanel` (Leaflet) | Supabase |
 
-## 3. Pantalla: cómo está organizada
+Nota: el código tiene pestañas internas adicionales (Stock en USD, Meses de Stock y Mercado) que usan `WorkspacePanel` y no aparecen en la barra.
 
-- **Barra superior (`SubHeader`):** pestañas del capítulo 1.1 (Resumen General, Stock en Ventas, Ritmo de Ventas, Análisis de Producto, Comparación de Proyectos, Proyectos, Tipologías, Mapa).
-- **Barra izquierda (`LeftAnalyticsBar`):** capítulos organizados en 5 secciones.
-- **Filtros (`FilterBar`):** ciudad (`SCZ`, `LPZ`, `CBB`, `ALL`).
-- **Panel central:** el panel del capítulo elegido.
-- **Lateral derecho:** `ChatPanel` (asistente) y `AnalysisPanel` (análisis y diagnóstico).
-- **Tema:** claro u oscuro. Se guarda en el navegador con la clave `citrino_theme_v2`. Si no hay selección guardada, sigue el sistema.
+### Capítulos 1.2 a 5.1 (menú izquierdo)
 
-### Capítulos (menú izquierdo)
+| Capítulo | Componente | Fuente de datos |
+|---|---|---|
+| 1.2 Evolución de la Oferta Nueva | `EvolutivoOfertaPanel` | Archivo fijo |
+| 1.3 Oferta de Particulares (Marketplace) | `MarketplaceParticularesPanel` | Archivo fijo |
+| 1.4 Bienes Adjudicados y Remates | `BienesAdjudicadosPanel` | Archivo fijo |
+| 2.1 Composición Económica y Voluntad de Compra | `AnalisisDemandaPanel` | Archivo fijo |
+| 2.2 Compra como Inversión | `AnalisisDemandaPanel` | Archivo fijo |
+| 2.3 Compra Vivienda Propia | `AnalisisDemandaPanel` | Archivo fijo |
+| 3.1 Financiamiento al Sector Inmobiliario | `SistemaFinancieroPanel` | Archivo fijo |
+| 3.2 Evolución de la Mora del Inmobiliario | `SistemaFinancieroPanel` | Archivo fijo |
+| 4.1 Perfil del Consumidor de Crédito | `EndeudamientoHipotecarioPanel` | Archivo fijo |
+| 4.2 Estado de la Cartera Hipotecaria | `EndeudamientoHipotecarioPanel` | Archivo fijo |
+| 4.3 Perspectivas del Comprador | `EndeudamientoHipotecarioPanel` | Archivo fijo |
+| 5.1 Ciclo Inmobiliario Físico | `CicloInmobiliarioPanel` | Archivo fijo |
 
-| Sección | Capítulos |
-|---|---|
-| 1. Análisis de Mercado | 1.1 Cuantificación de la Oferta Nueva · 1.2 Evolución de la Oferta Nueva · 1.3 Oferta de Particulares (Marketplace) · 1.4 Bienes Adjudicados y Remates |
-| 2. Análisis de la Demanda | 2.1 Composición Económica y Voluntad de Compra · 2.2 Compra como Inversión · 2.3 Compra Vivienda Propia |
-| 3. Análisis Financiero | 3.1 Financiamiento al Sector Inmobiliario · 3.2 Evolución de la Mora del Inmobiliario |
-| 4. Endeudamiento Hipotecario | 4.1 Perfil del Consumidor de Crédito · 4.2 Estado de la Cartera Hipotecaria · 4.3 Perspectivas del Comprador |
-| 5. Indicadores Inmobiliarios | 5.1 Ciclo Inmobiliario Físico |
+Cada uno de estos paneles muestra sus pestañas arriba con el componente `TopTabBar` (ver la skill `crear-panel-pestanas`).
 
-Cada capítulo de los paneles con pestañas muestra sus pestañas arriba (componente `TopTabBar`). Dentro de un panel no hay botones de capítulo: se cambia de capítulo desde el menú izquierdo. Ver la skill `crear-panel-pestanas`.
+### Otros paneles
 
-## 4. Tecnologías
+- **Hipotecario:** `HipotecarioPanel`. Hoy es un aviso de "Próximamente", sin datos.
+- **Dossier de capítulo:** `ChapterDossierPanel`. Texto fijo por capítulo, guardado en `CHAPTER_REGISTRY` dentro del mismo archivo.
 
-- **Gráficos:** ECharts (`echarts-for-react`). El tema lo da `useChartTheme` (`src/lib/chartTheme.ts`).
-- **Mapas:** Leaflet en `GeoespacialPanel`. Los polígonos vienen de `pipeline/datakmz/*.kmz`.
-- **Estilos:** CSS plano con tokens en `src/index.css`. Sin framework de CSS.
+## 4. De dónde sale cada dato
+
+- **Base de datos (Supabase):** seis tablas `oferta_*` cargadas por el pipeline:
+  - `oferta_proyectos`
+  - `oferta_indicadores_censo`
+  - `oferta_tipologias`
+  - `oferta_avg_tipologias`
+  - `oferta_condiciones_financieras`
+  - `oferta_amenidades`
+
+  Todas las consultas están en `frontend/src/lib/supabase.ts`. Ahí también están los tipos y los cálculos de métricas.
+- **Archivo fijo:** `frontend/src/data/citrinoDataStudioData.ts`. Datos de los capítulos 1.2 a 5.1. No se actualizan solos: cambiarlos es editar ese archivo.
+- **Asistente AI:** responde con reglas programadas que consultan los datos de Supabase. En el código no hay conexión a un modelo de IA externo.
+
+Los nombres y el orden de carga de las tablas están en `pipeline/config.py` (`DIAMOND_TABLES`) y en `supabase/00*.sql`.
+
+## 5. Tecnologías
+
+- **Gráficos:** ECharts (`echarts-for-react`). Colores del tema en `frontend/src/lib/chartTheme.ts`.
+- **Mapas:** Leaflet en `GeoespacialPanel`. Polígonos de zonas en `pipeline/datakmz/*.kmz`.
+- **Estilos:** CSS plano con tokens de color y tamaños en `frontend/src/index.css`. Sin framework de CSS.
 - **Publicación:** Vercel (`vercel.json`) o Netlify (`netlify.toml`), con reescritura a `index.html`.
 
-## 5. Dónde mirar antes de cambiar algo
+## 6. Pendientes conocidos
+
+- Dashboard del capítulo 1.1 y Mapa, Tipologías, Análisis de Producto y Comparación todavía usan palabras técnicas en pantalla.
+- Hipotecario sin datos.
+- Capítulo 3.1, pestaña "La Construcción y su Financiamiento": sin serie histórica cargada.
+- Bolivianos (Bs) en el selector de moneda: sin datos.
+
+## 7. Dónde mirar antes de cambiar algo
 
 | Quiero cambiar... | Mirar |
 |---|---|
-| Un número o una tabla que sale de Supabase | `frontend/src/lib/supabase.ts` |
-| Datos fijos de un capítulo del Data Studio | `frontend/src/data/citrinoDataStudioData.ts` |
-| Un panel | `frontend/src/components/<Nombre>Panel.tsx` |
+| Un número que sale de Supabase | `frontend/src/lib/supabase.ts` |
+| Un dato fijo de un capítulo 1.2 a 5.1 | `frontend/src/data/citrinoDataStudioData.ts` |
+| El contenido de un panel | `frontend/src/components/<Nombre>Panel.tsx` |
 | Qué capítulo abre qué panel | `frontend/src/App.tsx` (bloque de `activeChapter`) |
 | Los títulos del menú izquierdo | `frontend/src/components/LeftAnalyticsBar.tsx` |
+| Las pestañas del capítulo 1.1 | `frontend/src/components/SubHeader.tsx` |
+| Los filtros | `frontend/src/components/FilterBar.tsx` |
+| El Asistente AI | `frontend/src/components/ChatPanel.tsx` |
 | Cómo se leen las columnas de las hojas | `pipeline/config.py` |
