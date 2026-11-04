@@ -1,169 +1,91 @@
 ---
 name: citrino-intelligence-workspace
 description: >
-  Especificación de arquitectura y capacidades del Workspace de Inteligencia Analítica
-  Citrino Platform. Sistema operativo de datos inmobiliarios y multi-industria que
-  sustituye dashboards tradicionales por un entorno de productividad integral (Explore,
-  Analyze, Predict, Report) con arquitectura Medallion ETL, motor geoespacial GIS,
-  copiloto de IA generativo y dossiers ejecutivos de grado institucional.
+  Mapa actual de la plataforma Citrino Intelligence: qué partes existen, cómo fluyen
+  los datos desde Google Sheets hasta la pantalla, qué pestañas y capítulos hay y
+  dónde está cada cosa en el código. Usar al empezar cualquier cambio para ubicarse.
 tags:
   - intelligence-platform
-  - workspace-os
   - real-estate-analytics
-  - medallion-architecture
+  - react-vite
   - supabase-postgresql
-  - react-vite-nextjs
   - echarts
   - leaflet-gis
-  - ai-copilot
   - bolivia-market
 ---
 
-# 🌐 CITRINO INTELLIGENCE PLATFORM
-### *Enterprise Workspace OS for Real Estate & Multi-Industry Intelligence*
+# Mapa de la plataforma Citrino Intelligence
 
-> **Documento Ejecutivo de Arquitectura y Capacidades de Producto**  
-> Diseñado para presentación ante Comités de Inversión, Fondos de Capital, Desarrolladores y Socios Tecnológicos.
+Plataforma de inteligencia de mercado inmobiliario para Bolivia. Ciudades: Santa Cruz (`SCZ`), La Paz (`LPZ`) y Cochabamba (`CBB`).
 
----
+Fuente de verdad: `CLAUDE.md` en la raíz del repositorio y el código. Si este documento contradice al código, manda el código.
 
-## 1. Visión Estratégica & Filosofía de Producto
+## 1. Dos mitades conectadas solo por Supabase
 
-La mayoría de las herramientas de Business Intelligence en el mercado (como Power BI o Tableau) cometen un error crítico: **venden dashboards estáticos llenos de tarjetas desconectadas**. 
-
-**Citrino Intelligence Platform** rompe radicalmente con ese paradigma. Está concebido como un **Operating System de Inteligencia Analítica (Workspace OS)**, inspirado en la filosofía de interfaces de alta productividad como **VS Code, Figma, Linear y Notion**:
-
-```
-┌─────────────────┬──────────────────────────────────────────┬──────────────────┐
-│                 │                                          │                  │
-│  NAVBAR /       │          WORKSPACE CANVAS (80%)          │    INSPECTOR     │
-│  MÓDULOS        │                                          │    CONTEXTUAL    │
-│                 │  • Mapas Vectoriales Interactivos (GIS)  │                  │
-│  🏠 Inicio      │  • Radar Multidimensional Competitivo    │  • Diagnóstico   │
-│  📊 Inteligencia│  • Matrices de Tipología y Precios ($/m²)│  • Métricas Micro│
-│  🗺️ Geoespacial │  • Command Palette (⌘K / Ctrl+K)         │  • IA Copilot    │
-│  📑 Dossiers    │  • Simulación de Escenarios y Absorción  │  • Historial     │
-│                 │                                          │                  │
-└─────────────────┴──────────────────────────────────────────┴──────────────────┘
-```
-
-### Principio Fundamental: "Todo funciona como Aplicaciones, nunca como Páginas"
-En lugar de forzar al usuario a saltar entre URLs y recargar pantallas:
-* El analista selecciona un proyecto en el mapa vectorial.
-* El inspector lateral abre instantáneamente el diagnóstico de tracción comercial.
-* Con un clic se compara lado a lado contra sus competidores directos en un radar 5D.
-* Con otro clic se genera un dossier ejecutivo descargable en PDF de grado institucional.
-* **Todo a 60 FPS, sin recargar la página.**
-
----
-
-## 2. Los 4 Espacios de Trabajo (The 4 Workspaces)
-
-La plataforma organiza el flujo analítico profesional en 4 etapas cognitivas:
-
-```
-┌─────────────┐     ┌─────────────┐     ┌─────────────┐     ┌─────────────┐
-│  1. EXPLORE │ ──> │ 2. ANALYZE  │ ──> │  3. PREDICT │ ──> │  4. REPORT  │
-│  Datos, GIS │     │ Comparador, │     │ Simulación, │     │ Dossiers,   │
-│  y Filtros  │     │ Tipologías  │     │ Absorción IA│     │ PDF, Excel  │
-└─────────────┘     └─────────────┘     └─────────────┘     └─────────────┘
-```
-
-### 1. `Explore` (Exploración Territorial & Censal)
-* **Motor Geoespacial GIS en Tiempo Real**: Mapas vectoriales con tecnología ESRI Canvas (adaptables automáticamente a modo Diurno y Nocturno).
-* **Volumetría y Semáforos de Riesgo**: Marcadores circulares proporcionales al inventario, coloreados según velocidad de venta (`<12 meses`, `12-18 meses`, `>24 meses` sobreoferta).
-* **Filtros Dinámicos Multidimensionales**: Filtrado instantáneo por Ciudad (Santa Cruz, La Paz, Cochabamba, Nacional), Zona urbana y Etapa de construcción (Preventa, Obra gruesa, Obra fina, Terminado).
-
-### 2. `Analyze` (Competitividad & Producto Inmobiliario)
-* **Comparador Head-to-Head**: Contraste lado a lado de 2 a 4 proyectos con matriz de atributos y etiquetas de desempeño (`🏆 Mayor Tracción`, `⚡ Menor Exposición`).
-* **Radar Multidimensional 5D**: Evaluación gráfica de:
-  1. *Ritmo de Venta* (unidades/mes).
-  2. *Stock Disponible* (unidades remanentes).
-  3. *% Vendido* (avance sobre el total).
-  4. *Escala del Desarrollo* (unidades totales proyectadas).
-  5. *Capital Monetizado Expuesto* ($US en inventario).
-* **Matriz Oficial de Tipologías (Módulo 01-E)**: Desglose por modelo (Monoambiente, 1D, 2D, 3D+) analizando metrajes mínimos, medios y máximos junto al ticket promedio y valor $/m².
-
-### 3. `Predict` (Inteligencia Predictiva & Copiloto IA)
-* **Algoritmos de Absorción y Meses de Stock**: Proyección matemática del horizonte de liquidación de inventario zonal y por proyecto.
-* **Copiloto IA Generativo**: Asistente conversacional especializado en finanzas e inversiones inmobiliarias capaz de calcular correlaciones, detectar anomalías de precio y generar gráficos Apache ECharts en tiempo real según la consulta del usuario.
-
-### 4. `Report` (Dossiers Ejecutivos de Inversión)
-* **Generador de Memorándums en PDF**: Diseñado específicamente para directorios y comités bancarios. Integra el diagnóstico cualitativo automatizado, KPIs cuantitativos y visualizaciones en formato A4 limpio.
-* **Exportación de Datos Crudos (CSV/Excel)**: Descarga directa de datos consolidados para modelación financiera avanzada.
-
----
-
-## 3. Arquitectura de Datos: Medallion Pipeline (ETL Idempotente)
-
-La base de datos sigue el estándar de las grandes plataformas de datos empresariales (**Arquitectura Medallion**):
-
-```
-┌────────────────────────────────────────────────────────────────────────┐
-│                        FUENTES DE INGESTIÓN                            │
-│  Google Sheets API v4 (9 libros consolidados) + Data Studio + Relevamientos│
-└──────────────────────────────────┬─────────────────────────────────────┘
-                                   │  GitHub Actions (Cron cada 6h)
-                                   ▼
-┌────────────────────────────────────────────────────────────────────────┐
-│ 🥉 BRONZE LAYER (Raw Ingestion)                                        │
-│  • Tabla: bronze_raw_sheets                                            │
-│  • Hashes SHA-256 por fila para idempotencia absoluta (0 duplicados)   │
-└──────────────────────────────────┬─────────────────────────────────────┘
-                                   │  Python Transform Pipeline
-                                   ▼
-┌────────────────────────────────────────────────────────────────────────┐
-│ 🥈 SILVER LAYER (Cleaned & Validated)                                  │
-│  • Limpieza de anomalías de divisas ($US vs Bs)                        │
-│  • Geocodificación y normalización de tipologías                       │
-│  • Tablas: silver_projects, silver_tipologias, silver_amenidades       │
-└──────────────────────────────────┬─────────────────────────────────────┘
-                                   │  Materialized Views / Aggregators
-                                   ▼
-┌────────────────────────────────────────────────────────────────────────┐
-│ 🥇 GOLD & DIAMOND LAYER (Analytical Core - Supabase PostgreSQL)        │
-│  • Tablas: diamond_properties, oferta_proyectos, oferta_tipologias     │
-│  • Índices geoespaciales y consultas optimizadas para sub-segundo      │
-└────────────────────────────────────────────────────────────────────────┘
-```
-
----
-
-## 4. Stack Tecnológico de Grado Institucional
-
-| Capa | Tecnologías Seleccionadas | Razón Técnica y de Negocio |
+| Mitad | Carpeta | Qué hace |
 |---|---|---|
-| **Frontend Framework** | **React 19 / Next.js 15 (App Router)** | Renderizado ultra-fluido, arquitectura modular por componentes, SEO institucional. |
-| **Diseño & Styling** | **Modern CSS Design Tokens + TailwindCSS** | Control milimétrico de paleta de marca (*Citrino Petrol & Amber*), sin dependencias pesadas. |
-| **Visualización Gráfica** | **Apache ECharts** | El motor de gráficos más potente del mercado; soporta gráficos radar, barras, líneas y visualización masiva sin degradación de memoria. |
-| **Cartografía GIS** | **Leaflet GIS + ESRI World Canvas** | Rendimiento 10x superior a librerías propietarias costosas; soporte nativo para capas diurnas y nocturnas sin costo de API key. |
-| **Base de Datos & Auth** | **Supabase (PostgreSQL 15)** | Motor SQL relacional maduro, Row Level Security (RLS), soporte geoespacial PostGIS y autenticación robusta. |
-| **Pipeline ETL** | **Python 3.11 + GitHub Actions** | Ingestión autónoma programada cada 6 horas, con tolerancia a fallos y alertas de sincronización. |
-| **Hosting & Edge Delivery**| **Vercel Global Edge Network** | Disponibilidad del 99.99%, despliegue continuo (CI/CD) conectado a GitHub y latencia mínima. |
+| Pipeline de datos | `pipeline/` | Lee Google Sheets, limpia y carga en Supabase (Python) |
+| Dashboard | `frontend/` | React 19 + TypeScript + Vite. Lee Supabase desde el navegador |
 
----
+El pipeline corre cada 6 horas en GitHub Actions (`.github/workflows/sync-pipeline.yml`). Ver la skill `sheets-supabase-pipeline`.
 
-## 5. Capacidades Institucionales Exclusivas
+## 2. Modelo de datos actual ("Diamond")
 
-1. **Conmutador de Tema Diurno / Nocturno (Daylight & Night Mode):**
-   - **Modo Diurno (☀️ Daylight Slate):** Diseñado para salas de juntas con alta iluminación, proyectores o trabajo de oficina diurno. Paleta pizarra de máximo contraste (`#0f172a` sobre `#f1f5f9`).
-   - **Modo Nocturno (🌙 Deep Petrol Dark):** Diseñado para analistas de datos en sesiones de trabajo intensivas, minimizando el cansancio ocular.
-   - **Mapas y gráficos adaptativos:** Los azulejos satelitales y los ejes de los gráficos ECharts cambian de paleta en tiempo real.
+Seis tablas `oferta_*` cargadas directamente, sin capas intermedias:
 
-2. **Command Palette Global (`⌘K` / `Ctrl+K`):**
-   - Búsqueda tipo Spotlight/Linear: localiza proyectos, cambia de ciudad, filtra por zonas o ejecuta comandos sin tocar el ratón.
+- `oferta_proyectos`
+- `oferta_indicadores_censo`
+- `oferta_tipologias`
+- `oferta_avg_tipologias`
+- `oferta_condiciones_financieras`
+- `oferta_amenidades`
 
-3. **Arquitectura Multi-Rubro (Agnóstica al Sector):**
-   - Diseñada desde el primer día para escalar no solo en el sector **Inmobiliario**, sino también en **Automotriz, Retail, Agroindustria y Banca/Crédito**, adaptando únicamente las capas Silver y Gold.
+Los nombres y el orden de carga están en `pipeline/config.py` (`DIAMOND_TABLES`) y en `supabase/00*.sql`.
 
----
+Nota: los capítulos 1.2, 1.3, 1.4, 2.x, 3.x, 4.x y 5.1 NO leen Supabase. Leen un archivo fijo: `frontend/src/data/citrinoDataStudioData.ts`.
 
-## 6. Casos de Negocio para Stakeholders & Clientes
+## 3. Pantalla: cómo está organizada
 
-* **Para Desarrolladores Inmobiliarios:** Identificación precisa de qué tipologías están saturadas y en qué zonas existe demanda insatisfecha antes de comprar terrenos o diseñar planos.
-* **Para Fondos de Inversión y Bancos:** Monitoreo del ritmo de colocación de garantías hipotecarias, alertas tempranas de sobreoferta y valoración realista de carteras de activos adjudicados.
-* **Para Brokers y Asesores Patrimoniales:** Capacidad de generar dossiers ejecutivos en 3 segundos para cerrar negociaciones con inversionistas institucionales y compradores de alto patrimonio.
+- **Barra superior (`SubHeader`):** pestañas del capítulo 1.1 (Resumen General, Stock en Ventas, Ritmo de Ventas, Análisis de Producto, Comparación de Proyectos, Proyectos, Tipologías, Mapa).
+- **Barra izquierda (`LeftAnalyticsBar`):** capítulos organizados en 5 secciones.
+- **Filtros (`FilterBar`):** ciudad (`SCZ`, `LPZ`, `CBB`, `ALL`).
+- **Panel central:** el panel del capítulo elegido.
+- **Lateral derecho:** `ChatPanel` (asistente) y `AnalysisPanel` (análisis y diagnóstico).
+- **Tema:** claro u oscuro. Se guarda en el navegador con la clave `citrino_theme_v2`. Si no hay selección guardada, sigue el sistema.
 
----
+### Capítulos (menú izquierdo)
 
-*Desarrollado y optimizado en la plataforma de desarrollo agéntico Google Antigravity.*
+| Sección | Capítulos |
+|---|---|
+| 1. Análisis de Mercado | 1.1 Cuantificación de la Oferta Nueva · 1.2 Evolución de la Oferta Nueva · 1.3 Oferta de Particulares (Marketplace) · 1.4 Bienes Adjudicados y Remates |
+| 2. Análisis de la Demanda | 2.1 Composición Económica y Voluntad de Compra · 2.2 Compra como Inversión · 2.3 Compra Vivienda Propia |
+| 3. Análisis Financiero | 3.1 Financiamiento al Sector Inmobiliario · 3.2 Evolución de la Mora del Inmobiliario |
+| 4. Endeudamiento Hipotecario | 4.1 Perfil del Consumidor de Crédito · 4.2 Estado de la Cartera Hipotecaria · 4.3 Perspectivas del Comprador |
+| 5. Indicadores Inmobiliarios | 5.1 Ciclo Inmobiliario Físico |
+
+Cada capítulo de los paneles con pestañas muestra sus pestañas arriba (componente `TopTabBar`). Dentro de un panel no hay botones de capítulo: se cambia de capítulo desde el menú izquierdo. Ver la skill `crear-panel-pestanas`.
+
+## 4. Tecnologías
+
+- **Gráficos:** ECharts (`echarts-for-react`). El tema lo da `useChartTheme` (`src/lib/chartTheme.ts`).
+- **Mapas:** Leaflet en `GeoespacialPanel`. Los polígonos vienen de `pipeline/datakmz/*.kmz`.
+- **Estilos:** CSS plano con tokens en `src/index.css`. Sin framework de CSS.
+- **Publicación:** Vercel (`vercel.json`) o Netlify (`netlify.toml`), con reescritura a `index.html`.
+
+## 5. Piezas que ya no existen
+
+Estas partes se eliminaron del código y solo quedan en el historial de git. No volver a usarlas como referencia:
+
+- Command Palette (⌘K), `RightSidebar`, `LeftSidebar`, `WorkspaceOSPanel`.
+- Arquitectura "Medallion" (Bronze, Silver, Gold): reemplazada por el modelo Diamond.
+
+## 6. Dónde mirar antes de cambiar algo
+
+| Quiero cambiar... | Mirar |
+|---|---|
+| Un número o una tabla que sale de Supabase | `frontend/src/lib/supabase.ts` |
+| Datos fijos de un capítulo del Data Studio | `frontend/src/data/citrinoDataStudioData.ts` |
+| Un panel | `frontend/src/components/<Nombre>Panel.tsx` |
+| Qué capítulo abre qué panel | `frontend/src/App.tsx` (bloque de `activeChapter`) |
+| Los títulos del menú izquierdo | `frontend/src/components/LeftAnalyticsBar.tsx` |
+| Cómo se leen las columnas de las hojas | `pipeline/config.py` |
