@@ -629,7 +629,7 @@ export default function ChatPanel({
           }
           if (part.startsWith('*') && part.endsWith('*')) {
             return (
-              <em key={j} style={{ color: '#94a3b8', fontSize: '0.92em' }}>
+              <em key={j} style={{ color: 'var(--text-muted)', fontSize: '0.92em' }}>
                 {part.slice(1, -1)}
               </em>
             )
@@ -675,7 +675,7 @@ export default function ChatPanel({
                   fontWeight: 700,
                   flexShrink: 0,
                   background: msg.role === 'ai' ? 'var(--bg-card-hover)' : 'var(--bg-card)',
-                  color: msg.role === 'ai' ? '#ffffff' : '#cbd5e1',
+                  color: msg.role === 'ai' ? '#ffffff' : 'var(--text-secondary)',
                   border: `1px solid var(--border-default)`,
                 }}>
                 {msg.role === 'ai' ? (
