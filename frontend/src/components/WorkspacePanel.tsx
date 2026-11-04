@@ -1868,7 +1868,7 @@ export default function WorkspacePanel({
               <div style={{ fontSize: 'var(--fs-etiqueta)', fontWeight: 600, color: 'var(--text-secondary)', marginTop: 2, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                 <span>Cantidad de proyectos vendidos</span>
                 {selectedResumenStage === 'Vendida' && (
-                  <span style={{ fontSize: 'var(--fs-etiqueta)', color: '#10b981', fontWeight: 700 }}>● Filtro activo</span>
+                  <span style={{ fontSize: 'var(--fs-etiqueta)', color: 'var(--text-success)', fontWeight: 700 }}>● Filtro activo</span>
                 )}
               </div>
               <div style={{ fontSize: 'var(--fs-etiqueta)', color: 'var(--text-muted)', marginTop: 2 }}>
@@ -2393,7 +2393,7 @@ export default function WorkspacePanel({
                       fontSize: 'var(--fs-etiqueta)',
                       fontWeight: 600,
                       background: theme === 'dark' ? 'rgba(161, 161, 170, 0.12)' : 'rgba(161, 161, 170, 0.18)',
-                      color: theme === 'dark' ? '#cbd5e1' : '#475569',
+                      color: theme === 'dark' ? 'var(--text-secondary)' : '#475569',
                       padding: '2px 8px',
                       borderRadius: 12,
                     }}>
@@ -2460,7 +2460,7 @@ export default function WorkspacePanel({
                       fontSize: 'var(--fs-etiqueta)',
                       fontWeight: 600,
                       background: theme === 'dark' ? 'rgba(161, 161, 170, 0.12)' : 'rgba(161, 161, 170, 0.18)',
-                      color: theme === 'dark' ? '#cbd5e1' : '#475569',
+                      color: theme === 'dark' ? 'var(--text-secondary)' : '#475569',
                       padding: '2px 8px',
                       borderRadius: 12,
                     }}>
@@ -2499,7 +2499,7 @@ export default function WorkspacePanel({
                       fontSize: 'var(--fs-etiqueta)',
                       fontWeight: 600,
                       background: theme === 'dark' ? 'rgba(161, 161, 170, 0.12)' : 'rgba(161, 161, 170, 0.18)',
-                      color: theme === 'dark' ? '#cbd5e1' : '#475569',
+                      color: theme === 'dark' ? 'var(--text-secondary)' : '#475569',
                       padding: '2px 8px',
                       borderRadius: 12,
                     }}>
@@ -2547,7 +2547,7 @@ export default function WorkspacePanel({
                       fontSize: 'var(--fs-etiqueta)',
                       fontWeight: 600,
                       background: stockBarMode === 'usd' ? 'rgba(0, 131, 143, 0.15)' : stockBarMode === 'meses' ? 'rgba(16,185,129,0.13)' : 'rgba(21, 101, 192, 0.15)',
-                      color: stockBarMode === 'usd' ? '#00838f' : stockBarMode === 'meses' ? '#10b981' : '#60a5fa',
+                      color: stockBarMode === 'usd' ? '#00838f' : stockBarMode === 'meses' ? 'var(--text-success)' : '#60a5fa',
                       padding: '2px 8px',
                       borderRadius: 12,
                     }}>
@@ -2599,7 +2599,7 @@ export default function WorkspacePanel({
                       fontSize: 'var(--fs-etiqueta)',
                       fontWeight: 600,
                       background: stockBarMode === 'meses' ? 'rgba(16,185,129,0.13)' : 'rgba(239, 68, 68, 0.15)',
-                      color: stockBarMode === 'meses' ? '#10b981' : '#f87171',
+                      color: stockBarMode === 'meses' ? 'var(--text-success)' : '#f87171',
                       padding: '2px 8px',
                       borderRadius: 12,
                     }}>
