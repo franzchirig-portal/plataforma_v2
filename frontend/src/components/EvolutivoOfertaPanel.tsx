@@ -541,7 +541,7 @@ export default function EvolutivoOfertaPanel() {
                 border: '1px solid rgba(255,255,255,0.12)',
                 borderRadius: 6,
                 padding: '6px 12px',
-                color: '#f8fafc',
+                color: 'var(--text-primary)',
                 fontSize: 'var(--fs-cuerpo)',
               }}
             />
