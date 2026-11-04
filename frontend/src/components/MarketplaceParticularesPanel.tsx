@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import ReactECharts from 'echarts-for-react'
 import './CitrinoInstitutionalPanels.css'
+import './TopTabs.css'
 import { MARKETPLACE_DATA } from '../data/citrinoDataStudioData'
 import { useChartTheme } from '../lib/chartTheme'
 
@@ -85,18 +86,26 @@ export default function MarketplaceParticularesPanel() {
 
   return (
     <div className="citrino-panel-wrap">
-      {/* Header */}
-      <div className="citrino-panel-header">
-        <div className="citrino-title-area">
-          <div className="citrino-badge-row">
-            <span className="citrino-badge">Módulo 03</span>
-            <span className="citrino-sample-badge">Relevamiento Mercado Secundario & Portales</span>
-          </div>
-          <h1 className="citrino-panel-title">Oferta de Particulares (Marketplace)</h1>
-          <p className="citrino-panel-subtitle">
-            Monitoreo y cuantificación del mercado secundario de reventa inmobiliaria entre particulares compitiendo con la oferta nueva.
-          </p>
-        </div>
+      {/* Pestañas superiores */}
+      <div className="top-tabs">
+        <button
+          className={`top-tab ${activeSubTab === 'stock' ? 'active' : ''}`}
+          onClick={() => setActiveSubTab('stock')}
+        >
+          Cuantificación de la Oferta informal
+        </button>
+        <button
+          className={`top-tab ${activeSubTab === 'zonificacion' ? 'active' : ''}`}
+          onClick={() => setActiveSubTab('zonificacion')}
+        >
+          Zonificación de la Reventa
+        </button>
+        <button
+          className={`top-tab ${activeSubTab === 'evolutivo' ? 'active' : ''}`}
+          onClick={() => setActiveSubTab('evolutivo')}
+        >
+          Evolutivo de Marketplace
+        </button>
       </div>
 
       {/* KPIs Grid */}
@@ -121,28 +130,6 @@ export default function MarketplaceParticularesPanel() {
           <span className="citrino-kpi-val">Equipetrol (21%)</span>
           <span className="citrino-kpi-sub">$128M USD concentrado</span>
         </div>
-      </div>
-
-      {/* Nav Pills */}
-      <div className="citrino-nav-pills">
-        <button
-          className={`citrino-nav-pill-btn ${activeSubTab === 'stock' ? 'active' : ''}`}
-          onClick={() => setActiveSubTab('stock')}
-        >
-          03-A Stock y Tipología
-        </button>
-        <button
-          className={`citrino-nav-pill-btn ${activeSubTab === 'zonificacion' ? 'active' : ''}`}
-          onClick={() => setActiveSubTab('zonificacion')}
-        >
-          03-B Zonificación Territorial
-        </button>
-        <button
-          className={`citrino-nav-pill-btn ${activeSubTab === 'evolutivo' ? 'active' : ''}`}
-          onClick={() => setActiveSubTab('evolutivo')}
-        >
-          03-C Evolutivo Marketplace
-        </button>
       </div>
 
       {/* ── 03-A STOCK Y TIPOLOGÍA ── */}

@@ -1,7 +1,8 @@
-/* ─── Pestañas de Evolutivo de la Oferta ─────────────────────────────────
+/* ─── Pestañas superiores de los paneles ──────────────────────────────────
    Mismo estilo que la barra superior (SubHeader): franja azul #002857,
-   pestaña activa con fondo claro y línea blanca abajo. */
-.evo-tabs {
+   pestaña activa con fondo claro y línea blanca abajo.
+   Lo usan EvolutivoOfertaPanel y MarketplaceParticularesPanel. */
+.top-tabs {
   display: flex;
   align-items: stretch;
   gap: 2px;
@@ -17,7 +18,7 @@
   scrollbar-color: rgba(255, 255, 255, 0.2) transparent;
 }
 
-.evo-tab {
+.top-tab {
   appearance: none;
   border: none;
   background: transparent;
@@ -37,19 +38,19 @@
   transition: color 0.14s, background 0.14s;
 }
 
-.evo-tab:hover {
+.top-tab:hover {
   color: #ffffff;
   background: rgba(255, 255, 255, 0.1);
 }
 
-.evo-tab.active {
+.top-tab.active {
   color: #ffffff;
   font-weight: 600;
   background: rgba(255, 255, 255, 0.16);
 }
 
 /* Indicador activo: línea blanca abajo */
-.evo-tab.active::after {
+.top-tab.active::after {
   content: '';
   position: absolute;
   bottom: 0;
@@ -60,17 +61,17 @@
   border-radius: 2px 2px 0 0;
 }
 
-.evo-tab:focus-visible {
+.top-tab:focus-visible {
   outline: 2px solid rgba(255, 255, 255, 0.7);
   outline-offset: -2px;
 }
 
 /* En móvil el panel tiene menos margen lateral (ver CitrinoInstitutionalPanels.css) */
 @media (max-width: 900px) {
-  .evo-tabs {
+  .top-tabs {
     margin: -12px -14px 16px;
   }
-  /* Evita que la cuadrícula de gráficas (pie + tabla) se salga de la pantalla en móvil */
+  /* Evita que la cuadrícula de gráficas se salga de la pantalla en móvil */
   .citrino-charts-grid {
     grid-template-columns: minmax(0, 1fr);
   }
