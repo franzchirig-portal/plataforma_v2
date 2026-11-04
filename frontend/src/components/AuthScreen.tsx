@@ -184,7 +184,7 @@ export default function AuthScreen({ onSuccess }: AuthScreenProps) {
           <div style={{
             background: 'rgba(244, 63, 94, 0.12)',
             border: '1px solid rgba(244, 63, 94, 0.35)',
-            color: '#fda4af',
+            color: 'var(--color-rosa-300)',
             padding: '9px 12px',
             borderRadius: 6,
             fontSize: 'var(--fs-etiqueta)',
@@ -199,7 +199,7 @@ export default function AuthScreen({ onSuccess }: AuthScreenProps) {
           <div style={{
             background: 'rgba(16, 185, 129, 0.12)',
             border: '1px solid rgba(16, 185, 129, 0.35)',
-            color: '#86efac',
+            color: 'var(--color-verde-300)',
             padding: '9px 12px',
             borderRadius: 6,
             fontSize: 'var(--fs-etiqueta)',
@@ -310,8 +310,8 @@ export default function AuthScreen({ onSuccess }: AuthScreenProps) {
               padding: '10px 16px',
               fontSize: 'var(--fs-cuerpo)',
               fontWeight: 600,
-              background: '#f3f3f3',
-              color: '#181818',
+              background: 'var(--color-gris-100)',
+              color: 'var(--bg-base)',
               border: 'none',
               borderRadius: 6,
               cursor: loading ? 'not-allowed' : 'pointer',

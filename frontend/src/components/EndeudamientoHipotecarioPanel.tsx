@@ -483,7 +483,7 @@ export default function EndeudamientoHipotecarioPanel({ initialChapter = '4.1' }
                       <tr key={r.ano}>
                         <td><b>{r.ano}</b></td>
                         <td className="num" style={{ color: 'var(--text-success)' }}>{r.no}%</td>
-                        <td className="num" style={{ color: '#ef4444' }}><b>{r.si}%</b></td>
+                        <td className="num" style={{ color: 'var(--color-rojo-500)' }}><b>{r.si}%</b></td>
                         <td>{r.ano === '2023' ? 'Pico pos-pandemia' : r.ano === '2026' ? 'Reactivación leve de reprogramaciones' : 'Baja morosidad declarada'}</td>
                       </tr>
                     ))}
@@ -560,7 +560,7 @@ export default function EndeudamientoHipotecarioPanel({ initialChapter = '4.1' }
                     {percepcionPasadoPrecios.map((p) => (
                       <tr key={p.ano}>
                         <td><b>{p.ano}</b></td>
-                        <td className="num" style={{ color: '#ef4444' }}>{p.bajo}%</td>
+                        <td className="num" style={{ color: 'var(--color-rojo-500)' }}>{p.bajo}%</td>
                         <td className="num" style={{ color: 'var(--citrino-sky)' }}>{p.igual}%</td>
                         <td className="num" style={{ color: 'var(--text-success)' }}><b>{p.subio}%</b></td>
                       </tr>
@@ -619,7 +619,7 @@ export default function EndeudamientoHipotecarioPanel({ initialChapter = '4.1' }
                         {percepcionFuturoPrecios12Meses.map((p) => (
                           <tr key={p.ano}>
                             <td><b>{p.ano}</b></td>
-                            <td className="num" style={{ color: '#ef4444' }}>{p.bajara}%</td>
+                            <td className="num" style={{ color: 'var(--color-rojo-500)' }}>{p.bajara}%</td>
                             <td className="num" style={{ color: 'var(--citrino-sky)' }}>{p.igual}%</td>
                             <td className="num" style={{ color: 'var(--text-success)' }}><b>{p.subira}%</b></td>
                           </tr>

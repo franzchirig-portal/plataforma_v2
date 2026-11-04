@@ -321,7 +321,7 @@ export default function ResumenEtapasMap({
             fontSize: 'var(--fs-etiqueta)',
             fontWeight: 600,
             background: isDark ? 'rgba(161, 161, 170, 0.12)' : 'rgba(161, 161, 170, 0.18)',
-            color: isDark ? '#cbd5e1' : '#475569',
+            color: isDark ? 'var(--text-secondary)' : 'var(--color-pizarra-600)',
             padding: '1px 6px',
             borderRadius: 10,
           }}>
@@ -389,7 +389,7 @@ export default function ResumenEtapasMap({
       }}>
         <div
           ref={mapContainerRef}
-          style={{ height: '100%', width: '100%', background: isDark ? '#091b22' : '#f8fafc' }}
+          style={{ height: '100%', width: '100%', background: isDark ? 'var(--color-fondo-profundo-2)' : 'var(--text-primary)' }}
         />
       </div>
 

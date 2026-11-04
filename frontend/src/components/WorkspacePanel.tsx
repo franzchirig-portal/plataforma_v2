@@ -1868,7 +1868,7 @@ export default function WorkspacePanel({
               <div style={{ fontSize: 'var(--fs-etiqueta)', fontWeight: 600, color: 'var(--text-secondary)', marginTop: 2, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                 <span>Cantidad de proyectos vendidos</span>
                 {selectedResumenStage === 'Vendida' && (
-                  <span style={{ fontSize: 'var(--fs-etiqueta)', color: '#10b981', fontWeight: 700 }}>● Filtro activo</span>
+                  <span style={{ fontSize: 'var(--fs-etiqueta)', color: 'var(--text-success)', fontWeight: 700 }}>● Filtro activo</span>
                 )}
               </div>
               <div style={{ fontSize: 'var(--fs-etiqueta)', color: 'var(--text-muted)', marginTop: 2 }}>
@@ -2393,7 +2393,7 @@ export default function WorkspacePanel({
                       fontSize: 'var(--fs-etiqueta)',
                       fontWeight: 600,
                       background: theme === 'dark' ? 'rgba(161, 161, 170, 0.12)' : 'rgba(161, 161, 170, 0.18)',
-                      color: theme === 'dark' ? '#cbd5e1' : '#475569',
+                      color: theme === 'dark' ? 'var(--text-secondary)' : 'var(--color-pizarra-600)',
                       padding: '2px 8px',
                       borderRadius: 12,
                     }}>
@@ -2460,7 +2460,7 @@ export default function WorkspacePanel({
                       fontSize: 'var(--fs-etiqueta)',
                       fontWeight: 600,
                       background: theme === 'dark' ? 'rgba(161, 161, 170, 0.12)' : 'rgba(161, 161, 170, 0.18)',
-                      color: theme === 'dark' ? '#cbd5e1' : '#475569',
+                      color: theme === 'dark' ? 'var(--text-secondary)' : 'var(--color-pizarra-600)',
                       padding: '2px 8px',
                       borderRadius: 12,
                     }}>
@@ -2499,7 +2499,7 @@ export default function WorkspacePanel({
                       fontSize: 'var(--fs-etiqueta)',
                       fontWeight: 600,
                       background: theme === 'dark' ? 'rgba(161, 161, 170, 0.12)' : 'rgba(161, 161, 170, 0.18)',
-                      color: theme === 'dark' ? '#cbd5e1' : '#475569',
+                      color: theme === 'dark' ? 'var(--text-secondary)' : 'var(--color-pizarra-600)',
                       padding: '2px 8px',
                       borderRadius: 12,
                     }}>
@@ -2547,7 +2547,7 @@ export default function WorkspacePanel({
                       fontSize: 'var(--fs-etiqueta)',
                       fontWeight: 600,
                       background: stockBarMode === 'usd' ? 'rgba(0, 131, 143, 0.15)' : stockBarMode === 'meses' ? 'rgba(16,185,129,0.13)' : 'rgba(21, 101, 192, 0.15)',
-                      color: stockBarMode === 'usd' ? '#00838f' : stockBarMode === 'meses' ? '#10b981' : '#60a5fa',
+                      color: stockBarMode === 'usd' ? 'var(--color-cian-700)' : stockBarMode === 'meses' ? 'var(--text-success)' : 'var(--color-azul-400)',
                       padding: '2px 8px',
                       borderRadius: 12,
                     }}>
@@ -2599,7 +2599,7 @@ export default function WorkspacePanel({
                       fontSize: 'var(--fs-etiqueta)',
                       fontWeight: 600,
                       background: stockBarMode === 'meses' ? 'rgba(16,185,129,0.13)' : 'rgba(239, 68, 68, 0.15)',
-                      color: stockBarMode === 'meses' ? '#10b981' : '#f87171',
+                      color: stockBarMode === 'meses' ? 'var(--text-success)' : 'var(--color-rojo-400)',
                       padding: '2px 8px',
                       borderRadius: 12,
                     }}>
@@ -2662,7 +2662,7 @@ export default function WorkspacePanel({
                 <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
                   {/* Vendidas */}
                   <div style={{ display: 'flex', alignItems: 'center', gap: 6, userSelect: 'none' }}>
-                    <span style={{ width: 14, height: 3, background: '#ef4444', display: 'inline-block', borderRadius: 2 }} />
+                    <span style={{ width: 14, height: 3, background: 'var(--color-rojo-500)', display: 'inline-block', borderRadius: 2 }} />
                     <span style={{ color: 'var(--text-secondary)' }}>Vendidas:</span>
                     <strong style={{ color: 'var(--text-primary)' }}>
                       {(stockBarMode === 'usd' || isStockUSD)
@@ -2673,7 +2673,7 @@ export default function WorkspacePanel({
 
                   {/* Por Vender */}
                   <div style={{ display: 'flex', alignItems: 'center', gap: 6, userSelect: 'none' }}>
-                    <span style={{ width: 14, height: 3, background: (stockBarMode === 'usd' || isStockUSD) ? '#00838f' : '#1565c0', display: 'inline-block', borderRadius: 2 }} />
+                    <span style={{ width: 14, height: 3, background: (stockBarMode === 'usd' || isStockUSD) ? 'var(--color-cian-700)' : 'var(--color-azul-700)', display: 'inline-block', borderRadius: 2 }} />
                     <span style={{ color: 'var(--text-secondary)' }}>Por Vender (Stock):</span>
                     <strong style={{ color: 'var(--citrino-teal-light)' }}>
                       {(stockBarMode === 'usd' || isStockUSD)
@@ -2687,7 +2687,7 @@ export default function WorkspacePanel({
               {isRitmoVentas && (
                 <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: 6, userSelect: 'none' }}>
-                    <span style={{ width: 14, height: 3, background: '#a1a1aa', display: 'inline-block', borderRadius: 2 }} />
+                    <span style={{ width: 14, height: 3, background: 'var(--color-gris-400)', display: 'inline-block', borderRadius: 2 }} />
                     <span style={{ color: 'var(--text-secondary)' }}>Ritmo Total:</span>
                     <strong style={{ color: 'var(--text-primary)' }}>
                       {Math.round(totalRitmoCurrent).toLocaleString('es-BO')} und/mes

@@ -42,7 +42,7 @@ function fmtUSD(n: number | null | undefined): string {
 }
 
 const IconBuilding = () => (
-  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" style={{ color: '#10b981' }}>
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" style={{ color: 'var(--text-success)' }}>
     <rect x="4" y="2" width="16" height="20" rx="2" ry="2" />
     <path d="M9 22v-4h6v4" />
     <path d="M8 6h.01" />
@@ -58,7 +58,7 @@ const IconBuilding = () => (
 )
 
 const IconHouse = () => (
-  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" style={{ color: '#10b981' }}>
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" style={{ color: 'var(--text-success)' }}>
     <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
     <polyline points="9 22 9 12 15 12 15 22" />
   </svg>
@@ -396,13 +396,13 @@ export default function AnalisisProductoPanel({
                           padding: '3px 10px',
                           borderRadius: 12,
                           background: 'rgba(16, 185, 129, 0.15)',
-                          color: '#10b981',
+                          color: 'var(--text-success)',
                           border: '1px solid rgba(16, 185, 129, 0.3)',
                           display: 'inline-flex',
                           alignItems: 'center',
                           gap: 5,
                         }}>
-                          <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#10b981' }} />
+                          <span style={{ width: 6, height: 6, borderRadius: '50%', background: 'var(--text-success)' }} />
                           {projEtapa}
                         </span>
                       </div>
@@ -488,7 +488,7 @@ export default function AnalisisProductoPanel({
                         textAlign: 'center',
                       }}>
                         <div style={{ fontSize: 'var(--fs-etiqueta)', color: 'var(--text-muted)', fontWeight: 600 }}>RITMO DE VENTA</div>
-                        <div style={{ fontSize: 'var(--fs-cuerpo)', fontWeight: 800, color: (projRitmo ?? 0) > 0 ? '#10b981' : 'var(--text-primary)' }}>
+                        <div style={{ fontSize: 'var(--fs-cuerpo)', fontWeight: 800, color: (projRitmo ?? 0) > 0 ? 'var(--text-success)' : 'var(--text-primary)' }}>
                           {projRitmo != null ? (
                             <>
                               {fmt(projRitmo, 1)}
@@ -511,7 +511,7 @@ export default function AnalisisProductoPanel({
                           fontSize: 'var(--fs-cuerpo)',
                           fontWeight: 800,
                           color: projMesesStock != null
-                            ? (projMesesStock > 18 ? '#f43f5e' : projMesesStock > 12 ? '#f59e0b' : '#10b981')
+                            ? (projMesesStock > 18 ? 'var(--text-danger)' : projMesesStock > 12 ? 'var(--text-warning)' : 'var(--text-success)')
                             : 'var(--text-primary)',
                         }}>
                           {projMesesStock != null ? (
@@ -555,7 +555,7 @@ export default function AnalisisProductoPanel({
 
                       <div style={{ textAlign: 'right' }}>
                         <div style={{ fontSize: 'var(--fs-etiqueta)', color: 'var(--text-secondary)' }}>Precio Real Estimado</div>
-                        <div style={{ fontSize: 'var(--fs-titulo)', fontWeight: 800, color: '#10b981', letterSpacing: -0.5 }}>
+                        <div style={{ fontSize: 'var(--fs-titulo)', fontWeight: 800, color: 'var(--text-success)', letterSpacing: -0.5 }}>
                           {avgM2Real ? `$${fmt(avgM2Real, 0)}` : '—'} <span style={{ fontSize: 'var(--fs-cuerpo)', fontWeight: 500, color: 'var(--text-muted)' }}>USD/m²</span>
                         </div>
                       </div>
@@ -573,7 +573,7 @@ export default function AnalisisProductoPanel({
                         justifyContent: 'space-between',
                       }}>
                         <span>Ajuste cambiario real:</span>
-                        <strong style={{ color: '#10b981' }}>{diffPctRealVsLista}% vs Lista</strong>
+                        <strong style={{ color: 'var(--text-success)' }}>{diffPctRealVsLista}% vs Lista</strong>
                       </div>
                     )}
                   </div>
@@ -604,7 +604,7 @@ export default function AnalisisProductoPanel({
                       <span style={{
                         fontSize: 'var(--fs-etiqueta)',
                         fontWeight: 800,
-                        color: '#f59e0b',
+                        color: 'var(--text-warning)',
                         background: 'rgba(245, 158, 11, 0.1)',
                         padding: '2px 8px',
                         borderRadius: 4,
@@ -647,7 +647,7 @@ export default function AnalisisProductoPanel({
                         className="progress-bar-fill"
                         style={{
                           width: `${Math.min(100, projPctVendido ?? 0)}%`,
-                          background: (projPctVendido ?? 0) >= 50 ? '#10b981' : '#3b82f6',
+                          background: (projPctVendido ?? 0) >= 50 ? 'var(--text-success)' : 'var(--color-azul-500)',
                         }}
                       />
                     </div>
@@ -680,7 +680,7 @@ export default function AnalisisProductoPanel({
                     <span style={{
                       fontSize: 'var(--fs-etiqueta)',
                       fontWeight: 700,
-                      color: '#10b981',
+                      color: 'var(--text-success)',
                       background: 'rgba(16, 185, 129, 0.12)',
                       padding: '2px 8px',
                       borderRadius: 10,
@@ -717,7 +717,7 @@ export default function AnalisisProductoPanel({
                             width: 6,
                             height: 6,
                             borderRadius: '50%',
-                            background: '#10b981',
+                            background: 'var(--text-success)',
                             flexShrink: 0,
                           }} />
                           <span style={{
@@ -852,7 +852,7 @@ export default function AnalisisProductoPanel({
                                   $/m² Lista: <strong style={{ color: 'var(--text-primary)' }}>{fmt(t.avg_sus_m2)} $US</strong>
                                 </span>
                                 {realM2Price && (
-                                  <span style={{ color: '#10b981', fontWeight: 700 }}>
+                                  <span style={{ color: 'var(--text-success)', fontWeight: 700 }}>
                                     Real: ${fmt(realM2Price, 0)}
                                   </span>
                                 )}
@@ -877,7 +877,7 @@ export default function AnalisisProductoPanel({
                                   className="progress-bar-fill"
                                   style={{
                                     width: `${Math.min(100, pctVend ?? 0)}%`,
-                                    background: (pctVend ?? 0) >= 50 ? '#10b981' : '#3b82f6',
+                                    background: (pctVend ?? 0) >= 50 ? 'var(--text-success)' : 'var(--color-azul-500)',
                                   }}
                                 />
                               </div>
@@ -898,7 +898,7 @@ export default function AnalisisProductoPanel({
                             }}>
                               <div>
                                 <div style={{ fontSize: 'var(--fs-etiqueta)', color: 'var(--text-muted)' }}>Ritmo de venta</div>
-                                <div style={{ fontWeight: 700, color: (t.ritmo_venta ?? 0) > 0 ? '#10b981' : 'var(--text-muted)', marginTop: 1 }}>
+                                <div style={{ fontWeight: 700, color: (t.ritmo_venta ?? 0) > 0 ? 'var(--text-success)' : 'var(--text-muted)', marginTop: 1 }}>
                                   {t.ritmo_venta != null && t.ritmo_venta > 0 ? `${fmt(t.ritmo_venta)} und/mes` : '—'}
                                 </div>
                               </div>
@@ -906,7 +906,7 @@ export default function AnalisisProductoPanel({
                                 <div style={{ fontSize: 'var(--fs-etiqueta)', color: 'var(--text-muted)' }}>Meses de stock</div>
                                 <div style={{
                                   fontWeight: 700,
-                                  color: (t.meses_stock ?? 0) > 18 ? '#f43f5e' : (t.meses_stock ?? 0) > 12 ? '#f59e0b' : '#10b981',
+                                  color: (t.meses_stock ?? 0) > 18 ? 'var(--text-danger)' : (t.meses_stock ?? 0) > 12 ? 'var(--text-warning)' : 'var(--text-success)',
                                   marginTop: 1,
                                 }}>
                                   {t.meses_stock != null ? `${fmt(t.meses_stock)} meses` : '—'}
@@ -930,7 +930,7 @@ export default function AnalisisProductoPanel({
                                   return (
                                     <span>
                                       vs Media Plaza ({fmt(bench.avgSusM2)} $/m²):{' '}
-                                      <strong style={{ color: isPositive ? '#10b981' : '#f43f5e' }}>
+                                      <strong style={{ color: isPositive ? 'var(--text-success)' : 'var(--text-danger)' }}>
                                         {isPositive ? `▲ +${diff.toFixed(1)}%` : `▼ ${diff.toFixed(1)}%`}
                                       </strong>
                                     </span>
@@ -1004,9 +1004,9 @@ export default function AnalisisProductoPanel({
                                 <td style={{ textAlign: 'right' }}>{t.avg_construccion_m2 ? `${fmt(t.avg_construccion_m2)} m²` : '—'}</td>
                                 <td style={{ textAlign: 'right', fontWeight: 700, color: 'var(--text-primary)' }}>{fmtUSD(t.avg_precio)}</td>
                                 <td style={{ textAlign: 'right', fontWeight: 600 }}>${fmt(t.avg_sus_m2, 0)}</td>
-                                <td style={{ textAlign: 'right', fontWeight: 700, color: '#10b981' }}>{realM2 ? `$${fmt(realM2, 0)}` : '—'}</td>
+                                <td style={{ textAlign: 'right', fontWeight: 700, color: 'var(--text-success)' }}>{realM2 ? `$${fmt(realM2, 0)}` : '—'}</td>
                                 <td style={{ textAlign: 'center' }}>{t.und_totales ?? '—'}</td>
-                                <td style={{ textAlign: 'center', color: '#10b981', fontWeight: 600 }}>{t.und_vendidas ?? 0}</td>
+                                <td style={{ textAlign: 'center', color: 'var(--text-success)', fontWeight: 600 }}>{t.und_vendidas ?? 0}</td>
                                 <td style={{ textAlign: 'right' }}>{t.ritmo_venta ? `${fmt(t.ritmo_venta)} u/m` : '—'}</td>
                                 <td style={{ textAlign: 'right', fontWeight: 600 }}>{t.meses_stock ? `${fmt(t.meses_stock)} m` : '—'}</td>
                               </tr>
