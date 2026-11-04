@@ -1236,7 +1236,7 @@ export default function AnalysisPanel({
 
                     <div>
                       <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 'var(--fs-etiqueta)', marginBottom: 3 }}>
-                        <span style={{ color: '#f59e0b', fontWeight: 600 }}>Presión Moderada (12 - 18 meses)</span>
+                        <span style={{ color: 'var(--text-warning)', fontWeight: 600 }}>Presión Moderada (12 - 18 meses)</span>
                         <span style={{ color: '#ffffff' }}>{riskModerate.length} proy. ({totalSampleProyectos > 0 ? Math.round((riskModerate.length / totalSampleProyectos) * 100) : 0}%)</span>
                       </div>
                       <div className="progress-bar" style={{ height: 5, background: 'rgba(255,255,255,0.1)' }}>
