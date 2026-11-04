@@ -647,7 +647,7 @@ export default function AnalisisProductoPanel({
                         className="progress-bar-fill"
                         style={{
                           width: `${Math.min(100, projPctVendido ?? 0)}%`,
-                          background: (projPctVendido ?? 0) >= 50 ? 'var(--text-success)' : '#3b82f6',
+                          background: (projPctVendido ?? 0) >= 50 ? 'var(--text-success)' : 'var(--color-azul-500)',
                         }}
                       />
                     </div>
@@ -877,7 +877,7 @@ export default function AnalisisProductoPanel({
                                   className="progress-bar-fill"
                                   style={{
                                     width: `${Math.min(100, pctVend ?? 0)}%`,
-                                    background: (pctVend ?? 0) >= 50 ? 'var(--text-success)' : '#3b82f6',
+                                    background: (pctVend ?? 0) >= 50 ? 'var(--text-success)' : 'var(--color-azul-500)',
                                   }}
                                 />
                               </div>
