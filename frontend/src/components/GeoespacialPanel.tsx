@@ -969,7 +969,7 @@ export default function GeoespacialPanel({
             style={{
               background: showProjectList ? 'var(--bg-active)' : 'var(--bg-card)',
               border: `1px solid ${showProjectList ? 'var(--border-bright)' : 'var(--border-default)'}`,
-              color: showProjectList ? '#ffffff' : 'var(--text-secondary)',
+              color: showProjectList ? 'var(--color-blanco)' : 'var(--text-secondary)',
               padding: '4px 10px',
               borderRadius: 4,
               fontSize: 'var(--fs-etiqueta)',
@@ -1140,7 +1140,7 @@ export default function GeoespacialPanel({
                     <span style={{ color: 'var(--text-primary)' }}>18 - 24 meses (Presión moderada)</span>
                   </div>
                   <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-                    <div style={{ width: 10, height: 10, borderRadius: 2, background: '#ef4444' }} />
+                    <div style={{ width: 10, height: 10, borderRadius: 2, background: 'var(--color-rojo-500)' }} />
                     <span style={{ color: 'var(--text-primary)' }}>&gt; 24 meses (Sobreoferta)</span>
                   </div>
                 </div>
@@ -1161,7 +1161,7 @@ export default function GeoespacialPanel({
                     <span style={{ color: 'var(--text-primary)' }}>0.4 - 1.0 und/mes (Lento)</span>
                   </div>
                   <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-                    <div style={{ width: 10, height: 10, borderRadius: 2, background: '#ef4444' }} />
+                    <div style={{ width: 10, height: 10, borderRadius: 2, background: 'var(--color-rojo-500)' }} />
                     <span style={{ color: 'var(--text-primary)' }}>&lt; 0.4 und/mes (Crítico)</span>
                   </div>
                 </div>
@@ -1299,7 +1299,7 @@ export default function GeoespacialPanel({
                         <button
                           onClick={() => removeQgisLayer(l.id)}
                           title="Eliminar capa"
-                          style={{ background: 'transparent', border: 'none', color: '#fda4af', cursor: 'pointer', padding: 2 }}>
+                          style={{ background: 'transparent', border: 'none', color: 'var(--color-rosa-300)', cursor: 'pointer', padding: 2 }}>
                           <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
                         </button>
                       )}
@@ -1416,7 +1416,7 @@ export default function GeoespacialPanel({
                   style={{
                     width: '100%',
                     padding: '8px 12px',
-                    background: '#f3f3f3',
+                    background: 'var(--color-gris-100)',
                     color: 'var(--bg-base)',
                     border: 'none',
                     borderRadius: 4,
