@@ -8,15 +8,15 @@ import {
 } from '../data/citrinoDataStudioData'
 import { useChartTheme } from '../lib/chartTheme'
 
-type SubTab = 'cuantificacion' | 'etapas' | 'ritmo' | 'stock_brecha' | 'ficha'
+type TopTab = 'cuantificacion' | 'precio_ritmo' | 'proyectos'
 
 export default function EvolutivoOfertaPanel() {
   const ct = useChartTheme()
-  const [activeSubTab, setActiveSubTab] = useState<SubTab>('cuantificacion')
+  const [activeTab, setActiveTab] = useState<TopTab>('cuantificacion')
   // Pills internos
   const [subPillCuant, setSubPillCuant] = useState<'cuantificacion' | 'estadistica'>('estadistica')
+  const [subPillStock, setSubPillStock] = useState<'stock_und' | 'stock_usd'>('stock_und')
   const [subPillRitmo, setSubPillRitmo] = useState<'grafico' | 'tabla'>('grafico')
-  const [subPillBrecha, setSubPillBrecha] = useState<'brecha' | 'stock_und' | 'stock_usd'>('brecha')
   const [searchProj, setSearchProj] = useState('')
 
   // Último snapshot censal (2026)
@@ -195,56 +195,30 @@ export default function EvolutivoOfertaPanel() {
 
   return (
     <div className="citrino-panel-wrap">
-      {/* Header */}
-      <div className="citrino-panel-header">
-        <div className="citrino-title-area">
-          <div className="citrino-badge-row">
-            <span className="citrino-badge">Módulo 02</span>
-            <span className="citrino-sample-badge">Censo Histórico Citrino 2013 - 2026</span>
-          </div>
-          <h1 className="citrino-panel-title">Evolutivo de la Oferta Nueva</h1>
-          <p className="citrino-panel-subtitle">
-            Comportamiento censal multianual de proyectos residenciales, etapas comerciales, ritmo de venta y brecha cambiaria en Santa Cruz.
-          </p>
-        </div>
-      </div>
-
-      {/* Nav Pills principales */}
+      {/* Nav Pills principales (3 pestañas) */}
       <div className="citrino-nav-pills">
         <button
-          className={`citrino-nav-pill-btn ${activeSubTab === 'cuantificacion' ? 'active' : ''}`}
-          onClick={() => setActiveSubTab('cuantificacion')}
+          className={`citrino-nav-pill-btn ${activeTab === 'cuantificacion' ? 'active' : ''}`}
+          onClick={() => setActiveTab('cuantificacion')}
         >
-          02-A Cuantificación y Estadística
+          Cuantificación Evolutiva de la Oferta
         </button>
         <button
-          className={`citrino-nav-pill-btn ${activeSubTab === 'etapas' ? 'active' : ''}`}
-          onClick={() => setActiveSubTab('etapas')}
+          className={`citrino-nav-pill-btn ${activeTab === 'precio_ritmo' ? 'active' : ''}`}
+          onClick={() => setActiveTab('precio_ritmo')}
         >
-          02-B Etapas Comerciales
+          Evolutivo Precio & Ritmo de Venta
         </button>
         <button
-          className={`citrino-nav-pill-btn ${activeSubTab === 'ritmo' ? 'active' : ''}`}
-          onClick={() => setActiveSubTab('ritmo')}
+          className={`citrino-nav-pill-btn ${activeTab === 'proyectos' ? 'active' : ''}`}
+          onClick={() => setActiveTab('proyectos')}
         >
-          02-C Ritmo de Ventas
-        </button>
-        <button
-          className={`citrino-nav-pill-btn ${activeSubTab === 'stock_brecha' ? 'active' : ''}`}
-          onClick={() => setActiveSubTab('stock_brecha')}
-        >
-          02-D Stock y Brecha Cambiaria
-        </button>
-        <button
-          className={`citrino-nav-pill-btn ${activeSubTab === 'ficha' ? 'active' : ''}`}
-          onClick={() => setActiveSubTab('ficha')}
-        >
-          02-E Ficha por Proyecto
+          Evolutivo por Proyectos
         </button>
       </div>
 
-      {/* ── SUB-TAB: CUANTIFICACIÓN Y ESTADÍSTICA ── */}
-      {activeSubTab === 'cuantificacion' && (
+      {/* ── PESTAÑA 1: CUANTIFICACIÓN EVOLUTIVA DE LA OFERTA ── */}
+      {activeTab === 'cuantificacion' && (
         <div>
           {/* Sub-pills (auditado de Looker Studio: Cuantificación vs Estadística) */}
           <div className="citrino-subpills-row">
@@ -334,51 +308,98 @@ export default function EvolutivoOfertaPanel() {
               <ReactECharts option={getCuantificacionChart()} style={{ height: 360 }} />
             </div>
           )}
-        </div>
-      )}
 
-      {/* ── SUB-TAB: ETAPAS COMERCIALES ── */}
-      {activeSubTab === 'etapas' && (
-        <div className="citrino-charts-grid">
-          <div className="citrino-card-box">
-            <div className="citrino-card-header">
-              <h3 className="citrino-card-title">Distribución de Proyectos por Etapa Comercial (2026)</h3>
-            </div>
-            <ReactECharts option={getEtapasPieChart()} style={{ height: 320 }} />
+          {/* Stock en unidades y en capital (antes en 02-D) */}
+          <div className="citrino-subpills-row" style={{ marginTop: 18 }}>
+            <span className="citrino-subpill-label">Stock por vender:</span>
+            <button
+              className={`citrino-subpill-btn ${subPillStock === 'stock_und' ? 'active' : ''}`}
+              onClick={() => setSubPillStock('stock_und')}
+            >
+              📦 Stock Unidades Vacantes
+            </button>
+            <button
+              className={`citrino-subpill-btn ${subPillStock === 'stock_usd' ? 'active' : ''}`}
+              onClick={() => setSubPillStock('stock_usd')}
+            >
+              💰 Stock Capital ($US M)
+            </button>
           </div>
-
           <div className="citrino-card-box">
             <div className="citrino-card-header">
-              <h3 className="citrino-card-title">Detalle de Etapas</h3>
+              <h3 className="citrino-card-title">
+                {subPillStock === 'stock_und'
+                  ? 'Evolutivo de Stock en Unidades por Vender'
+                  : 'Evolutivo de Stock en Millones de $US'}
+              </h3>
+              <span className="citrino-card-hint">Serie 2016-2026</span>
             </div>
             <div className="citrino-table-wrap">
               <table className="citrino-table">
                 <thead>
                   <tr>
-                    <th>Etapa</th>
-                    <th className="num">Participación</th>
-                    <th className="num">Proyectos</th>
-                    <th className="num">Unidades</th>
+                    <th>Año</th>
+                    <th className="num">Stock Unds por Vender</th>
+                    <th className="num">Stock Capital ($US M)</th>
+                    <th className="num">% Por Vender</th>
                   </tr>
                 </thead>
                 <tbody>
-                  {ETAPAS_COMERCIALES_EVOLUTIVO.map((e) => (
-                    <tr key={e.etapa}>
-                      <td><b>{e.etapa}</b></td>
-                      <td className="num">{e.pct}%</td>
-                      <td className="num">{e.proyectos}</td>
-                      <td className="num">{e.unds.toLocaleString()}</td>
+                  {EVOLUTIVO_OFERTA_SNAPSHOTS.map((s) => (
+                    <tr key={s.ano}>
+                      <td>{s.ano}</td>
+                      <td className="num"><b>{Math.round(s.undTotales * (s.pctPorVender / 100)).toLocaleString()} unds</b></td>
+                      <td className="num">${Math.round(s.stockTotalUsd * (s.pctPorVender / 100))} M</td>
+                      <td className="num">{s.pctPorVender}%</td>
                     </tr>
                   ))}
                 </tbody>
               </table>
             </div>
           </div>
+
+          {/* Distribución por etapa comercial (antes en 02-B) */}
+          <div className="citrino-charts-grid">
+            <div className="citrino-card-box">
+              <div className="citrino-card-header">
+                <h3 className="citrino-card-title">Distribución de Proyectos por Etapa Comercial (2026)</h3>
+              </div>
+              <ReactECharts option={getEtapasPieChart()} style={{ height: 320 }} />
+            </div>
+
+            <div className="citrino-card-box">
+              <div className="citrino-card-header">
+                <h3 className="citrino-card-title">Detalle de Etapas</h3>
+              </div>
+              <div className="citrino-table-wrap">
+                <table className="citrino-table">
+                  <thead>
+                    <tr>
+                      <th>Etapa</th>
+                      <th className="num">Participación</th>
+                      <th className="num">Proyectos</th>
+                      <th className="num">Unidades</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {ETAPAS_COMERCIALES_EVOLUTIVO.map((e) => (
+                      <tr key={e.etapa}>
+                        <td><b>{e.etapa}</b></td>
+                        <td className="num">{e.pct}%</td>
+                        <td className="num">{e.proyectos}</td>
+                        <td className="num">{e.unds.toLocaleString()}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
         </div>
       )}
 
-      {/* ── SUB-TAB: RITMO DE VENTAS ── */}
-      {activeSubTab === 'ritmo' && (
+      {/* ── PESTAÑA 2: EVOLUTIVO PRECIO & RITMO DE VENTA ── */}
+      {activeTab === 'precio_ritmo' && (
         <div>
           {/* Sub-pills (auditado de Looker Studio: Gráfico vs Tabla) */}
           <div className="citrino-subpills-row">
@@ -454,80 +475,22 @@ export default function EvolutivoOfertaPanel() {
               </div>
             </div>
           )}
-        </div>
-      )}
 
-      {/* ── SUB-TAB: STOCK Y BRECHA CAMBIARIA ── */}
-      {activeSubTab === 'stock_brecha' && (
-        <div>
-          <div className="citrino-subpills-row">
-            <span className="citrino-subpill-label">Selector:</span>
-            <button
-              className={`citrino-subpill-btn ${subPillBrecha === 'brecha' ? 'active' : ''}`}
-              onClick={() => setSubPillBrecha('brecha')}
-            >
-              💱 Brecha Cambiaria (T/C 6.96 vs T/C 9.90+)
-            </button>
-            <button
-              className={`citrino-subpill-btn ${subPillBrecha === 'stock_und' ? 'active' : ''}`}
-              onClick={() => setSubPillBrecha('stock_und')}
-            >
-              📦 Stock Unidades Vacantes
-            </button>
-            <button
-              className={`citrino-subpill-btn ${subPillBrecha === 'stock_usd' ? 'active' : ''}`}
-              onClick={() => setSubPillBrecha('stock_usd')}
-            >
-              💰 Stock Capital ($US M)
-            </button>
-          </div>
-
-          <div className="citrino-card-box">
+          {/* Brecha cambiaria precio por m² (antes en 02-D) */}
+          <div className="citrino-card-box" style={{ marginTop: 18 }}>
             <div className="citrino-card-header">
               <h3 className="citrino-card-title">
-                {subPillBrecha === 'brecha'
-                  ? 'Análisis de Brecha Cambiaria: Precio / m² a T/C Oficial (6.96) vs T/C Paralelo (9.90+)'
-                  : subPillBrecha === 'stock_und'
-                  ? 'Evolutivo de Stock en Unidades por Vender'
-                  : 'Evolutivo de Stock en Millones de $US'}
+                Análisis de Brecha Cambiaria: Precio / m² a T/C Oficial (6.96) vs T/C Paralelo (9.90+)
               </h3>
-              <span className="citrino-card-hint">
-                {subPillBrecha === 'brecha' ? 'Divergencia real del costo de reposición y metro cuadrado' : 'Serie 2016-2026'}
-              </span>
+              <span className="citrino-card-hint">Divergencia real del costo de reposición y metro cuadrado</span>
             </div>
-
-            {subPillBrecha === 'brecha' ? (
-              <ReactECharts option={getBrechaChart()} style={{ height: 380 }} />
-            ) : (
-              <div className="citrino-table-wrap">
-                <table className="citrino-table">
-                  <thead>
-                    <tr>
-                      <th>Año</th>
-                      <th className="num">Stock Unds por Vender</th>
-                      <th className="num">Stock Capital ($US M)</th>
-                      <th className="num">% Por Vender</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {EVOLUTIVO_OFERTA_SNAPSHOTS.map((s) => (
-                      <tr key={s.ano}>
-                        <td>{s.ano}</td>
-                        <td className="num"><b>{Math.round(s.undTotales * (s.pctPorVender / 100)).toLocaleString()} unds</b></td>
-                        <td className="num">${Math.round(s.stockTotalUsd * (s.pctPorVender / 100))} M</td>
-                        <td className="num">{s.pctPorVender}%</td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            )}
+            <ReactECharts option={getBrechaChart()} style={{ height: 380 }} />
           </div>
         </div>
       )}
 
-      {/* ── SUB-TAB: FICHA POR PROYECTO ── */}
-      {activeSubTab === 'ficha' && (
+      {/* ── PESTAÑA 3: EVOLUTIVO POR PROYECTOS ── */}
+      {activeTab === 'proyectos' && (
         <div className="citrino-card-box">
           <div className="citrino-card-header">
             <h3 className="citrino-card-title">02-E Condiciones Comerciales y Fichas de Proyectos Censados</h3>
