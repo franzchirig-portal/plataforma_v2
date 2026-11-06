@@ -1,4 +1,4 @@
-﻿# Regla: Actualizar / Publicar en Vercel
+# Regla: Actualizar / Publicar en Vercel
 
 Cuando el usuario pida **"actualizar"**, **"publicar"**, **"subir a Vercel"**, **"actualizar Vercel"**, **"que cualquiera pueda verla"** o frases similares relacionadas con desplegar la plataforma, ejecuta SIEMPRE este flujo completo en orden:
 
@@ -35,7 +35,8 @@ Después del push exitoso, reportar:
 - URL del dashboard: https://vercel.com/dashboard
 
 ## Datos clave del proyecto
-- Repositorio remoto: https://github.com/franzchirig-portal/intelligence.git
+- Carpeta local: `C:\Users\USUARIO\Documents\repositorios\citrino\plataforma_v2`
+- Repositorio remoto: https://github.com/franzchirig-portal/plataforma_v2.git
 - Rama de producción: master
 - Vercel auto-despliega en cada push a master (no requiere comando adicional)
 - No ejecutar npm run build manualmente — Vercel lo hace con la config de vercel.json
