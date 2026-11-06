@@ -76,6 +76,8 @@ Nota: el código tiene pestañas internas adicionales (Stock en USD, Meses de St
 
 Cada uno de estos paneles muestra sus pestañas arriba con el componente `TopTabBar` (ver la skill `crear-panel-pestanas`).
 
+Detalle por capítulo: el capítulo 1.2 ya tiene su propia skill, `capitulo-1-2-evolutivo-oferta`, con sus gráficas, sus cifras y sus cálculos. Para los demás capítulos, este mapa es el único índice por ahora.
+
 ### Otros paneles
 
 - **Hipotecario:** `HipotecarioPanel`. Hoy es un aviso de "Próximamente", sin datos.
