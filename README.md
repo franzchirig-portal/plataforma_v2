@@ -9,9 +9,12 @@ El proyecto tiene dos mitades independientes que solo se comunican a través de 
 
 ---
 
-## Modelo de datos ("Diamond")
+## Base de datos (`citrino_db` — 41 tablas) y Modelo "Diamond"
 
-El pipeline carga directamente seis tablas del esquema `public`, todas con prefijo `oferta_`:
+La plataforma se conecta al proyecto de Supabase **`citrino_db`** (`https://ixistkrftmebvefnqqkq.supabase.co`), que concentra **41 tablas** del esquema `public`:
+
+### 1. Oferta Nueva (`6 tablas oferta_*` — Modelo "Diamond")
+El pipeline (`pipeline/sync.py`) carga directamente seis tablas con prefijo `oferta_` que alimentan los **Capítulos 1.1 y 1.2**:
 
 | Tabla | Contenido | Relación |
 |---|---|---|
@@ -24,10 +27,16 @@ El pipeline carga directamente seis tablas del esquema `public`, todas con prefi
 
 Los identificadores son UUID **deterministas** (derivados del nombre del proyecto y la ciudad), por lo que volver a ejecutar el pipeline no duplica datos: el volcado es un `upsert`.
 
+### 2. Marketplace, Indicadores ASFI/Macro y Encuestas (`35 tablas anu_*`, `ind_*` y `enc_*`)
+Alimentan en vivo los **Capítulos 1.3 a 5.1**:
+- **Oferta de Particulares (`3 tablas anu_*` + `ind_oferta_inmuebles`):** `ind_oferta_inmuebles` (6.761 anuncios), `anu_anuncios`, `anu_anuncio_rentabilidad`, `anu_tc_diario` (Cap. 1.3).
+- **Bienes Adjudicados, Sistema Financiero ASFI y Ciclo (`10 tablas ind_*` adicionales):** `ind_bienes_adjudicados`, `ind_remates_judiciales` (Cap. 1.4); `ind_consolidado_carteras`, `ind_consolidado_hipotecaria_vivienda`, `ind_consolidado_credito_construccion`, `ind_cartera_construccion`, `ind_mora_hipotecaria_bancos` (Cap. 3.1 y 3.2); `ind_alquileres`, `ind_ipc`, `ind_precios_latam` (Cap. 5.1).
+- **Encuestas de Demanda y Endeudamiento Hipotecario (`21 tablas enc_*`):** 16 tablas `enc_*` de demanda residencial/inversión (Cap. 2.1, 2.2 y 2.3) y 5 tablas `enc_credito_*` de prestatarios hipotecarios (Cap. 4.1, 4.2 y 4.3).
+
 Los scripts SQL están en `supabase/` y se ejecutan **manualmente**, en orden, en el SQL Editor de Supabase:
 
-1. `001_diamond_tables.sql` — crea las seis tablas.
-2. `002_rls_public_read.sql` — habilita lectura pública (rol `anon`) con seguridad por filas.
+1. `001_diamond_tables.sql` — crea las seis tablas `oferta_*`.
+2. `002_rls_public_read.sql` — habilita lectura pública (rol `anon`) con seguridad por filas (RLS) en las **41 tablas** de `citrino_db`.
 3. `003_auth_config.sql` — configuración de autenticación.
 
 ---
@@ -88,7 +97,7 @@ En GitHub: *Actions → "📊 Sync: Sheets → Supabase" → Run workflow* (perm
 
 ## Frontend (`frontend/`)
 
-Panel "Workspace OS": React 19 + TypeScript + Vite, gráficos con ECharts y mapas con Leaflet. Lee `oferta_proyectos` y `oferta_indicadores_censo` desde el navegador (`src/lib/supabase.ts`) y los une en JavaScript.
+Panel "Workspace OS": React 19 + TypeScript + Vite, gráficos con ECharts y mapas con Leaflet. Consulta en vivo las **41 tablas** de `citrino_db` desde el navegador (`src/lib/supabase.ts`) para alimentar las 5 secciones y 13 capítulos (`1.1` a `5.1`), filtrando dinámicamente por ciudad (`SCZ`, `LPZ`, `CBB`, `ALL`) y por la barra inferior (`FilterBar`).
 
 Necesita `VITE_SUPABASE_URL` y `VITE_SUPABASE_ANON_KEY` en `frontend/.env`.
 

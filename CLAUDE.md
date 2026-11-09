@@ -17,8 +17,6 @@ Citrino "Intelligence": real-estate market intelligence for Bolivia (Santa Cruz 
 
 UI copy, docs and commit messages are in Spanish (commits use conventional-commit prefixes such as `feat(gis):`, `fix(build):`, `style:`).
 
-Note: `README.md` and `.agents/skills/sheets\_supabase\_pipeline/SKILL.md` still describe the old Medallion (Bronze/Silver/Gold) design and files like `003\_gold\_views.sql`. The current code uses the **"Diamond" model** (see below); trust the code and `supabase/00\*.sql` over the README.
-
 ## Commands
 
 Pipeline (run from repo root; needs `.env` — see `.env.example` — with `GOOGLE\_APPLICATION\_CREDENTIALS`, `SUPABASE\_URL`, `SUPABASE\_SERVICE\_KEY`):
