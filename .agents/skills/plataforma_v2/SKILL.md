@@ -99,15 +99,15 @@ Toda la plataforma se conecta al proyecto de Supabase **`citrino_db`** (`https:/
    - `ind_bienes_adjudicados`, `ind_remates_judiciales` (Cap. 1.4)
    - `ind_consolidado_carteras`, `ind_consolidado_hipotecaria_vivienda`, `ind_consolidado_credito_construccion`, `ind_cartera_construccion`, `ind_mora_hipotecaria_bancos` (Cap. 3.1 y 3.2)
    - `ind_alquileres`, `ind_ipc`, `ind_precios_latam` (Cap. 5.1)
-4. **Encuestas de Demanda y Endeudamiento Hipotecario — 13 tablas `enc_*`** (alimentan los Capítulos 2.1–2.3 y 4.1–4.3):
-   - Demanda (300 hogares): `enc_encuestados`, `enc_perfil_intencion`, `enc_inversion`, `enc_vivienda`, `enc_vivienda_zonas`, `enc_vivienda_amenidades`, `enc_vivienda_depto_aspectos`, `enc_vivienda_detalle_casa`, `enc_vivienda_detalle_depto`
-   - Crédito Hipotecario (796 prestatarios): `enc_credito_encuestados`, `enc_credito_perfil_consumidor`, `enc_credito_hipotecario`, `enc_credito_creditos_adicionales`
+4. **Encuestas de Demanda y Endeudamiento Hipotecario — 21 tablas `enc_*`** (alimentan los Capítulos 2.1–2.3 y 4.1–4.3):
+   - Demanda (300 hogares): `enc_encuestados`, `enc_perfil_intencion`, `enc_inversion`, `enc_inversion_aspectos_decision`, `enc_inversion_zonas`, `enc_inversion_factores_zona`, `enc_inversion_amenidades`, `enc_vivienda`, `enc_vivienda_aspectos_decision`, `enc_vivienda_zonas`, `enc_vivienda_factores_zona`, `enc_vivienda_amenidades`, `enc_vivienda_casa_aspectos`, `enc_vivienda_depto_aspectos`, `enc_vivienda_detalle_casa`, `enc_vivienda_detalle_depto`
+   - Crédito Hipotecario (796 prestatarios): `enc_credito_encuestados`, `enc_credito_perfil_consumidor`, `enc_credito_hipotecario`, `enc_credito_creditos_adicionales`, `enc_credito_percepcion_mercado`
 
 - **Capa de consulta:** Todas las consultas a `citrino_db` están en `frontend/src/lib/supabase.ts` (`fetchIndicadores`, `fetchAllAvgTipologias`, `fetchAllCondicionesFinancieras`, `fetchMarketplaceLive`, `fetchBienesAdjudicadosLive`, `fetchDemandaLive`, `fetchSistemaFinancieroLive`, `fetchEndeudamientoLive`, `fetchCicloInmobiliarioLive`).
 - **Archivo de respaldo:** `frontend/src/data/citrinoDataStudioData.ts` sirve únicamente como respaldo estático en caso de que alguna sub-pregunta histórica no tenga filas en `citrino_db`.
 - **Asistente AI:** responde con reglas programadas que consultan los datos de `citrino_db` en Supabase. En el código no hay conexión a un modelo de IA externo.
 
-Las políticas de lectura pública (`anon`) para las 33 tablas de `citrino_db` están en `supabase/002_rls_public_read.sql`.
+Las políticas de lectura pública (`anon`) para las 41 tablas de `citrino_db` están en `supabase/002_rls_public_read.sql`.
 
 ## 5. Tecnologías
 

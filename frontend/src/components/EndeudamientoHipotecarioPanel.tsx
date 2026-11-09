@@ -102,6 +102,149 @@ export default function EndeudamientoHipotecarioPanel({ initialChapter = '4.1' }
     const nseLive = buildFreqList(liveData.encuestados, 'nse', 'estrato', 6)
     const ingresoFamLive = buildFreqList(liveData.perfilConsumidor, 'ingresos_hogar_bs_q4', 'rango', 10)
 
+    // Mapa encuestado_id -> año de encuesta (2022..2026)
+    const encYearMap = new Map<any, string>()
+    for (const e of liveData.encuestados) {
+      if (e.encuestado_id != null && e.anio_encuesta != null) {
+        encYearMap.set(e.encuestado_id, String(e.anio_encuesta))
+      }
+    }
+
+    // 4.1 Situación laboral (origen_ingresos_q5 y emocion_ambiente_laboral_q6)
+    const perf2026 = liveData.perfilConsumidor.filter((r: any) => encYearMap.get(r.encuestado_id) === '2026')
+    const baseLaboralRows = perf2026.length > 0 ? perf2026 : liveData.perfilConsumidor
+    const fuenteLive = buildFreqList(baseLaboralRows, 'origen_ingresos_q5', 'fuente', 6).map((f) => ({
+      fuente: f.fuente,
+      y2023: f.pct,
+      y2024: f.pct,
+      y2025: f.pct,
+      y2026: f.pct,
+    }))
+    const climaLive = buildFreqList(baseLaboralRows, 'emocion_ambiente_laboral_q6', 'emocion', 8).map((c) => ({
+      emocion: c.emocion,
+      y2023: c.pct,
+      y2024: c.pct,
+      y2025: c.pct,
+      y2026: c.pct,
+    }))
+
+    // 4.1 Evolutivo ingresos (reduccion_ingresos_12m_q8 cruzado por año 2024, 2025, 2026)
+    const redRawByLabel = new Map<string, { orderKey: string; y2024: number; y2025: number; y2026: number }>()
+    const redTotals = { '2024': 0, '2025': 0, '2026': 0 }
+    for (const r of liveData.perfilConsumidor) {
+      const raw = String(r.reduccion_ingresos_12m_q8 ?? '').trim()
+      const ano = encYearMap.get(r.encuestado_id)
+      if (!raw || raw.toLowerCase() === 'null' || (ano !== '2024' && ano !== '2025' && ano !== '2026')) continue
+      const clean = cleanLabel(raw)
+      const item = redRawByLabel.get(clean) ?? { orderKey: raw.toLowerCase(), y2024: 0, y2025: 0, y2026: 0 }
+      if (ano === '2024') {
+        item.y2024 += 1
+        redTotals['2024'] += 1
+      } else if (ano === '2025') {
+        item.y2025 += 1
+        redTotals['2025'] += 1
+      } else if (ano === '2026') {
+        item.y2026 += 1
+        redTotals['2026'] += 1
+      }
+      redRawByLabel.set(clean, item)
+    }
+    const evolutivoIngresosLive = Array.from(redRawByLabel.entries())
+      .sort((a, b) => a[1].orderKey.localeCompare(b[1].orderKey))
+      .map(([rango, counts]) => ({
+        rango,
+        y2024: redTotals['2024'] > 0 ? Math.round((counts.y2024 / redTotals['2024']) * 1000) / 10 : 0,
+        y2025: redTotals['2025'] > 0 ? Math.round((counts.y2025 / redTotals['2025']) * 1000) / 10 : 0,
+        y2026: redTotals['2026'] > 0 ? Math.round((counts.y2026 / redTotals['2026']) * 1000) / 10 : 0,
+      }))
+
+    // 4.2 Estado del prestatario: ¿Difirió o reprogramó en los últimos 12 meses? (difirio_12m_q24 por año)
+    const difByYear = new Map<string, { no: number; si: number; total: number }>()
+    for (const h of liveData.hipotecario) {
+      const ano = encYearMap.get(h.encuestado_id)
+      const val = String(h.difirio_12m_q24 ?? '').trim().toLowerCase()
+      if (!ano || !val || val === 'null') continue
+      const curr = difByYear.get(ano) ?? { no: 0, si: 0, total: 0 }
+      if (val.startsWith('no')) {
+        curr.no += 1
+        curr.total += 1
+      } else if (val.startsWith('si') || val.startsWith('sí')) {
+        curr.si += 1
+        curr.total += 1
+      }
+      difByYear.set(ano, curr)
+    }
+    const reprogramacionLive = Array.from(difByYear.entries())
+      .filter(([, v]) => v.total > 0)
+      .sort((a, b) => a[0].localeCompare(b[0]))
+      .map(([ano, v]) => ({
+        ano,
+        no: Math.round((v.no / v.total) * 1000) / 10,
+        si: Math.round((v.si / v.total) * 1000) / 10,
+      }))
+
+    // 4.2 Evolutivo del endeudamiento (dificultad_pago_simplificado_q25_1 y probabilidad_default_q26)
+    const dificultadLive = buildFreqList(liveData.hipotecario, 'dificultad_pago_simplificado_q25_1', 'nivel', 6)
+    const defaultLive = buildFreqList(liveData.hipotecario, 'probabilidad_default_q26', 'nivel', 6)
+
+    // 4.3 Perspectivas del comprador (enc_credito_percepcion_mercado si tiene filas habilitadas)
+    const percRows = liveData.percepcionMercado ?? []
+    let percPasadoLive: typeof ENDEUDAMIENTO_DATA.percepcionPasadoPrecios = []
+    let percFuturoExpLive: typeof ENDEUDAMIENTO_DATA.percepcionFuturoExpectativa = []
+    let percFuturoPreciosLive: typeof ENDEUDAMIENTO_DATA.percepcionFuturoPrecios12Meses = []
+
+    if (percRows.length > 0) {
+      const sampleKeys = Object.keys(percRows[0] ?? {}).filter(
+        (k) => !['percepcion_id', 'encuestado_id', 'created_at', 'updated_at'].includes(k)
+      )
+      const colPasado = sampleKeys.find((k) => /pasado|ultimos|q32|q27/i.test(k))
+      const colFuturoPrecios = sampleKeys.find((k) => k !== colPasado && /futuro|proximos|q33|q28/i.test(k))
+      const colExpectativa = sampleKeys.find((k) => k !== colPasado && k !== colFuturoPrecios)
+
+      if (colExpectativa) {
+        percFuturoExpLive = buildFreqList(percRows, colExpectativa, 'concepto', 6)
+      }
+      const buildYearTrend = (col: string) => {
+        const byAno = new Map<string, { b: number; i: number; s: number; total: number }>()
+        for (const r of percRows) {
+          const ano = encYearMap.get(r.encuestado_id)
+          const v = String(r[col] ?? '').toLowerCase()
+          if (!ano || !v) continue
+          const c = byAno.get(ano) ?? { b: 0, i: 0, s: 0, total: 0 }
+          if (v.includes('baj')) {
+            c.b += 1
+            c.total += 1
+          } else if (v.includes('igual') || v.includes('mant')) {
+            c.i += 1
+            c.total += 1
+          } else if (v.includes('sub')) {
+            c.s += 1
+            c.total += 1
+          }
+          byAno.set(ano, c)
+        }
+        return Array.from(byAno.entries())
+          .filter(([, v]) => v.total > 0)
+          .sort((a, b) => a[0].localeCompare(b[0]))
+      }
+      if (colPasado) {
+        percPasadoLive = buildYearTrend(colPasado).map(([ano, v]) => ({
+          ano,
+          bajo: Math.round((v.b / v.total) * 1000) / 10,
+          igual: Math.round((v.i / v.total) * 1000) / 10,
+          subio: Math.round((v.s / v.total) * 1000) / 10,
+        }))
+      }
+      if (colFuturoPrecios) {
+        percFuturoPreciosLive = buildYearTrend(colFuturoPrecios).map(([ano, v]) => ({
+          ano,
+          bajara: Math.round((v.b / v.total) * 1000) / 10,
+          igual: Math.round((v.i / v.total) * 1000) / 10,
+          subira: Math.round((v.s / v.total) * 1000) / 10,
+        }))
+      }
+    }
+
     return {
       ...ENDEUDAMIENTO_DATA,
       zonasCredito: zonasLive.length > 0 ? zonasLive : ENDEUDAMIENTO_DATA.zonasCredito,
@@ -112,6 +255,12 @@ export default function EndeudamientoHipotecarioPanel({ initialChapter = '4.1' }
         dormitorios: dormsLive.length > 0 ? dormsLive : ENDEUDAMIENTO_DATA.caracteristicasHogar.dormitorios,
         tamanoFamilia: tamanoFamLive.length > 0 ? tamanoFamLive : ENDEUDAMIENTO_DATA.caracteristicasHogar.tamanoFamilia,
       },
+      situacionLaboral: {
+        fuenteIngresos: fuenteLive.length > 0 ? fuenteLive : ENDEUDAMIENTO_DATA.situacionLaboral.fuenteIngresos,
+        climaLaboral: climaLive.length > 0 ? climaLive : ENDEUDAMIENTO_DATA.situacionLaboral.climaLaboral,
+      },
+      evolutivoIngresosReduccion:
+        evolutivoIngresosLive.length > 0 ? evolutivoIngresosLive : ENDEUDAMIENTO_DATA.evolutivoIngresosReduccion,
       bancosFinanciadores: bancosLive.length > 0 ? bancosLive : ENDEUDAMIENTO_DATA.bancosFinanciadores,
       estadoPrestamo: {
         nivelDeuda: nivelDeudaLive.length > 0 ? nivelDeudaLive : ENDEUDAMIENTO_DATA.estadoPrestamo.nivelDeuda,
@@ -119,6 +268,16 @@ export default function EndeudamientoHipotecarioPanel({ initialChapter = '4.1' }
         nse: nseLive.length > 0 ? nseLive : ENDEUDAMIENTO_DATA.estadoPrestamo.nse,
         ingresoFamiliar: ingresoFamLive.length > 0 ? ingresoFamLive : ENDEUDAMIENTO_DATA.estadoPrestamo.ingresoFamiliar,
       },
+      estadoPrestatarioReprogramacion:
+        reprogramacionLive.length > 0 ? reprogramacionLive : ENDEUDAMIENTO_DATA.estadoPrestatarioReprogramacion,
+      dificultadPago: dificultadLive.length > 0 ? dificultadLive : ENDEUDAMIENTO_DATA.dificultadPago,
+      probabilidadDefault: defaultLive.length > 0 ? defaultLive : ENDEUDAMIENTO_DATA.probabilidadDefault,
+      percepcionPasadoPrecios:
+        percPasadoLive.length > 0 ? percPasadoLive : ENDEUDAMIENTO_DATA.percepcionPasadoPrecios,
+      percepcionFuturoExpectativa:
+        percFuturoExpLive.length > 0 ? percFuturoExpLive : ENDEUDAMIENTO_DATA.percepcionFuturoExpectativa,
+      percepcionFuturoPrecios12Meses:
+        percFuturoPreciosLive.length > 0 ? percFuturoPreciosLive : ENDEUDAMIENTO_DATA.percepcionFuturoPrecios12Meses,
     }
   }, [liveData])
 

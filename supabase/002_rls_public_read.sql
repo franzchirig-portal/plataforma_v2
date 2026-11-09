@@ -171,6 +171,48 @@ DROP POLICY IF EXISTS "Public read enc_credito_creditos_adicionales" ON public.e
 CREATE POLICY "Public read enc_credito_creditos_adicionales" ON public.enc_credito_creditos_adicionales
   FOR SELECT USING (true);
 
+ALTER TABLE public.enc_credito_percepcion_mercado ENABLE ROW LEVEL SECURITY;
+DROP POLICY IF EXISTS "Public read enc_credito_percepcion_mercado" ON public.enc_credito_percepcion_mercado;
+CREATE POLICY "Public read enc_credito_percepcion_mercado" ON public.enc_credito_percepcion_mercado
+  FOR SELECT USING (true);
+
+-- ── TABLAS COMPLEMENTARIAS DE ENCUESTAS (INVERSIÓN Y VIVIENDA — 7 TABLAS) ──
+
+ALTER TABLE public.enc_inversion_aspectos_decision ENABLE ROW LEVEL SECURITY;
+DROP POLICY IF EXISTS "Public read enc_inversion_aspectos_decision" ON public.enc_inversion_aspectos_decision;
+CREATE POLICY "Public read enc_inversion_aspectos_decision" ON public.enc_inversion_aspectos_decision
+  FOR SELECT USING (true);
+
+ALTER TABLE public.enc_inversion_zonas ENABLE ROW LEVEL SECURITY;
+DROP POLICY IF EXISTS "Public read enc_inversion_zonas" ON public.enc_inversion_zonas;
+CREATE POLICY "Public read enc_inversion_zonas" ON public.enc_inversion_zonas
+  FOR SELECT USING (true);
+
+ALTER TABLE public.enc_inversion_factores_zona ENABLE ROW LEVEL SECURITY;
+DROP POLICY IF EXISTS "Public read enc_inversion_factores_zona" ON public.enc_inversion_factores_zona;
+CREATE POLICY "Public read enc_inversion_factores_zona" ON public.enc_inversion_factores_zona
+  FOR SELECT USING (true);
+
+ALTER TABLE public.enc_inversion_amenidades ENABLE ROW LEVEL SECURITY;
+DROP POLICY IF EXISTS "Public read enc_inversion_amenidades" ON public.enc_inversion_amenidades;
+CREATE POLICY "Public read enc_inversion_amenidades" ON public.enc_inversion_amenidades
+  FOR SELECT USING (true);
+
+ALTER TABLE public.enc_vivienda_aspectos_decision ENABLE ROW LEVEL SECURITY;
+DROP POLICY IF EXISTS "Public read enc_vivienda_aspectos_decision" ON public.enc_vivienda_aspectos_decision;
+CREATE POLICY "Public read enc_vivienda_aspectos_decision" ON public.enc_vivienda_aspectos_decision
+  FOR SELECT USING (true);
+
+ALTER TABLE public.enc_vivienda_factores_zona ENABLE ROW LEVEL SECURITY;
+DROP POLICY IF EXISTS "Public read enc_vivienda_factores_zona" ON public.enc_vivienda_factores_zona;
+CREATE POLICY "Public read enc_vivienda_factores_zona" ON public.enc_vivienda_factores_zona
+  FOR SELECT USING (true);
+
+ALTER TABLE public.enc_vivienda_casa_aspectos ENABLE ROW LEVEL SECURITY;
+DROP POLICY IF EXISTS "Public read enc_vivienda_casa_aspectos" ON public.enc_vivienda_casa_aspectos;
+CREATE POLICY "Public read enc_vivienda_casa_aspectos" ON public.enc_vivienda_casa_aspectos
+  FOR SELECT USING (true);
+
 -- ── CAPÍTULO 5.1 E INDICADORES MACRO: CICLO INMOBILIARIO (4 TABLAS) ──
 
 ALTER TABLE public.ind_alquileres ENABLE ROW LEVEL SECURITY;
@@ -193,7 +235,7 @@ DROP POLICY IF EXISTS "Public read ind_precios_latam" ON public.ind_precios_lata
 CREATE POLICY "Public read ind_precios_latam" ON public.ind_precios_latam
   FOR SELECT USING (true);
 
--- Verificar que las políticas están activas en las 33 tablas:
+-- Verificar que las políticas están activas en las 41 tablas:
 SELECT tablename, policyname, cmd, permissive
 FROM pg_policies
 WHERE schemaname = 'public'

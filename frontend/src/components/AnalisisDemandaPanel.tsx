@@ -75,29 +75,119 @@ export default function AnalisisDemandaPanel({ initialChapter = '2.1' }: Props) 
   const [vivPillDepto, setVivPillDepto] = useState<'por_que' | 'aspectos' | 'detalles'>('por_que')
 
   const { general, inversion, viviendaPropia } = useMemo(() => {
-    if (!liveData || !liveData.hasLiveRows) return DEMANDA_DATA
+    if (!liveData || !liveData.hasLiveRows) {
+      return {
+        general: DEMANDA_DATA.general,
+        inversion: {
+          ...DEMANDA_DATA.inversion,
+          amenidadesList: [] as { amenidad: string; pct: number }[],
+        },
+        viviendaPropia: {
+          ...DEMANDA_DATA.viviendaPropia,
+          factoresAmenidades: DEMANDA_DATA.inversion.preferenciaAmenidades.map((p) => ({
+            factor: p.concepto,
+            pct: p.pct,
+          })),
+          casaDormitorios: DEMANDA_DATA.viviendaPropia.porQueCasa,
+          casaTerreno: DEMANDA_DATA.viviendaPropia.porQueCasa,
+          deptoDormitorios: DEMANDA_DATA.viviendaPropia.porQueDepto,
+          deptoSuperficie: DEMANDA_DATA.viviendaPropia.porQueDepto,
+        },
+      }
+    }
+
+    // 2.1 Voluntad comparativa por año (enc_encuestados.anio_encuesta + enc_perfil_intencion.mudarse_o_inversion_q12)
+    const encYearMap = new Map<any, string>()
+    for (const e of liveData.encuestados) {
+      if (e.encuestado_id != null && e.anio_encuesta != null) {
+        encYearMap.set(e.encuestado_id, String(e.anio_encuesta))
+      }
+    }
+    const volByYear = new Map<string, { mudarse: number; inversion: number; total: number }>()
+    for (const p of liveData.perfilIntencion) {
+      const ano = encYearMap.get(p.encuestado_id) ?? '2026'
+      const rawVal = String(p.mudarse_o_inversion_q12 ?? '').toLowerCase()
+      if (!rawVal) continue
+      const entry = volByYear.get(ano) ?? { mudarse: 0, inversion: 0, total: 0 }
+      if (rawVal.includes('mudar') || rawVal.includes('vivienda') || rawVal.includes('propia')) {
+        entry.mudarse += 1
+        entry.total += 1
+      } else if (rawVal.includes('inver')) {
+        entry.inversion += 1
+        entry.total += 1
+      }
+      volByYear.set(ano, entry)
+    }
+    const voluntadLive = Array.from(volByYear.entries())
+      .filter(([, v]) => v.total > 0)
+      .sort((a, b) => a[0].localeCompare(b[0]))
+      .map(([ano, v]) => ({
+        ano,
+        viviendaPropia: Math.round((v.mudarse / v.total) * 1000) / 10,
+        inversion: Math.round((v.inversion / v.total) * 1000) / 10,
+      }))
 
     const ingresosLive = buildPctList(liveData.perfilIntencion, 'ingresos_rango_q7', 'rango', 8)
     const cuotaLive = buildPctList(liveData.perfilIntencion, 'cuota_rango_q8', 'rango', 8)
     const aporteLive = buildPctList(liveData.perfilIntencion, 'ahorro_rango_q9', 'rango', 6)
 
+    // 2.2 Compra como inversión
     const motivadoresLive = buildPctList(liveData.inversion, 'motivador_inversion_q13', 'motivo', 6)
-    const decision1Live = buildPctList(liveData.inversion, 'opcion_invertir_q14', 'factor', 6)
-    const decision2Live = buildPctList(liveData.inversion, 'que_haria_con_inversion_q19', 'factor', 6)
-    const valorInvLive = buildPctList(liveData.inversion, 'valor_rango_q23', 'rango', 6)
-    const factoresInvLive = buildPctList(liveData.inversion, 'alternativa_inversion_q24', 'factor', 7)
+    const invDec1Rows = (liveData.inversionAspectosDecision ?? []).filter((r: any) => Number(r.orden) === 1)
+    const invDec2Rows = (liveData.inversionAspectosDecision ?? []).filter((r: any) => Number(r.orden) === 2)
+    const decision1FromTable = buildPctList(invDec1Rows, 'aspecto_q17_q18', 'factor', 6)
+    const decision2FromTable = buildPctList(invDec2Rows, 'aspecto_q17_q18', 'factor', 6)
+    const decision1Live =
+      decision1FromTable.length > 0
+        ? decision1FromTable
+        : buildPctList(liveData.inversion, 'opcion_invertir_q14', 'factor', 6)
+    const decision2Live =
+      decision2FromTable.length > 0
+        ? decision2FromTable
+        : buildPctList(liveData.inversion, 'que_haria_con_inversion_q19', 'factor', 6)
 
+    const valorInvLive = buildPctList(liveData.inversion, 'valor_rango_q23', 'rango', 6)
+    const zonasInvFromTable = buildPctList(liveData.inversionZonas ?? [], 'zona_q20_q21', 'zona', 8)
+    const factoresInvFromTable = buildPctList(liveData.inversionFactoresZona ?? [], 'factor_zona_q22', 'factor', 7)
+    const factoresInvLive =
+      factoresInvFromTable.length > 0
+        ? factoresInvFromTable
+        : buildPctList(liveData.inversion, 'alternativa_inversion_q24', 'factor', 7)
+    const prefAmenidadesInvLive = buildPctList(liveData.inversion, 'factor_importante_areas_q16', 'concepto', 5)
+    const amenidadesInvListLive = buildPctList(liveData.inversionAmenidades ?? [], 'amenidad_q15', 'amenidad', 8)
+
+    // 2.3 Compra vivienda propia
     const tipologiaVivLive = buildPctList(liveData.vivienda, 'opcion_comprar_vivienda_q25', 'tipo', 6)
     const presupuestoVivLive = buildPctList(liveData.vivienda, 'valor_rango_q33', 'rango', 6)
-    const decisionVivLive = buildPctList(liveData.vivienda, 'tiempo_mudarse_q34', 'factor', 6)
+    const decisionVivFromTable = buildPctList(liveData.viviendaAspectosDecision ?? [], 'aspecto_q28_q29', 'factor', 6)
+    const decisionVivLive =
+      decisionVivFromTable.length > 0
+        ? decisionVivFromTable
+        : buildPctList(liveData.vivienda, 'tiempo_mudarse_q34', 'factor', 6)
     const zonasVivLive = buildPctList(liveData.viviendaZonas, 'zona_q30_q31', 'zona', 8)
+    const factoresVivFromTable = buildPctList(liveData.viviendaFactoresZona ?? [], 'factor_zona_q32', 'factor', 7)
+    const factoresAmenidadesVivLive = buildPctList(liveData.vivienda, 'factor_importante_areas_q27', 'factor', 5)
     const amenidadesVivLive = buildPctList(liveData.viviendaAmenidades, 'amenidad_q26', 'amenidad', 8)
+
+    // 2.3 Casa: ¿Por qué casa? (enc_vivienda_casa_aspectos.aspecto_q36) + Aspectos (dormitorios_q37) + Detalles (m2_terreno_rango_q39)
+    const porQueCasaFromTable = buildPctList(liveData.viviendaCasaAspectos ?? [], 'aspecto_q36', 'motivo', 6)
+    const casaDormsLive = buildPctList(liveData.viviendaDetalleCasa ?? [], 'dormitorios_q37', 'motivo', 6)
+    const casaTerrenoLive = buildPctList(liveData.viviendaDetalleCasa ?? [], 'm2_terreno_rango_q39', 'motivo', 7)
+    const casaConstruidosLive = buildPctList(liveData.viviendaDetalleCasa ?? [], 'm2_construidos_rango_q40', 'motivo', 8)
+
+    // 2.3 Depto: ¿Por qué depto? (enc_vivienda_depto_aspectos.aspecto_q42) + Aspectos (dormitorios_q43) + Detalles (m2_construidos_rango_q45)
     const aspectosDeptoLive = buildPctList(liveData.viviendaDeptoAspectos, 'aspecto_q42', 'motivo', 6)
+    const deptoDormsRaw = buildPctList(liveData.viviendaDetalleDepto ?? [], 'dormitorios_q43', 'motivo', 6).map((d) => ({
+      motivo: /^\d+$/.test(d.motivo) ? `${d.motivo} dormitorios` : d.motivo,
+      pct: d.pct,
+    }))
+    const deptoSupLive = buildPctList(liveData.viviendaDetalleDepto ?? [], 'm2_construidos_rango_q45', 'motivo', 7)
 
     return {
       general: {
         ...DEMANDA_DATA.general,
         muestra: liveData.encuestados.length || DEMANDA_DATA.general.muestra,
+        voluntadComparativa: voluntadLive.length > 0 ? voluntadLive : DEMANDA_DATA.general.voluntadComparativa,
         ingresos: ingresosLive.length > 0 ? ingresosLive : DEMANDA_DATA.general.ingresos,
         cuotaMensual: cuotaLive.length > 0 ? cuotaLive : DEMANDA_DATA.general.cuotaMensual,
         aportePropio: aporteLive.length > 0 ? aporteLive : DEMANDA_DATA.general.aportePropio,
@@ -109,8 +199,16 @@ export default function AnalisisDemandaPanel({ initialChapter = '2.1' }: Props) 
         decision1: decision1Live.length > 0 ? decision1Live : DEMANDA_DATA.inversion.decision1,
         decision2: decision2Live.length > 0 ? decision2Live : DEMANDA_DATA.inversion.decision2,
         valorInmueble: valorInvLive.length > 0 ? valorInvLive : DEMANDA_DATA.inversion.valorInmueble,
-        zonas: zonasVivLive.length > 0 ? zonasVivLive : DEMANDA_DATA.inversion.zonas,
+        zonas:
+          zonasInvFromTable.length > 0
+            ? zonasInvFromTable
+            : zonasVivLive.length > 0
+            ? zonasVivLive
+            : DEMANDA_DATA.inversion.zonas,
         factoresZona: factoresInvLive.length > 0 ? factoresInvLive : DEMANDA_DATA.inversion.factoresZona,
+        preferenciaAmenidades:
+          prefAmenidadesInvLive.length > 0 ? prefAmenidadesInvLive : DEMANDA_DATA.inversion.preferenciaAmenidades,
+        amenidadesList: amenidadesInvListLive,
       },
       viviendaPropia: {
         ...DEMANDA_DATA.viviendaPropia,
@@ -119,8 +217,28 @@ export default function AnalisisDemandaPanel({ initialChapter = '2.1' }: Props) 
         presupuesto: presupuestoVivLive.length > 0 ? presupuestoVivLive : DEMANDA_DATA.viviendaPropia.presupuesto,
         decision: decisionVivLive.length > 0 ? decisionVivLive : DEMANDA_DATA.viviendaPropia.decision,
         zonas: zonasVivLive.length > 0 ? zonasVivLive : DEMANDA_DATA.viviendaPropia.zonas,
+        factoresZona:
+          factoresVivFromTable.length > 0
+            ? factoresVivFromTable
+            : factoresAmenidadesVivLive.length > 0
+            ? factoresAmenidadesVivLive
+            : DEMANDA_DATA.viviendaPropia.factoresZona,
         amenidades: amenidadesVivLive.length > 0 ? amenidadesVivLive : DEMANDA_DATA.viviendaPropia.amenidades,
+        factoresAmenidades:
+          factoresAmenidadesVivLive.length > 0
+            ? factoresAmenidadesVivLive
+            : DEMANDA_DATA.inversion.preferenciaAmenidades.map((p) => ({ factor: p.concepto, pct: p.pct })),
+        porQueCasa:
+          porQueCasaFromTable.length > 0
+            ? porQueCasaFromTable
+            : casaConstruidosLive.length > 0
+            ? casaConstruidosLive
+            : DEMANDA_DATA.viviendaPropia.porQueCasa,
+        casaDormitorios: casaDormsLive.length > 0 ? casaDormsLive : DEMANDA_DATA.viviendaPropia.porQueCasa,
+        casaTerreno: casaTerrenoLive.length > 0 ? casaTerrenoLive : DEMANDA_DATA.viviendaPropia.porQueCasa,
         porQueDepto: aspectosDeptoLive.length > 0 ? aspectosDeptoLive : DEMANDA_DATA.viviendaPropia.porQueDepto,
+        deptoDormitorios: deptoDormsRaw.length > 0 ? deptoDormsRaw : DEMANDA_DATA.viviendaPropia.porQueDepto,
+        deptoSuperficie: deptoSupLive.length > 0 ? deptoSupLive : DEMANDA_DATA.viviendaPropia.porQueDepto,
       },
     }
   }, [liveData])
@@ -236,77 +354,90 @@ export default function AnalisisDemandaPanel({ initialChapter = '2.1' }: Props) 
       )}
 
       {/* ── 2.1 COMPOSICIÓN ECONÓMICA ── */}
-      {activeChapter === '2.1' && compTab === 'voluntad' && (
-        <div>
-          <div className="citrino-kpis-grid">
-            <div className="citrino-kpi-card green">
-              <span className="citrino-kpi-label">Intención Vivienda Propia</span>
-              <span className="citrino-kpi-val">55%</span>
-              <span className="citrino-kpi-sub">Sube de 42% en 2025</span>
-            </div>
-            <div className="citrino-kpi-card blue">
-              <span className="citrino-kpi-label">Intención Inversión</span>
-              <span className="citrino-kpi-val">45%</span>
-              <span className="citrino-kpi-sub">Baja de 58% en 2025</span>
-            </div>
-          </div>
-
-          <div className="citrino-card-box">
-            <div className="citrino-card-header">
-              <h3 className="citrino-card-title">Intención de compra: vivienda propia vs inversión (2025 - 2026)</h3>
-            </div>
-            <ReactECharts option={getVoluntadChart()} style={{ height: 320 }} />
-          </div>
-        </div>
-      )}
-
-      {activeChapter === '2.1' && compTab === 'composicion' && (
-        <div>
-          <div className="citrino-kpis-grid">
-            <div className="citrino-kpi-card amber">
-              <span className="citrino-kpi-label">Estrato Ingreso Mediano</span>
-              <span className="citrino-kpi-val">3k - 7k Bs/mes</span>
-              <span className="citrino-kpi-sub">41% de hogares consultados</span>
-            </div>
-            <div className="citrino-kpi-card purple">
-              <span className="citrino-kpi-label">Cuota Inicial Disponible</span>
-              <span className="citrino-kpi-val">&lt; 25.000 Bs</span>
-              <span className="citrino-kpi-sub">40.6% barrera de entrada</span>
-            </div>
-          </div>
-
-          <div className="citrino-charts-grid">
-            <div className="citrino-card-box">
-              <div className="citrino-card-header">
-                <h3 className="citrino-card-title">Estratificación de Ingresos Familiares Mensuales</h3>
+      {activeChapter === '2.1' && compTab === 'voluntad' && (() => {
+        const latestVol = general.voluntadComparativa[general.voluntadComparativa.length - 1] ?? { ano: '2026', viviendaPropia: 55, inversion: 45 }
+        const prevVol = general.voluntadComparativa[general.voluntadComparativa.length - 2] ?? { ano: '2025', viviendaPropia: 42, inversion: 58 }
+        return (
+          <div>
+            <div className="citrino-kpis-grid">
+              <div className="citrino-kpi-card green">
+                <span className="citrino-kpi-label">Intención Vivienda Propia</span>
+                <span className="citrino-kpi-val">{latestVol.viviendaPropia}%</span>
+                <span className="citrino-kpi-sub">
+                  {latestVol.viviendaPropia >= prevVol.viviendaPropia ? 'Sube' : 'Baja'} de {prevVol.viviendaPropia}% en {prevVol.ano}
+                </span>
               </div>
-              <ReactECharts
-                option={getBarSimple(general.ingresos.map((i) => i.rango), general.ingresos.map((i) => i.pct), '#10b981')}
-                style={{ height: 280 }}
-              />
+              <div className="citrino-kpi-card blue">
+                <span className="citrino-kpi-label">Intención Inversión</span>
+                <span className="citrino-kpi-val">{latestVol.inversion}%</span>
+                <span className="citrino-kpi-sub">
+                  {latestVol.inversion >= prevVol.inversion ? 'Sube' : 'Baja'} de {prevVol.inversion}% en {prevVol.ano}
+                </span>
+              </div>
             </div>
 
             <div className="citrino-card-box">
               <div className="citrino-card-header">
-                <h3 className="citrino-card-title">Capacidad Máxima de Cuota Mensual Destinada a Vivienda</h3>
+                <h3 className="citrino-card-title">Intención de compra: vivienda propia vs inversión (2025 - 2026)</h3>
+                <span className="citrino-card-hint">Muestra: n = {general.muestra} encuestados</span>
               </div>
-              <ReactECharts
-                option={getBarSimple(general.cuotaMensual.map((c) => c.rango), general.cuotaMensual.map((c) => c.pct), '#38bdf8')}
-                style={{ height: 280 }}
-              />
+              <ReactECharts option={getVoluntadChart()} style={{ height: 320 }} />
             </div>
           </div>
-        </div>
-      )}
+        )
+      })()}
 
-      {/* ── 2.2 COMPRA COMO INVERSIÓN (n=459) ── */}
+      {activeChapter === '2.1' && compTab === 'composicion' && (() => {
+        const topIngreso = general.ingresos[0] ?? { rango: '3k - 7k Bs/mes', pct: 41 }
+        const topAporte = general.aportePropio[0] ?? { rango: '< 25.000 Bs', pct: 40.6 }
+        return (
+          <div>
+            <div className="citrino-kpis-grid">
+              <div className="citrino-kpi-card amber">
+                <span className="citrino-kpi-label">Estrato Ingreso Principal</span>
+                <span className="citrino-kpi-val">{topIngreso.rango}</span>
+                <span className="citrino-kpi-sub">{topIngreso.pct}% de hogares consultados (n = {general.muestra})</span>
+              </div>
+              <div className="citrino-kpi-card purple">
+                <span className="citrino-kpi-label">Cuota Inicial Disponible</span>
+                <span className="citrino-kpi-val">{topAporte.rango}</span>
+                <span className="citrino-kpi-sub">{topAporte.pct}% de los compradores potenciales</span>
+              </div>
+            </div>
+
+            <div className="citrino-charts-grid">
+              <div className="citrino-card-box">
+                <div className="citrino-card-header">
+                  <h3 className="citrino-card-title">Estratificación de Ingresos Familiares Mensuales</h3>
+                </div>
+                <ReactECharts
+                  option={getBarSimple(general.ingresos.map((i) => i.rango), general.ingresos.map((i) => i.pct), '#10b981')}
+                  style={{ height: 280 }}
+                />
+              </div>
+
+              <div className="citrino-card-box">
+                <div className="citrino-card-header">
+                  <h3 className="citrino-card-title">Capacidad Máxima de Cuota Mensual Destinada a Vivienda</h3>
+                </div>
+                <ReactECharts
+                  option={getBarSimple(general.cuotaMensual.map((c) => c.rango), general.cuotaMensual.map((c) => c.pct), '#38bdf8')}
+                  style={{ height: 280 }}
+                />
+              </div>
+            </div>
+          </div>
+        )
+      })()}
+
+      {/* ── 2.2 COMPRA COMO INVERSIÓN ── */}
       {activeChapter === '2.2' && (
         <div>
           {/* 02-A Motivadores */}
           {invSubTab === 'motivadores' && (
             <div className="citrino-card-box">
               <div className="citrino-card-header">
-                <h3 className="citrino-card-title">Motivadores Clave para Comprar como Inversión (n = 459)</h3>
+                <h3 className="citrino-card-title">Motivadores Clave para Comprar como Inversión (n = {inversion.muestra})</h3>
               </div>
               <ReactECharts
                 option={getPieSimple(inversion.motivadores.map((m) => ({ name: m.motivo, value: m.pct })), ['#10b981', '#ff6b00', '#38bdf8'])}
@@ -414,20 +545,33 @@ export default function AnalisisDemandaPanel({ initialChapter = '2.1' }: Props) 
 
           {/* 02-D Valores Agregados (con Preferencia) */}
           {invSubTab === 'amenidades' && (
-            <div className="citrino-card-box">
-              <div className="citrino-card-header">
-                <h3 className="citrino-card-title">Áreas comunes vs costo de expensas (inversión)</h3>
+            <div>
+              <div className="citrino-card-box">
+                <div className="citrino-card-header">
+                  <h3 className="citrino-card-title">Áreas comunes vs costo de expensas (inversión)</h3>
+                </div>
+                <ReactECharts
+                  option={getPieSimple(inversion.preferenciaAmenidades.map((a) => ({ name: a.concepto, value: a.pct })))}
+                  style={{ height: 300 }}
+                />
               </div>
-              <ReactECharts
-                option={getPieSimple(inversion.preferenciaAmenidades.map((a) => ({ name: a.concepto, value: a.pct })))}
-                style={{ height: 300 }}
-              />
+              {inversion.amenidadesList && inversion.amenidadesList.length > 0 && (
+                <div className="citrino-card-box" style={{ marginTop: 16 }}>
+                  <div className="citrino-card-header">
+                    <h3 className="citrino-card-title">Amenidades más valoradas por el inversionista</h3>
+                  </div>
+                  <ReactECharts
+                    option={getBarSimple(inversion.amenidadesList.map((a) => a.amenidad), inversion.amenidadesList.map((a) => a.pct), '#10b981')}
+                    style={{ height: 280 }}
+                  />
+                </div>
+              )}
             </div>
           )}
         </div>
       )}
 
-      {/* ── 2.3 COMPRA VIVIENDA PROPIA (n=441) ── */}
+      {/* ── 2.3 COMPRA VIVIENDA PROPIA ── */}
       {activeChapter === '2.3' && (
         <div>
           {/* 03-A Tipología y Precio (con Aspectos, Valor, Decisión) */}
@@ -554,101 +698,128 @@ export default function AnalisisDemandaPanel({ initialChapter = '2.1' }: Props) 
 
               <div className="citrino-card-box">
                 <div className="citrino-card-header">
-                  <h3 className="citrino-card-title">Áreas Comunes Prioritarias para la Familia</h3>
+                  <h3 className="citrino-card-title">
+                    {vivPillAmenidades === 'preferencia'
+                      ? 'Áreas Comunes Prioritarias para la Familia'
+                      : 'Preferencia de Áreas Comunes vs Costo de Expensas'}
+                  </h3>
                 </div>
-                <ReactECharts
-                  option={getBarSimple(viviendaPropia.amenidades.map((a) => a.amenidad), viviendaPropia.amenidades.map((a) => a.pct), '#10b981')}
-                  style={{ height: 280 }}
-                />
+                {vivPillAmenidades === 'preferencia' ? (
+                  <ReactECharts
+                    option={getBarSimple(viviendaPropia.amenidades.map((a) => a.amenidad), viviendaPropia.amenidades.map((a) => a.pct), '#10b981')}
+                    style={{ height: 280 }}
+                  />
+                ) : (
+                  <ReactECharts
+                    option={getPieSimple(viviendaPropia.factoresAmenidades.map((f) => ({ name: f.factor, value: f.pct })))}
+                    style={{ height: 280 }}
+                  />
+                )}
               </div>
             </div>
           )}
 
           {/* 03-D Preferencia Casa (¿Por qué Casa?, Aspectos, Detalles) */}
-          {vivSubTab === 'casa' && (
-            <div>
-              <div className="citrino-subpills-row">
-                <span className="citrino-subpill-label">Ver:</span>
-                <button
-                  className={`citrino-subpill-btn ${vivPillCasa === 'por_que' ? 'active' : ''}`}
-                  onClick={() => setVivPillCasa('por_que')}
-                >
-                  🏡 ¿Por qué Casa?
-                </button>
-                <button
-                  className={`citrino-subpill-btn ${vivPillCasa === 'aspectos' ? 'active' : ''}`}
-                  onClick={() => setVivPillCasa('aspectos')}
-                >
-                  📐 Aspectos Espaciales
-                </button>
-                <button
-                  className={`citrino-subpill-btn ${vivPillCasa === 'detalles' ? 'active' : ''}`}
-                  onClick={() => setVivPillCasa('detalles')}
-                >
-                  🧱 Detalles Constructivos
-                </button>
-              </div>
-
-              <div className="citrino-card-box">
-                <div className="citrino-card-header">
-                  <h3 className="citrino-card-title">
-                    {vivPillCasa === 'por_que'
-                      ? 'Razones Clave de la Preferencia por Casa Independiente'
-                      : vivPillCasa === 'aspectos'
-                      ? 'Aspectos Espaciales: Patio Propio, Muros Independientes y Garaje 2+'
-                      : 'Detalles Constructivos: Terreno propio, barda perimetral y sin expensas'}
-                  </h3>
+          {vivSubTab === 'casa' && (() => {
+            const casaActiveList =
+              vivPillCasa === 'por_que'
+                ? viviendaPropia.porQueCasa
+                : vivPillCasa === 'aspectos'
+                ? viviendaPropia.casaDormitorios
+                : viviendaPropia.casaTerreno
+            return (
+              <div>
+                <div className="citrino-subpills-row">
+                  <span className="citrino-subpill-label">Ver:</span>
+                  <button
+                    className={`citrino-subpill-btn ${vivPillCasa === 'por_que' ? 'active' : ''}`}
+                    onClick={() => setVivPillCasa('por_que')}
+                  >
+                    🏡 ¿Por qué Casa?
+                  </button>
+                  <button
+                    className={`citrino-subpill-btn ${vivPillCasa === 'aspectos' ? 'active' : ''}`}
+                    onClick={() => setVivPillCasa('aspectos')}
+                  >
+                    📐 Dormitorios Preferidos
+                  </button>
+                  <button
+                    className={`citrino-subpill-btn ${vivPillCasa === 'detalles' ? 'active' : ''}`}
+                    onClick={() => setVivPillCasa('detalles')}
+                  >
+                    🧱 Superficie de Terreno (m²)
+                  </button>
                 </div>
-                <ReactECharts
-                  option={getBarSimple(viviendaPropia.porQueCasa.map((c) => c.motivo), viviendaPropia.porQueCasa.map((c) => c.pct), '#ff6b00')}
-                  style={{ height: 280 }}
-                />
+
+                <div className="citrino-card-box">
+                  <div className="citrino-card-header">
+                    <h3 className="citrino-card-title">
+                      {vivPillCasa === 'por_que'
+                        ? 'Razones Clave de la Preferencia por Casa Independiente'
+                        : vivPillCasa === 'aspectos'
+                        ? 'Distribución de Dormitorios Preferida en Casa'
+                        : 'Superficie de Terreno Buscada para Casa (m²)'}
+                    </h3>
+                  </div>
+                  <ReactECharts
+                    option={getBarSimple(casaActiveList.map((c) => c.motivo), casaActiveList.map((c) => c.pct), '#ff6b00')}
+                    style={{ height: 280 }}
+                  />
+                </div>
               </div>
-            </div>
-          )}
+            )
+          })()}
 
           {/* 03-E Preferencia Depto (¿Por qué Depto?, Aspectos, Detalles) */}
-          {vivSubTab === 'depto' && (
-            <div>
-              <div className="citrino-subpills-row">
-                <span className="citrino-subpill-label">Ver:</span>
-                <button
-                  className={`citrino-subpill-btn ${vivPillDepto === 'por_que' ? 'active' : ''}`}
-                  onClick={() => setVivPillDepto('por_que')}
-                >
-                  🏢 ¿Por qué Departamento?
-                </button>
-                <button
-                  className={`citrino-subpill-btn ${vivPillDepto === 'aspectos' ? 'active' : ''}`}
-                  onClick={() => setVivPillDepto('aspectos')}
-                >
-                  📐 Aspectos Espaciales
-                </button>
-                <button
-                  className={`citrino-subpill-btn ${vivPillDepto === 'detalles' ? 'active' : ''}`}
-                  onClick={() => setVivPillDepto('detalles')}
-                >
-                  🔑 Detalles de Equipamiento
-                </button>
-              </div>
-
-              <div className="citrino-card-box">
-                <div className="citrino-card-header">
-                  <h3 className="citrino-card-title">
-                    {vivPillDepto === 'por_que'
-                      ? 'Razones Clave de la Preferencia por Departamento'
-                      : vivPillDepto === 'aspectos'
-                      ? 'Aspectos Espaciales: Altura de Piso, Iluminación y Vistas Panorámicas'
-                      : 'Detalles de Equipamiento: Balcón churrasquera, parqueo techado y baulera'}
-                  </h3>
+          {vivSubTab === 'depto' && (() => {
+            const deptoActiveList =
+              vivPillDepto === 'por_que'
+                ? viviendaPropia.porQueDepto
+                : vivPillDepto === 'aspectos'
+                ? viviendaPropia.deptoDormitorios
+                : viviendaPropia.deptoSuperficie
+            return (
+              <div>
+                <div className="citrino-subpills-row">
+                  <span className="citrino-subpill-label">Ver:</span>
+                  <button
+                    className={`citrino-subpill-btn ${vivPillDepto === 'por_que' ? 'active' : ''}`}
+                    onClick={() => setVivPillDepto('por_que')}
+                  >
+                    🏢 ¿Por qué Departamento?
+                  </button>
+                  <button
+                    className={`citrino-subpill-btn ${vivPillDepto === 'aspectos' ? 'active' : ''}`}
+                    onClick={() => setVivPillDepto('aspectos')}
+                  >
+                    📐 Dormitorios Preferidos
+                  </button>
+                  <button
+                    className={`citrino-subpill-btn ${vivPillDepto === 'detalles' ? 'active' : ''}`}
+                    onClick={() => setVivPillDepto('detalles')}
+                  >
+                    🔑 Superficie Construida (m²)
+                  </button>
                 </div>
-                <ReactECharts
-                  option={getBarSimple(viviendaPropia.porQueDepto.map((d) => d.motivo), viviendaPropia.porQueDepto.map((d) => d.pct), '#38bdf8')}
-                  style={{ height: 280 }}
-                />
+
+                <div className="citrino-card-box">
+                  <div className="citrino-card-header">
+                    <h3 className="citrino-card-title">
+                      {vivPillDepto === 'por_que'
+                        ? 'Razones Clave de la Preferencia por Departamento'
+                        : vivPillDepto === 'aspectos'
+                        ? 'Distribución de Dormitorios Preferida en Departamento'
+                        : 'Superficie Construida Buscada en Departamento (m²)'}
+                    </h3>
+                  </div>
+                  <ReactECharts
+                    option={getBarSimple(deptoActiveList.map((d) => d.motivo), deptoActiveList.map((d) => d.pct), '#38bdf8')}
+                    style={{ height: 280 }}
+                  />
+                </div>
               </div>
-            </div>
-          )}
+            )
+          })()}
         </div>
       )}
     </div>

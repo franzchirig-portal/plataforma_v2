@@ -583,9 +583,16 @@ export async function fetchDemandaLive() {
     encuestados,
     perfilIntencion,
     inversion,
+    inversionAspectosDecision,
+    inversionZonas,
+    inversionFactoresZona,
+    inversionAmenidades,
     vivienda,
+    viviendaAspectosDecision,
     viviendaZonas,
+    viviendaFactoresZona,
     viviendaAmenidades,
+    viviendaCasaAspectos,
     viviendaDeptoAspectos,
     viviendaDetalleCasa,
     viviendaDetalleDepto,
@@ -593,9 +600,16 @@ export async function fetchDemandaLive() {
     fetchCitrinoTable('enc_encuestados'),
     fetchCitrinoTable('enc_perfil_intencion'),
     fetchCitrinoTable('enc_inversion'),
+    fetchCitrinoTable('enc_inversion_aspectos_decision'),
+    fetchCitrinoTable('enc_inversion_zonas'),
+    fetchCitrinoTable('enc_inversion_factores_zona'),
+    fetchCitrinoTable('enc_inversion_amenidades'),
     fetchCitrinoTable('enc_vivienda'),
+    fetchCitrinoTable('enc_vivienda_aspectos_decision'),
     fetchCitrinoTable('enc_vivienda_zonas'),
+    fetchCitrinoTable('enc_vivienda_factores_zona'),
     fetchCitrinoTable('enc_vivienda_amenidades'),
+    fetchCitrinoTable('enc_vivienda_casa_aspectos'),
     fetchCitrinoTable('enc_vivienda_depto_aspectos'),
     fetchCitrinoTable('enc_vivienda_detalle_casa'),
     fetchCitrinoTable('enc_vivienda_detalle_depto'),
@@ -609,9 +623,16 @@ export async function fetchDemandaLive() {
     encuestados,
     perfilIntencion,
     inversion,
+    inversionAspectosDecision,
+    inversionZonas,
+    inversionFactoresZona,
+    inversionAmenidades,
     vivienda,
+    viviendaAspectosDecision,
     viviendaZonas,
+    viviendaFactoresZona,
     viviendaAmenidades,
+    viviendaCasaAspectos,
     viviendaDeptoAspectos,
     viviendaDetalleCasa,
     viviendaDetalleDepto,
@@ -650,18 +671,20 @@ export async function fetchSistemaFinancieroLive() {
 }
 
 export async function fetchEndeudamientoLive() {
-  const [encuestados, perfilConsumidor, hipotecario, creditosAdicionales] = await Promise.all([
+  const [encuestados, perfilConsumidor, hipotecario, creditosAdicionales, percepcionMercado] = await Promise.all([
     fetchCitrinoTable('enc_credito_encuestados'),
     fetchCitrinoTable('enc_credito_perfil_consumidor'),
     fetchCitrinoTable('enc_credito_hipotecario'),
     fetchCitrinoTable('enc_credito_creditos_adicionales'),
+    fetchCitrinoTable('enc_credito_percepcion_mercado'),
   ])
   const hasLiveRows =
     encuestados.length > 0 ||
     perfilConsumidor.length > 0 ||
     hipotecario.length > 0 ||
-    creditosAdicionales.length > 0
-  return { encuestados, perfilConsumidor, hipotecario, creditosAdicionales, hasLiveRows }
+    creditosAdicionales.length > 0 ||
+    percepcionMercado.length > 0
+  return { encuestados, perfilConsumidor, hipotecario, creditosAdicionales, percepcionMercado, hasLiveRows }
 }
 
 export async function fetchCicloInmobiliarioLive() {
