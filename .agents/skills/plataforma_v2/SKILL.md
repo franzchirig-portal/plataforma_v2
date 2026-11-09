@@ -65,13 +65,13 @@ Nota: el código tiene pestañas internas adicionales (Stock en USD, Meses de St
 | 1.3 Oferta de Particulares (Marketplace) | `MarketplaceParticularesPanel` | Supabase (`ind_oferta_inmuebles` — 6.761 anuncios, `anu_*`) |
 | 1.4 Bienes Adjudicados y Remates | `BienesAdjudicadosPanel` | Supabase (`ind_bienes_adjudicados` — 158 cortes, `ind_remates_judiciales` — 11.575 remates) |
 | 2.1 Composición Económica y Voluntad de Compra | `AnalisisDemandaPanel` | Supabase (`enc_encuestados` — 300 hogares, `enc_perfil_intencion` — 300 filas) |
-| 2.2 Compra como Inversión | `AnalisisDemandaPanel` | Supabase (`enc_inversion` — 153 encuestados) |
-| 2.3 Compra Vivienda Propia | `AnalisisDemandaPanel` | Supabase (`enc_vivienda` — 147 filas y 5 tablas `enc_vivienda_*`) |
+| 2.2 Compra como Inversión | `AnalisisDemandaPanel` | Supabase (`enc_inversion` — 153 encuestados y 4 tablas `enc_inversion_*`) |
+| 2.3 Compra Vivienda Propia | `AnalisisDemandaPanel` | Supabase (`enc_vivienda` — 147 filas y 7 tablas `enc_vivienda_*`) |
 | 3.1 Financiamiento al Sector Inmobiliario | `SistemaFinancieroPanel` | Supabase (`ind_consolidado_hipotecaria_vivienda` — 422 filas, `ind_consolidado_credito_construccion` — 160 filas) |
 | 3.2 Evolución de la Mora del Inmobiliario | `SistemaFinancieroPanel` | Supabase (`ind_mora_hipotecaria_bancos` — 1.722 filas, `ind_cartera_construccion` — 196 filas) |
 | 4.1 Perfil del Consumidor de Crédito | `EndeudamientoHipotecarioPanel` | Supabase (`enc_credito_encuestados` y `enc_credito_perfil_consumidor` — 796 prestatarios) |
 | 4.2 Estado de la Cartera Hipotecaria | `EndeudamientoHipotecarioPanel` | Supabase (`enc_credito_hipotecario` — 796 filas, `enc_credito_creditos_adicionales` — 490 filas) |
-| 4.3 Perspectivas del Comprador | `EndeudamientoHipotecarioPanel` | Supabase (`enc_credito_*` con respaldo en archivo fijo para preguntas de percepción) |
+| 4.3 Perspectivas del Comprador | `EndeudamientoHipotecarioPanel` | Supabase (`enc_credito_percepcion_mercado` — 796 filas) |
 | 5.1 Ciclo Inmobiliario Físico | `CicloInmobiliarioPanel` | Supabase (`ind_alquileres` — 315 cortes, `ind_ipc` — 105 cortes) |
 
 Cada uno de estos paneles muestra sus pestañas arriba con el componente `TopTabBar` (ver la skill `crear-panel-pestanas`).
@@ -83,7 +83,7 @@ Cada uno de estos paneles muestra sus pestañas arriba con el componente `TopTab
 
 ## 4. De dónde sale cada dato (Base de datos `citrino_db`)
 
-Toda la plataforma se conecta al proyecto de Supabase **`citrino_db`** (`https://ixistkrftmebvefnqqkq.supabase.co`), que contiene **33 tablas** organizadas en cuatro grupos:
+Toda la plataforma se conecta al proyecto de Supabase **`citrino_db`** (`https://ixistkrftmebvefnqqkq.supabase.co`), que contiene **41 tablas** organizadas en cuatro grupos:
 
 1. **Oferta Nueva — 6 tablas `oferta_*`** (sincronizadas desde Google Sheets por `pipeline/sync.py`, alimentan los Capítulos 1.1 y 1.2):
    - `oferta_proyectos`
