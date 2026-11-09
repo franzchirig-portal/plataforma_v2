@@ -1,16 +1,155 @@
-import { useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import ReactECharts from 'echarts-for-react'
 import './CitrinoInstitutionalPanels.css'
 import './TopTabs.css'
 import { MARKETPLACE_DATA } from '../data/citrinoDataStudioData'
 import { useChartTheme } from '../lib/chartTheme'
+import { fetchMarketplaceLive } from '../lib/supabase'
 
 type SubTab = 'stock' | 'zonificacion' | 'evolutivo'
 
 export default function MarketplaceParticularesPanel() {
   const ct = useChartTheme()
   const [activeSubTab, setActiveSubTab] = useState<SubTab>('stock')
-  const { kpis, tipologias, zonas, serieMensual } = MARKETPLACE_DATA
+  const [liveAnuncios, setLiveAnuncios] = useState<any[]>([])
+
+  useEffect(() => {
+    let cancelled = false
+    fetchMarketplaceLive().then((res) => {
+      if (!cancelled && res.hasLiveRows && res.anuncios.length > 0) {
+        setLiveAnuncios(res.anuncios)
+      }
+    })
+    return () => {
+      cancelled = true
+    }
+  }, [])
+
+  const { kpis, tipologias, zonas, serieMensual } = useMemo(() => {
+    if (liveAnuncios.length === 0) return MARKETPLACE_DATA
+
+    let totalUsd = 0
+    let deptosUsd = 0
+    let deptosUnds = 0
+    let casasUsd = 0
+    let casasUnds = 0
+    const zonaMap = new Map<string, { unds: number; usd: number }>()
+    const tipoMap = new Map<string, { unds: number; sups: number[]; m2s: number[] }>()
+    const mesMap = new Map<string, { unds: number; usd: number }>()
+
+    const formatZonaName = (raw: string) =>
+      raw
+        .trim()
+        .replace(/\b\w/g, (c) => c.toUpperCase())
+
+    for (const r of liveAnuncios) {
+      const precio = Number(r.precio_usd ?? r.precio_sus ?? r.precio ?? 0)
+      const tipoRaw = String(r.tipo_inmueble ?? r.tipo ?? '').toLowerCase()
+      const isCasa = tipoRaw.includes('casa')
+      const dorms = r.dormitorios != null ? Number(r.dormitorios) : null
+      const sup = Number(r.superficie_construida ?? r.construccion_m2 ?? r.superficie_terreno ?? 0)
+      const usdM2 = Number(r.usd_m2 ?? (sup > 0 && precio > 0 ? precio / sup : 0))
+      const rawZona = String(r.zona ?? r.macrozona ?? '').trim()
+      const fechaMes = String(r.fecha ?? r.created_at ?? '').slice(0, 7)
+
+      if (precio > 0 && precio < 10_000_000) {
+        totalUsd += precio
+        if (isCasa) {
+          casasUnds += 1
+          casasUsd += precio
+        } else {
+          deptosUnds += 1
+          deptosUsd += precio
+        }
+      } else {
+        if (isCasa) casasUnds += 1
+        else deptosUnds += 1
+      }
+
+      if (rawZona && rawZona.toLowerCase() !== 'null') {
+        const zKey = formatZonaName(rawZona)
+        const prevZ = zonaMap.get(zKey) ?? { unds: 0, usd: 0 }
+        prevZ.unds += 1
+        if (precio > 0 && precio < 10_000_000) prevZ.usd += precio
+        zonaMap.set(zKey, prevZ)
+      }
+
+      const dormLabel =
+        dorms == null || isNaN(dorms) || dorms <= 0
+          ? 'Estudio / Monoambiente'
+          : dorms >= 4
+            ? '4D o más'
+            : `${dorms}D`
+      const tipoKey = `${isCasa ? 'Casa' : 'Departamento'} ${dormLabel}`
+      const prevT = tipoMap.get(tipoKey) ?? { unds: 0, sups: [], m2s: [] }
+      prevT.unds += 1
+      if (sup >= 20 && sup <= 1500) prevT.sups.push(sup)
+      if (usdM2 >= 150 && usdM2 <= 4500) prevT.m2s.push(usdM2)
+      tipoMap.set(tipoKey, prevT)
+
+      if (/^\d{4}-\d{2}$/.test(fechaMes)) {
+        const prevM = mesMap.get(fechaMes) ?? { unds: 0, usd: 0 }
+        prevM.unds += 1
+        if (precio > 0 && precio < 10_000_000) prevM.usd += precio
+        mesMap.set(fechaMes, prevM)
+      }
+    }
+
+    const totalUnds = liveAnuncios.length
+    const totalZonificadas = Array.from(zonaMap.values()).reduce((s, v) => s + v.unds, 0) || totalUnds
+    const zonasLive = Array.from(zonaMap.entries())
+      .map(([zona, v]) => ({
+        zona,
+        pct: totalZonificadas > 0 ? Math.round((v.unds / totalZonificadas) * 1000) / 10 : 0,
+        unds: v.unds,
+        volumenUsd: Math.round((v.usd / 1_000_000) * 10) / 10,
+      }))
+      .sort((a, b) => b.unds - a.unds)
+      .slice(0, 12)
+
+    const tipologiasLive = Array.from(tipoMap.entries())
+      .filter(([, v]) => v.unds >= 5 && v.sups.length > 0 && v.m2s.length > 0)
+      .map(([tipo, v]) => {
+        const supsSorted = [...v.sups].sort((a, b) => a - b)
+        const m2sSorted = [...v.m2s].sort((a, b) => a - b)
+        const p05 = (arr: number[]) => arr[Math.floor(arr.length * 0.05)] ?? arr[0]
+        const p95 = (arr: number[]) => arr[Math.floor(arr.length * 0.95)] ?? arr[arr.length - 1]
+        const avg = (arr: number[]) => arr.reduce((s, x) => s + x, 0) / arr.length
+        return {
+          tipo,
+          unds: v.unds,
+          supMin: Math.round(p05(supsSorted)),
+          supMax: Math.round(p95(supsSorted)),
+          supAvg: Math.round(avg(supsSorted) * 10) / 10,
+          precioM2Min: Math.round(p05(m2sSorted)),
+          precioM2Max: Math.round(p95(m2sSorted)),
+          precioM2Avg: Math.round(avg(m2sSorted)),
+        }
+      })
+      .sort((a, b) => b.unds - a.unds)
+
+    const serieMensualLive = Array.from(mesMap.entries())
+      .sort(([a], [b]) => a.localeCompare(b))
+      .map(([periodo, v]) => ({
+        periodo,
+        valor: v.unds,
+        secundario: Math.round((v.usd / 1_000_000) * 10) / 10,
+      }))
+
+    return {
+      kpis: {
+        stockTotalUsd: Math.round(totalUsd / 1_000_000) || MARKETPLACE_DATA.kpis.stockTotalUsd,
+        unidadesTotales: totalUnds || MARKETPLACE_DATA.kpis.unidadesTotales,
+        deptosUsd: Math.round(deptosUsd / 1_000_000) || MARKETPLACE_DATA.kpis.deptosUsd,
+        deptosUnds: deptosUnds || MARKETPLACE_DATA.kpis.deptosUnds,
+        casasUsd: Math.round(casasUsd / 1_000_000) || MARKETPLACE_DATA.kpis.casasUsd,
+        casasUnds: casasUnds || MARKETPLACE_DATA.kpis.casasUnds,
+      },
+      tipologias: tipologiasLive.length > 0 ? tipologiasLive : MARKETPLACE_DATA.tipologias,
+      zonas: zonasLive.length > 0 ? zonasLive : MARKETPLACE_DATA.zonas,
+      serieMensual: serieMensualLive.length > 1 ? serieMensualLive : MARKETPLACE_DATA.serieMensual,
+    }
+  }, [liveAnuncios])
 
   // Chart Option: Zonificación Barras Horizontales
   const getZonificacionChart = () => ({
@@ -127,8 +266,12 @@ export default function MarketplaceParticularesPanel() {
         </div>
         <div className="citrino-kpi-card purple">
           <span className="citrino-kpi-label">Zona Principal de Oferta</span>
-          <span className="citrino-kpi-val">Equipetrol (21%)</span>
-          <span className="citrino-kpi-sub">$128M USD concentrado</span>
+          <span className="citrino-kpi-val">
+            {zonas[0] ? `${zonas[0].zona} (${zonas[0].pct}%)` : 'Equipetrol (21%)'}
+          </span>
+          <span className="citrino-kpi-sub">
+            {zonas[0] ? `$${zonas[0].volumenUsd}M USD concentrado` : '$128M USD concentrado'}
+          </span>
         </div>
       </div>
 

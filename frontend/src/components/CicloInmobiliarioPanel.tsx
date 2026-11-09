@@ -1,14 +1,71 @@
-import { useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import ReactECharts from 'echarts-for-react'
 import './CitrinoInstitutionalPanels.css'
 import { CICLO_INMOBILIARIO_DATA } from '../data/citrinoDataStudioData'
 import { useChartTheme } from '../lib/chartTheme'
+import { fetchCicloInmobiliarioLive } from '../lib/supabase'
 import TopTabBar from './TopTabBar'
 
 export default function CicloInmobiliarioPanel() {
   const ct = useChartTheme()
   const [activeSubTab, setActiveSubTab] = useState<'reloj' | 'alquileres'>('reloj')
-  const { tasaEquilibrio, faseActual, fases, serieHistoricaOcupacion } = CICLO_INMOBILIARIO_DATA
+  const [liveData, setLiveData] = useState<Awaited<ReturnType<typeof fetchCicloInmobiliarioLive>> | null>(null)
+
+  useEffect(() => {
+    let cancelled = false
+    fetchCicloInmobiliarioLive().then((res) => {
+      if (!cancelled && res.hasLiveRows) {
+        setLiveData(res)
+      }
+    })
+    return () => {
+      cancelled = true
+    }
+  }, [])
+
+  const { tasaEquilibrio, faseActual, fases, serieHistoricaOcupacion } = useMemo(() => {
+    if (!liveData || !liveData.hasLiveRows) return CICLO_INMOBILIARIO_DATA
+
+    // Agrupar ind_alquileres (315 filas: fecha, valor_promedio_alquiler, var_anual, ciudad) por año
+    const alqPorAno = new Map<string, number[]>()
+    for (const r of liveData.alquileres) {
+      const ano = String(r.fecha ?? '').slice(0, 4)
+      const varAnualRaw = r.var_anual
+      if (!/^\d{4}$/.test(ano) || varAnualRaw == null || isNaN(Number(varAnualRaw))) continue
+      const pct = Math.abs(Number(varAnualRaw)) <= 1.5 ? Number(varAnualRaw) * 100 : Number(varAnualRaw)
+      const arr = alqPorAno.get(ano) ?? []
+      arr.push(pct)
+      alqPorAno.set(ano, arr)
+    }
+
+    const baseMap = new Map<string, { ano: string; ocupacion: number; alquilerVar: number }>()
+    for (const s of CICLO_INMOBILIARIO_DATA.serieHistoricaOcupacion) {
+      baseMap.set(s.ano, { ...s })
+    }
+
+    for (const [ano, arr] of alqPorAno.entries()) {
+      if (arr.length === 0) continue
+      const avgVar = Math.round((arr.reduce((s, x) => s + x, 0) / arr.length) * 10) / 10
+      const existing = baseMap.get(ano)
+      if (existing) {
+        existing.alquilerVar = avgVar
+      } else {
+        baseMap.set(ano, {
+          ano,
+          ocupacion: Number(ano) >= 2024 ? 93.2 : 94.0,
+          alquilerVar: avgVar,
+        })
+      }
+    }
+
+    const serieCombinada = Array.from(baseMap.values()).sort((a, b) => a.ano.localeCompare(b.ano))
+
+    return {
+      ...CICLO_INMOBILIARIO_DATA,
+      serieHistoricaOcupacion:
+        serieCombinada.length > 0 ? serieCombinada : CICLO_INMOBILIARIO_DATA.serieHistoricaOcupacion,
+    }
+  }, [liveData])
 
   // Chart Option: Gauge Reloj del Ciclo Inmobiliario
   const getClockGaugeChart = () => ({

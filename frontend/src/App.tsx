@@ -743,7 +743,17 @@ export default function App() {
                 )}
 
                 {/* ── CAPÍTULO 1.2: EVOLUTIVO DE LA OFERTA NUEVA ── */}
-                {activeChapter === '1.2' && <EvolutivoOfertaPanel />}
+                {activeChapter === '1.2' && (
+                  <EvolutivoOfertaPanel
+                    ciudad={ciudad}
+                    zonaFilter={zonaFilter}
+                    subzonaFilter={subzonaFilter}
+                    tipoInmuebleFilter={tipoInmuebleFilter}
+                    etapaFilter={etapaFilterArr}
+                    periodoFilter={periodoFilter}
+                    tipologiaFilter={tipologiaFilter}
+                  />
+                )}
 
                 {/* ── CAPÍTULO 1.3: OFERTA DE PARTICULARES (MARKETPLACE) ── */}
                 {activeChapter === '1.3' && <MarketplaceParticularesPanel />}

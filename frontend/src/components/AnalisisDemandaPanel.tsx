@@ -1,18 +1,65 @@
-import { useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import ReactECharts from 'echarts-for-react'
 import './CitrinoInstitutionalPanels.css'
 import { DEMANDA_DATA } from '../data/citrinoDataStudioData'
 import { useChartTheme } from '../lib/chartTheme'
+import { fetchDemandaLive } from '../lib/supabase'
 import TopTabBar from './TopTabBar'
 
 interface Props {
   initialChapter?: '2.1' | '2.2' | '2.3'
 }
 
+function cleanSurveyLabel(raw: unknown): string {
+  const s = String(raw ?? '')
+    .trim()
+    .replace(/^[a-z0-9]{1,2}[.)]\s*/i, '')
+    .trim()
+  if (!s) return ''
+  return s.charAt(0).toUpperCase() + s.slice(1)
+}
+
+function buildPctList<K extends string>(
+  rows: any[],
+  field: string,
+  keyName: K,
+  maxItems = 8
+): Array<Record<K, string> & { pct: number }> {
+  const counts = new Map<string, number>()
+  let total = 0
+  for (const r of rows) {
+    const label = cleanSurveyLabel(r?.[field])
+    if (!label || label.toLowerCase() === 'null') continue
+    counts.set(label, (counts.get(label) ?? 0) + 1)
+    total += 1
+  }
+  if (total === 0) return []
+  return Array.from(counts.entries())
+    .sort((a, b) => b[1] - a[1])
+    .slice(0, maxItems)
+    .map(([label, c]) => ({
+      [keyName]: label,
+      pct: Math.round((c / total) * 1000) / 10,
+    } as Record<K, string> & { pct: number }))
+}
+
 export default function AnalisisDemandaPanel({ initialChapter = '2.1' }: Props) {
   const ct = useChartTheme()
   const [activeChapter] = useState<'2.1' | '2.2' | '2.3'>(initialChapter)
   const [compTab, setCompTab] = useState<'composicion' | 'voluntad'>('composicion')
+  const [liveData, setLiveData] = useState<Awaited<ReturnType<typeof fetchDemandaLive>> | null>(null)
+
+  useEffect(() => {
+    let cancelled = false
+    fetchDemandaLive().then((res) => {
+      if (!cancelled && res.hasLiveRows) {
+        setLiveData(res)
+      }
+    })
+    return () => {
+      cancelled = true
+    }
+  }, [])
 
   // Sub-pills internos auditados para Compra Inversión (2.2)
   const [invSubTab, setInvSubTab] = useState<'motivadores' | 'tipologia' | 'zonas' | 'amenidades'>('motivadores')
@@ -27,7 +74,56 @@ export default function AnalisisDemandaPanel({ initialChapter = '2.1' }: Props) 
   const [vivPillCasa, setVivPillCasa] = useState<'por_que' | 'aspectos' | 'detalles'>('por_que')
   const [vivPillDepto, setVivPillDepto] = useState<'por_que' | 'aspectos' | 'detalles'>('por_que')
 
-  const { general, inversion, viviendaPropia } = DEMANDA_DATA
+  const { general, inversion, viviendaPropia } = useMemo(() => {
+    if (!liveData || !liveData.hasLiveRows) return DEMANDA_DATA
+
+    const ingresosLive = buildPctList(liveData.perfilIntencion, 'ingresos_rango_q7', 'rango', 8)
+    const cuotaLive = buildPctList(liveData.perfilIntencion, 'cuota_rango_q8', 'rango', 8)
+    const aporteLive = buildPctList(liveData.perfilIntencion, 'ahorro_rango_q9', 'rango', 6)
+
+    const motivadoresLive = buildPctList(liveData.inversion, 'motivador_inversion_q13', 'motivo', 6)
+    const decision1Live = buildPctList(liveData.inversion, 'opcion_invertir_q14', 'factor', 6)
+    const decision2Live = buildPctList(liveData.inversion, 'que_haria_con_inversion_q19', 'factor', 6)
+    const valorInvLive = buildPctList(liveData.inversion, 'valor_rango_q23', 'rango', 6)
+    const factoresInvLive = buildPctList(liveData.inversion, 'alternativa_inversion_q24', 'factor', 7)
+
+    const tipologiaVivLive = buildPctList(liveData.vivienda, 'opcion_comprar_vivienda_q25', 'tipo', 6)
+    const presupuestoVivLive = buildPctList(liveData.vivienda, 'valor_rango_q33', 'rango', 6)
+    const decisionVivLive = buildPctList(liveData.vivienda, 'tiempo_mudarse_q34', 'factor', 6)
+    const zonasVivLive = buildPctList(liveData.viviendaZonas, 'zona_q30_q31', 'zona', 8)
+    const amenidadesVivLive = buildPctList(liveData.viviendaAmenidades, 'amenidad_q26', 'amenidad', 8)
+    const aspectosDeptoLive = buildPctList(liveData.viviendaDeptoAspectos, 'aspecto_q42', 'motivo', 6)
+
+    return {
+      general: {
+        ...DEMANDA_DATA.general,
+        muestra: liveData.encuestados.length || DEMANDA_DATA.general.muestra,
+        ingresos: ingresosLive.length > 0 ? ingresosLive : DEMANDA_DATA.general.ingresos,
+        cuotaMensual: cuotaLive.length > 0 ? cuotaLive : DEMANDA_DATA.general.cuotaMensual,
+        aportePropio: aporteLive.length > 0 ? aporteLive : DEMANDA_DATA.general.aportePropio,
+      },
+      inversion: {
+        ...DEMANDA_DATA.inversion,
+        muestra: liveData.inversion.length || DEMANDA_DATA.inversion.muestra,
+        motivadores: motivadoresLive.length > 0 ? motivadoresLive : DEMANDA_DATA.inversion.motivadores,
+        decision1: decision1Live.length > 0 ? decision1Live : DEMANDA_DATA.inversion.decision1,
+        decision2: decision2Live.length > 0 ? decision2Live : DEMANDA_DATA.inversion.decision2,
+        valorInmueble: valorInvLive.length > 0 ? valorInvLive : DEMANDA_DATA.inversion.valorInmueble,
+        zonas: zonasVivLive.length > 0 ? zonasVivLive : DEMANDA_DATA.inversion.zonas,
+        factoresZona: factoresInvLive.length > 0 ? factoresInvLive : DEMANDA_DATA.inversion.factoresZona,
+      },
+      viviendaPropia: {
+        ...DEMANDA_DATA.viviendaPropia,
+        muestra: liveData.vivienda.length || DEMANDA_DATA.viviendaPropia.muestra,
+        tipologia: tipologiaVivLive.length > 0 ? tipologiaVivLive : DEMANDA_DATA.viviendaPropia.tipologia,
+        presupuesto: presupuestoVivLive.length > 0 ? presupuestoVivLive : DEMANDA_DATA.viviendaPropia.presupuesto,
+        decision: decisionVivLive.length > 0 ? decisionVivLive : DEMANDA_DATA.viviendaPropia.decision,
+        zonas: zonasVivLive.length > 0 ? zonasVivLive : DEMANDA_DATA.viviendaPropia.zonas,
+        amenidades: amenidadesVivLive.length > 0 ? amenidadesVivLive : DEMANDA_DATA.viviendaPropia.amenidades,
+        porQueDepto: aspectosDeptoLive.length > 0 ? aspectosDeptoLive : DEMANDA_DATA.viviendaPropia.porQueDepto,
+      },
+    }
+  }, [liveData])
 
   // Charts
   const getPieSimple = (data: { name: string; value: number }[], colors?: string[]) => ({

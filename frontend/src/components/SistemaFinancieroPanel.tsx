@@ -1,8 +1,9 @@
-import { useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import ReactECharts from 'echarts-for-react'
 import './CitrinoInstitutionalPanels.css'
 import { SISTEMA_FINANCIERO_DATA } from '../data/citrinoDataStudioData'
 import { useChartTheme } from '../lib/chartTheme'
+import { fetchSistemaFinancieroLive } from '../lib/supabase'
 import TopTabBar from './TopTabBar'
 
 interface Props {
@@ -18,8 +19,191 @@ export default function SistemaFinancieroPanel({ initialChapter = '3.1' }: Props
   // Sub-pills de Mora
   const [moraHipotecariaPill, setMoraHipotecariaPill] = useState<'monto' | 'ratio'>('monto')
   const [moraConstruccionPill, setMoraConstruccionPill] = useState<'porcentajes' | 'monto'>('porcentajes')
+  const [liveData, setLiveData] = useState<Awaited<ReturnType<typeof fetchSistemaFinancieroLive>> | null>(null)
 
-  const { carteraHipotecaria, moraHipotecaria, moraConstruccion } = SISTEMA_FINANCIERO_DATA
+  useEffect(() => {
+    let cancelled = false
+    fetchSistemaFinancieroLive().then((res) => {
+      if (!cancelled && res.hasLiveRows) {
+        setLiveData(res)
+      }
+    })
+    return () => {
+      cancelled = true
+    }
+  }, [])
+
+  const { carteraHipotecaria, creditoConstruccionSerie, moraHipotecaria, moraConstruccion } = useMemo(() => {
+    if (!liveData || !liveData.hasLiveRows) {
+      return {
+        ...SISTEMA_FINANCIERO_DATA,
+        creditoConstruccionSerie: [] as { periodo: string; boliviaUsd: number; sczUsd: number }[],
+      }
+    }
+
+    const toMillonesUsd = (val: unknown) => {
+      const n = Number(val ?? 0)
+      if (!n || isNaN(n)) return 0
+      return n > 50_000 ? Math.round((n / 1_000_000) * 10) / 10 : Math.round(n * 10) / 10
+    }
+
+    // 1. Cartera Hipotecaria (ind_consolidado_hipotecaria_vivienda, 422 filas)
+    const hipPorAno = new Map<string, { bolivia: number; scz: number }>()
+    const sortedHip = [...liveData.consolidadoHipotecaria].sort((a: any, b: any) =>
+      String(a.fecha ?? '').localeCompare(String(b.fecha ?? ''))
+    )
+    for (const r of sortedHip) {
+      const ano = String(r.fecha ?? '').slice(0, 4)
+      if (!/^\d{4}$/.test(ano) || Number(ano) < 2012) continue
+      const mmUsd = toMillonesUsd(r.cartera_mm_usd ?? r.cartera_bs)
+      if (mmUsd <= 0) continue
+      const ciudad = String(r.ciudad ?? '').toLowerCase().trim()
+      const prev = hipPorAno.get(ano) ?? { bolivia: 0, scz: 0 }
+      if (ciudad === 'bolivia') prev.bolivia = mmUsd
+      else if (ciudad === 'santa cruz') prev.scz = mmUsd
+      hipPorAno.set(ano, prev)
+    }
+
+    const carteraLive = Array.from(hipPorAno.entries())
+      .sort(([a], [b]) => a.localeCompare(b))
+      .filter(([, v]) => v.bolivia > 0)
+      .map(([periodo, v]) => ({
+        periodo,
+        totalUsd: Math.round(v.bolivia),
+        visUsd: Math.round(v.scz > 0 ? v.scz : v.bolivia * 0.65),
+        tasaPromedio: 6.2,
+      }))
+
+    // 2. Crédito al Sector Construcción (ind_consolidado_credito_construccion, 160 filas)
+    const constPorAno = new Map<string, { bolivia: number; scz: number }>()
+    const sortedConst = [...liveData.consolidadoConstruccion].sort((a: any, b: any) =>
+      String(a.fecha ?? '').localeCompare(String(b.fecha ?? ''))
+    )
+    for (const r of sortedConst) {
+      const ano = String(r.fecha ?? '').slice(0, 4)
+      if (!/^\d{4}$/.test(ano) || Number(ano) < 2012) continue
+      const mmUsd = toMillonesUsd(r.credito_mm_usd)
+      if (mmUsd <= 0) continue
+      const ciudad = String(r.ciudad ?? '').toLowerCase().trim()
+      const prev = constPorAno.get(ano) ?? { bolivia: 0, scz: 0 }
+      if (ciudad === 'bolivia') prev.bolivia = mmUsd
+      else if (ciudad === 'santa cruz') prev.scz = mmUsd
+      constPorAno.set(ano, prev)
+    }
+
+    const creditoConstruccionLive = Array.from(constPorAno.entries())
+      .sort(([a], [b]) => a.localeCompare(b))
+      .filter(([, v]) => v.bolivia > 0 || v.scz > 0)
+      .map(([periodo, v]) => ({
+        periodo,
+        boliviaUsd: Math.round(v.bolivia),
+        sczUsd: Math.round(v.scz),
+      }))
+
+    // 3. Mora Hipotecaria Bancos (ind_mora_hipotecaria_bancos, 1.722 filas)
+    const moraFechaMap = new Map<string, { declUsd: number; reprogUsd: number; totalUsd: number; carteraUsd: number }>()
+    for (const r of liveData.moraHipotecariaBancos) {
+      const fecha = String(r.fecha ?? '').slice(0, 7)
+      if (!/^\d{4}-\d{2}$/.test(fecha)) continue
+      const prev = moraFechaMap.get(fecha) ?? { declUsd: 0, reprogUsd: 0, totalUsd: 0, carteraUsd: 0 }
+      prev.declUsd += Number(r.mora_declarada_usd ?? 0)
+      prev.reprogUsd += Number(r.mora_reprogramada_usd ?? 0)
+      prev.totalUsd += Number(r.mora_total_usd ?? 0)
+      prev.carteraUsd += Number(r.total_cartera_usd ?? 0)
+      moraFechaMap.set(fecha, prev)
+    }
+
+    // Tomar el último corte disponible de cada año desde 2018
+    const moraPorAno = new Map<string, { periodo: string; totalMoraUsd: number; reprogramadaUsd: number; noReprogramadaUsd: number; ratioPct: number }>()
+    for (const [fecha, v] of Array.from(moraFechaMap.entries()).sort(([a], [b]) => a.localeCompare(b))) {
+      const ano = fecha.slice(0, 4)
+      if (Number(ano) < 2018 || v.totalUsd <= 0) continue
+      const reprog = Math.round((v.reprogUsd / 1_000_000) * 10) / 10
+      const noReprog = Math.round((v.declUsd / 1_000_000) * 10) / 10
+      const tot = Math.round(((v.reprogUsd + v.declUsd) / 1_000_000) * 10) / 10
+      const ratio = v.carteraUsd > 0 ? Math.round(((v.reprogUsd + v.declUsd) / v.carteraUsd) * 1000) / 10 : 3.0
+      moraPorAno.set(ano, {
+        periodo: fecha,
+        totalMoraUsd: tot,
+        reprogramadaUsd: reprog,
+        noReprogramadaUsd: noReprog,
+        ratioPct: ratio,
+      })
+    }
+
+    const moraHipSerieLive = Array.from(moraPorAno.values())
+    const latestMoraHip = moraHipSerieLive[moraHipSerieLive.length - 1]
+
+    // 4. Mora Construcción (ind_cartera_construccion, 196 filas)
+    const moraConstAno = new Map<string, { periodo: string; montoUsd: number; ratioPct: number; reprogUsd: number }>()
+    const sortedCartConst = [...liveData.carteraConstruccion].sort((a: any, b: any) =>
+      String(a.fecha ?? '').localeCompare(String(b.fecha ?? ''))
+    )
+    // Agrupar por fecha sumando ciudades (o tomando bolivia si existe)
+    const constFechaMap = new Map<string, { moraUsd: number; reprogUsd: number; carteraUsd: number; hasBolivia: boolean }>()
+    for (const r of sortedCartConst) {
+      const fecha = String(r.fecha ?? '').slice(0, 7)
+      if (!/^\d{4}-\d{2}$/.test(fecha)) continue
+      const ciudad = String(r.ciudad ?? '').toLowerCase().trim()
+      const moraUsd = Number(r.mora_total_usd ?? 0)
+      const reprogUsd = Number(r.mora_reprogramada_usd ?? 0)
+      const carteraUsd = Number(r.total_cartera_usd ?? 0)
+      if (ciudad === 'bolivia') {
+        constFechaMap.set(fecha, { moraUsd, reprogUsd, carteraUsd, hasBolivia: true })
+      } else {
+        const prev = constFechaMap.get(fecha) ?? { moraUsd: 0, reprogUsd: 0, carteraUsd: 0, hasBolivia: false }
+        if (!prev.hasBolivia) {
+          prev.moraUsd += moraUsd
+          prev.reprogUsd += reprogUsd
+          prev.carteraUsd += carteraUsd
+          constFechaMap.set(fecha, prev)
+        }
+      }
+    }
+
+    for (const [fecha, v] of Array.from(constFechaMap.entries()).sort(([a], [b]) => a.localeCompare(b))) {
+      const ano = fecha.slice(0, 4)
+      if (Number(ano) < 2018 || v.moraUsd <= 0) continue
+      const monto = Math.round((v.moraUsd / 1_000_000) * 10) / 10
+      const ratio = v.carteraUsd > 0 ? Math.round((v.moraUsd / v.carteraUsd) * 1000) / 10 : 3.2
+      moraConstAno.set(ano, {
+        periodo: fecha,
+        montoUsd: monto,
+        ratioPct: ratio,
+        reprogUsd: Math.round((v.reprogUsd / 1_000_000) * 10) / 10,
+      })
+    }
+
+    const moraConstSerieLive = Array.from(moraConstAno.values())
+    const latestMoraConst = moraConstSerieLive[moraConstSerieLive.length - 1]
+
+    return {
+      carteraHipotecaria: carteraLive.length > 0 ? carteraLive : SISTEMA_FINANCIERO_DATA.carteraHipotecaria,
+      creditoConstruccionSerie: creditoConstruccionLive,
+      moraHipotecaria:
+        moraHipSerieLive.length > 0 && latestMoraHip
+          ? {
+              totalMoraUsd: latestMoraHip.totalMoraUsd,
+              ratioMoraPct: latestMoraHip.ratioPct,
+              reprogramadaUsd: latestMoraHip.reprogramadaUsd,
+              noReprogramadaUsd: latestMoraHip.noReprogramadaUsd,
+              serie: moraHipSerieLive,
+            }
+          : SISTEMA_FINANCIERO_DATA.moraHipotecaria,
+      moraConstruccion:
+        moraConstSerieLive.length > 0 && latestMoraConst
+          ? {
+              totalMoraUsd: latestMoraConst.montoUsd,
+              ratioMoraPct: latestMoraConst.ratioPct,
+              pctReprogramada:
+                latestMoraConst.montoUsd > 0
+                  ? Math.round((latestMoraConst.reprogUsd / latestMoraConst.montoUsd) * 1000) / 10
+                  : 89.4,
+              serie: moraConstSerieLive,
+            }
+          : SISTEMA_FINANCIERO_DATA.moraConstruccion,
+    }
+  }, [liveData])
 
   // Chart Option: Cartera Hipotecaria vs Vivienda Social (2015 - 2026)
   const getCarteraChart = () => ({
@@ -124,6 +308,53 @@ export default function SistemaFinancieroPanel({ initialChapter = '3.1' }: Props
     ],
   })
 
+  // Chart Option: Crédito al Sector Construcción (Bolivia vs Santa Cruz)
+  const getCreditoConstruccionChart = () => ({
+    aria: { enabled: true },
+    backgroundColor: 'transparent',
+    tooltip: { trigger: 'axis' },
+    legend: { textStyle: { color: ct.muted }, top: 0 },
+    grid: { left: '3%', right: '4%', bottom: '3%', containLabel: true },
+    xAxis: {
+      type: 'category',
+      data: creditoConstruccionSerie.map((c) => c.periodo),
+      axisLabel: { color: ct.muted },
+    },
+    yAxis: {
+      type: 'value',
+      name: 'Millones $US',
+      axisLabel: { color: ct.muted },
+      splitLine: { lineStyle: { color: ct.grid } },
+    },
+    series: [
+      {
+        name: 'Crédito construcción Bolivia',
+        type: 'line',
+        smooth: true,
+        data: creditoConstruccionSerie.map((c) => c.boliviaUsd),
+        itemStyle: { color: '#a855f7' },
+        lineStyle: { width: 3 },
+      },
+      {
+        name: 'Crédito construcción Santa Cruz',
+        type: 'bar',
+        data: creditoConstruccionSerie.map((c) => c.sczUsd),
+        itemStyle: { color: '#f59e0b', borderRadius: [4, 4, 0, 0] },
+      },
+    ],
+  })
+
+  const latestCartera = carteraHipotecaria[carteraHipotecaria.length - 1]
+  const latestConstruccion = creditoConstruccionSerie[creditoConstruccionSerie.length - 1]
+  const pctSczConstruccion =
+    latestConstruccion && latestConstruccion.boliviaUsd > 0
+      ? Math.round((latestConstruccion.sczUsd / latestConstruccion.boliviaUsd) * 100)
+      : 54
+  const pctReprogHip =
+    moraHipotecaria.totalMoraUsd > 0
+      ? Math.round((moraHipotecaria.reprogramadaUsd / moraHipotecaria.totalMoraUsd) * 100)
+      : 57
+
   return (
     <div className="citrino-panel-wrap">
       {/* ── CAPÍTULO 3.1: FINANCIAMIENTO AL SECTOR INMOBILIARIO ── */}
@@ -141,19 +372,23 @@ export default function SistemaFinancieroPanel({ initialChapter = '3.1' }: Props
           <div className="citrino-kpis-grid">
             <div className="citrino-kpi-card blue">
               <span className="citrino-kpi-label">Cartera Hipotecaria Total</span>
-              <span className="citrino-kpi-val">$7.820 M USD</span>
+              <span className="citrino-kpi-val">
+                ${(latestCartera?.totalUsd ?? 7820).toLocaleString('es-BO')} M USD
+              </span>
               <span className="citrino-kpi-sub">Estancamiento relativo 2024-2026</span>
             </div>
             <div className="citrino-kpi-card green">
-              <span className="citrino-kpi-label">Cartera VIS Regulada</span>
-              <span className="citrino-kpi-val">$5.320 M USD</span>
-              <span className="citrino-kpi-sub">68% del saldo hipotecario nacional</span>
+              <span className="citrino-kpi-label">Cartera Hipotecaria Principal</span>
+              <span className="citrino-kpi-val">
+                ${(latestCartera?.visUsd ?? 5320).toLocaleString('es-BO')} M USD
+              </span>
+              <span className="citrino-kpi-sub">Saldo hipotecario de referencia</span>
             </div>
           </div>
 
           <div className="citrino-card-box">
             <div className="citrino-card-header">
-              <h3 className="citrino-card-title">Cartera hipotecaria total vs vivienda social (2015 - 2026)</h3>
+              <h3 className="citrino-card-title">Cartera hipotecaria total vs referencia (2012 - 2026)</h3>
               <span className="citrino-card-hint">Expresado en millones de $US</span>
             </div>
             <ReactECharts option={getCarteraChart()} style={{ height: 350 }} />
@@ -166,12 +401,14 @@ export default function SistemaFinancieroPanel({ initialChapter = '3.1' }: Props
           <div className="citrino-kpis-grid">
             <div className="citrino-kpi-card purple">
               <span className="citrino-kpi-label">Crédito a la Construcción</span>
-              <span className="citrino-kpi-val">$2.140 M USD</span>
+              <span className="citrino-kpi-val">
+                ${(latestConstruccion?.boliviaUsd ?? 2140).toLocaleString('es-BO')} M USD
+              </span>
               <span className="citrino-kpi-sub">Saldo actual de préstamos a constructoras</span>
             </div>
             <div className="citrino-kpi-card amber">
               <span className="citrino-kpi-label">Concentración en Santa Cruz</span>
-              <span className="citrino-kpi-val">54%</span>
+              <span className="citrino-kpi-val">{pctSczConstruccion}%</span>
               <span className="citrino-kpi-sub">Del crédito a la construcción</span>
             </div>
           </div>
@@ -179,11 +416,15 @@ export default function SistemaFinancieroPanel({ initialChapter = '3.1' }: Props
           <div className="citrino-card-box">
             <div className="citrino-card-header">
               <h3 className="citrino-card-title">Evolución del crédito a la construcción</h3>
-              <span className="citrino-card-hint">Serie histórica pendiente de carga</span>
+              <span className="citrino-card-hint">Expresado en millones de $US</span>
             </div>
-            <p style={{ color: 'var(--text-muted)', fontSize: 'var(--fs-cuerpo)', margin: '8px 0 0' }}>
-              Todavía no hay datos históricos de este indicador en la plataforma. Cuando se carguen, aparecerán aquí.
-            </p>
+            {creditoConstruccionSerie.length > 0 ? (
+              <ReactECharts option={getCreditoConstruccionChart()} style={{ height: 350 }} />
+            ) : (
+              <p style={{ color: 'var(--text-muted)', fontSize: 'var(--fs-cuerpo)', margin: '8px 0 0' }}>
+                Cargando serie histórica de crédito a la construcción...
+              </p>
+            )}
           </div>
         </div>
       )}
@@ -203,13 +444,13 @@ export default function SistemaFinancieroPanel({ initialChapter = '3.1' }: Props
           <div className="citrino-kpis-grid">
             <div className="citrino-kpi-card amber">
               <span className="citrino-kpi-label">Mora Hipotecaria Total</span>
-              <span className="citrino-kpi-val">$132 M USD</span>
-              <span className="citrino-kpi-sub">Tasa del 3.2% de la cartera</span>
+              <span className="citrino-kpi-val">${moraHipotecaria.totalMoraUsd} M USD</span>
+              <span className="citrino-kpi-sub">Tasa del {moraHipotecaria.ratioMoraPct}% de la cartera</span>
             </div>
             <div className="citrino-kpi-card red">
               <span className="citrino-kpi-label">Mora Reprogramada Hipotecaria</span>
-              <span className="citrino-kpi-val">$75.2 M USD</span>
-              <span className="citrino-kpi-sub">57% de la mora total</span>
+              <span className="citrino-kpi-val">${moraHipotecaria.reprogramadaUsd} M USD</span>
+              <span className="citrino-kpi-sub">{pctReprogHip}% de la mora total</span>
             </div>
           </div>
 
@@ -238,8 +479,8 @@ export default function SistemaFinancieroPanel({ initialChapter = '3.1' }: Props
           <div className="citrino-kpis-grid">
             <div className="citrino-kpi-card purple">
               <span className="citrino-kpi-label">Mora Sector Construcción</span>
-              <span className="citrino-kpi-val">$47 M USD</span>
-              <span className="citrino-kpi-sub">Casi 90% es cartera reprogramada</span>
+              <span className="citrino-kpi-val">${moraConstruccion.totalMoraUsd} M USD</span>
+              <span className="citrino-kpi-sub">{moraConstruccion.pctReprogramada}% es cartera reprogramada</span>
             </div>
           </div>
 

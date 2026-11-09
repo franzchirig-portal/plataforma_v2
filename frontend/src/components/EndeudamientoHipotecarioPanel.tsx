@@ -1,17 +1,64 @@
-import { useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import ReactECharts from 'echarts-for-react'
 import './CitrinoInstitutionalPanels.css'
 import { ENDEUDAMIENTO_DATA } from '../data/citrinoDataStudioData'
 import { useChartTheme } from '../lib/chartTheme'
+import { fetchEndeudamientoLive } from '../lib/supabase'
 import TopTabBar from './TopTabBar'
 
 interface Props {
   initialChapter?: '4.1' | '4.2' | '4.3'
 }
 
+function cleanLabel(raw: unknown): string {
+  const s = String(raw ?? '')
+    .trim()
+    .replace(/^[a-z0-9]{1,2}[.)]\s*/i, '')
+    .trim()
+  if (!s) return ''
+  return s.charAt(0).toUpperCase() + s.slice(1)
+}
+
+function buildFreqList<K extends string>(
+  rows: any[],
+  field: string,
+  keyName: K,
+  maxItems = 12
+): Array<Record<K, string> & { pct: number }> {
+  const counts = new Map<string, number>()
+  let total = 0
+  for (const r of rows) {
+    const label = cleanLabel(r?.[field])
+    if (!label || label.toLowerCase() === 'null') continue
+    counts.set(label, (counts.get(label) ?? 0) + 1)
+    total += 1
+  }
+  if (total === 0) return []
+  return Array.from(counts.entries())
+    .sort((a, b) => b[1] - a[1])
+    .slice(0, maxItems)
+    .map(([label, c]) => ({
+      [keyName]: label,
+      pct: Math.round((c / total) * 1000) / 10,
+    } as Record<K, string> & { pct: number }))
+}
+
 export default function EndeudamientoHipotecarioPanel({ initialChapter = '4.1' }: Props) {
   const ct = useChartTheme()
   const [activeChapter] = useState<'4.1' | '4.2' | '4.3'>(initialChapter)
+  const [liveData, setLiveData] = useState<Awaited<ReturnType<typeof fetchEndeudamientoLive>> | null>(null)
+
+  useEffect(() => {
+    let cancelled = false
+    fetchEndeudamientoLive().then((res) => {
+      if (!cancelled && res.hasLiveRows) {
+        setLiveData(res)
+      }
+    })
+    return () => {
+      cancelled = true
+    }
+  }, [])
 
   // Sub-tabs y sub-pills para 4.1 Perfil del Consumidor
   const [perfilSubTab, setPerfilSubTab] = useState<'zona' | 'hogar' | 'laboral' | 'ingresos'>('zona')
@@ -40,7 +87,40 @@ export default function EndeudamientoHipotecarioPanel({ initialChapter = '4.1' }
     percepcionPasadoPrecios,
     percepcionFuturoExpectativa,
     percepcionFuturoPrecios12Meses,
-  } = ENDEUDAMIENTO_DATA
+  } = useMemo(() => {
+    if (!liveData || !liveData.hasLiveRows) return ENDEUDAMIENTO_DATA
+
+    const zonasLive = buildFreqList(liveData.perfilConsumidor, 'zona_vivienda_q13', 'zona', 20)
+    const finLive = buildFreqList(liveData.hipotecario, 'tipo_financiamiento_q14', 'tipo', 8)
+    const valorCompraLive = buildFreqList(liveData.hipotecario, 'monto_compra_usd_q19', 'rango', 10)
+    const tipoVivLive = buildFreqList(liveData.perfilConsumidor, 'tipo_vivienda_simplificado_q10_1', 'tipo', 5)
+    const dormsLive = buildFreqList(liveData.perfilConsumidor, 'dormitorios_rango_q11', 'dorms', 6)
+    const tamanoFamLive = buildFreqList(liveData.perfilConsumidor, 'tamano_familia_q1_1', 'tamano', 5)
+    const bancosLive = buildFreqList(liveData.hipotecario, 'institucion_financiera_q15', 'banco', 14)
+    const nivelDeudaLive = buildFreqList(liveData.hipotecario, 'nivel_deuda_nd', 'rango', 6)
+    const aporteLive = buildFreqList(liveData.hipotecario, 'pct_aporte_propio_q17', 'rango', 8)
+    const nseLive = buildFreqList(liveData.encuestados, 'nse', 'estrato', 6)
+    const ingresoFamLive = buildFreqList(liveData.perfilConsumidor, 'ingresos_hogar_bs_q4', 'rango', 10)
+
+    return {
+      ...ENDEUDAMIENTO_DATA,
+      zonasCredito: zonasLive.length > 0 ? zonasLive : ENDEUDAMIENTO_DATA.zonasCredito,
+      tiposFinanciacion: finLive.length > 0 ? finLive : ENDEUDAMIENTO_DATA.tiposFinanciacion,
+      caracteristicasHogar: {
+        valorCompra: valorCompraLive.length > 0 ? valorCompraLive : ENDEUDAMIENTO_DATA.caracteristicasHogar.valorCompra,
+        tipoVivienda: tipoVivLive.length > 0 ? tipoVivLive : ENDEUDAMIENTO_DATA.caracteristicasHogar.tipoVivienda,
+        dormitorios: dormsLive.length > 0 ? dormsLive : ENDEUDAMIENTO_DATA.caracteristicasHogar.dormitorios,
+        tamanoFamilia: tamanoFamLive.length > 0 ? tamanoFamLive : ENDEUDAMIENTO_DATA.caracteristicasHogar.tamanoFamilia,
+      },
+      bancosFinanciadores: bancosLive.length > 0 ? bancosLive : ENDEUDAMIENTO_DATA.bancosFinanciadores,
+      estadoPrestamo: {
+        nivelDeuda: nivelDeudaLive.length > 0 ? nivelDeudaLive : ENDEUDAMIENTO_DATA.estadoPrestamo.nivelDeuda,
+        aportePropio: aporteLive.length > 0 ? aporteLive : ENDEUDAMIENTO_DATA.estadoPrestamo.aportePropio,
+        nse: nseLive.length > 0 ? nseLive : ENDEUDAMIENTO_DATA.estadoPrestamo.nse,
+        ingresoFamiliar: ingresoFamLive.length > 0 ? ingresoFamLive : ENDEUDAMIENTO_DATA.estadoPrestamo.ingresoFamiliar,
+      },
+    }
+  }, [liveData])
 
   // Charts
   const getBarH = (categories: string[], values: number[], color = '#38bdf8') => ({
