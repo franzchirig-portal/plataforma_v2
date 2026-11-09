@@ -756,28 +756,53 @@ export default function App() {
                 )}
 
                 {/* ── CAPÍTULO 1.3: OFERTA DE PARTICULARES (MARKETPLACE) ── */}
-                {activeChapter === '1.3' && <MarketplaceParticularesPanel />}
+                {activeChapter === '1.3' && (
+                  <MarketplaceParticularesPanel
+                    ciudad={ciudad}
+                    zonaFilter={zonaFilter}
+                    subzonaFilter={subzonaFilter}
+                    tipoInmuebleFilter={tipoInmuebleFilter}
+                    tipologiaFilter={tipologiaFilter}
+                  />
+                )}
 
                 {/* ── CAPÍTULO 1.4: BIENES ADJUDICADOS Y REMATES JUDICIALES ── */}
-                {activeChapter === '1.4' && <BienesAdjudicadosPanel />}
+                {activeChapter === '1.4' && (
+                  <BienesAdjudicadosPanel
+                    ciudad={ciudad}
+                    tipoInmuebleFilter={tipoInmuebleFilter}
+                  />
+                )}
 
                 {/* ── CAPÍTULOS 2.1, 2.2, 2.3: ANÁLISIS DE LA DEMANDA ── */}
                 {(activeChapter === '2.1' || activeChapter === '2.2' || activeChapter === '2.3') && (
-                  <AnalisisDemandaPanel key={activeChapter} initialChapter={activeChapter as '2.1' | '2.2' | '2.3'} />
+                  <AnalisisDemandaPanel
+                    key={activeChapter}
+                    initialChapter={activeChapter as '2.1' | '2.2' | '2.3'}
+                    ciudad={ciudad}
+                  />
                 )}
 
                 {/* ── CAPÍTULOS 3.1, 3.2: ANÁLISIS FINANCIERO Y MORA ── */}
                 {(activeChapter === '3.1' || activeChapter === '3.2') && (
-                  <SistemaFinancieroPanel key={activeChapter} initialChapter={activeChapter as '3.1' | '3.2'} />
+                  <SistemaFinancieroPanel
+                    key={activeChapter}
+                    initialChapter={activeChapter as '3.1' | '3.2'}
+                    ciudad={ciudad}
+                  />
                 )}
 
                 {/* ── CAPÍTULOS 4.1, 4.2, 4.3: ENDEUDAMIENTO HIPOTECARIO Y SENTIMIENTO ── */}
                 {(activeChapter === '4.1' || activeChapter === '4.2' || activeChapter === '4.3') && (
-                  <EndeudamientoHipotecarioPanel key={activeChapter} initialChapter={activeChapter as '4.1' | '4.2' | '4.3'} />
+                  <EndeudamientoHipotecarioPanel
+                    key={activeChapter}
+                    initialChapter={activeChapter as '4.1' | '4.2' | '4.3'}
+                    ciudad={ciudad}
+                  />
                 )}
 
                 {/* ── CAPÍTULO 5.1: CICLO INMOBILIARIO FÍSICO RESIDENCIAL ── */}
-                {activeChapter === '5.1' && <CicloInmobiliarioPanel />}
+                {activeChapter === '5.1' && <CicloInmobiliarioPanel ciudad={ciudad} />}
 
                 {activeTab === 'hipotecario' && (
                   <HipotecarioPanel />

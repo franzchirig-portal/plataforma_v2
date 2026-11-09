@@ -4,11 +4,25 @@ import './CitrinoInstitutionalPanels.css'
 import './TopTabs.css'
 import { MARKETPLACE_DATA } from '../data/citrinoDataStudioData'
 import { useChartTheme } from '../lib/chartTheme'
-import { fetchMarketplaceLive } from '../lib/supabase'
+import { fetchMarketplaceLive, matchCiudad } from '../lib/supabase'
 
 type SubTab = 'stock' | 'zonificacion' | 'evolutivo'
 
-export default function MarketplaceParticularesPanel() {
+interface Props {
+  ciudad?: string
+  zonaFilter?: string
+  subzonaFilter?: string
+  tipoInmuebleFilter?: string
+  tipologiaFilter?: string
+}
+
+export default function MarketplaceParticularesPanel({
+  ciudad = 'SCZ',
+  zonaFilter = 'ALL',
+  subzonaFilter = 'ALL',
+  tipoInmuebleFilter = 'ALL',
+  tipologiaFilter = 'ALL',
+}: Props) {
   const ct = useChartTheme()
   const [activeSubTab, setActiveSubTab] = useState<SubTab>('stock')
   const [liveAnuncios, setLiveAnuncios] = useState<any[]>([])
@@ -28,6 +42,58 @@ export default function MarketplaceParticularesPanel() {
   const { kpis, tipologias, zonas, serieMensual } = useMemo(() => {
     if (liveAnuncios.length === 0) return MARKETPLACE_DATA
 
+    const norm = (s: unknown) =>
+      String(s ?? '')
+        .trim()
+        .toLowerCase()
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '')
+
+    const filteredAnuncios = liveAnuncios.filter((r) => {
+      if (ciudad && ciudad !== 'ALL') {
+        // Si el anuncio no tiene ciudad explícita, en ind_oferta_inmuebles corresponde a Santa Cruz
+        const rowCity = r.ciudad ? String(r.ciudad) : 'santa cruz'
+        if (!matchCiudad(rowCity, ciudad)) return false
+      }
+      if (zonaFilter && zonaFilter !== 'ALL') {
+        if (norm(r.zona ?? r.macrozona) !== norm(zonaFilter)) return false
+      }
+      if (subzonaFilter && subzonaFilter !== 'ALL') {
+        if (norm(r.sub_zona ?? r.subzona) !== norm(subzonaFilter)) return false
+      }
+      if (tipoInmuebleFilter && tipoInmuebleFilter !== 'ALL') {
+        const fTipo = norm(tipoInmuebleFilter)
+        const rTipo = norm(r.tipo_inmueble ?? r.tipo)
+        if (!rTipo.includes(fTipo) && !fTipo.includes(rTipo)) return false
+      }
+      if (tipologiaFilter && tipologiaFilter !== 'ALL') {
+        const dormMatch = tipologiaFilter.match(/(\d+)/)
+        if (dormMatch) {
+          const wantedDorms = Number(dormMatch[1])
+          if (Number(r.dormitorios) !== wantedDorms) return false
+        } else if (/mono|estudio/i.test(tipologiaFilter)) {
+          if (Number(r.dormitorios ?? 0) > 0) return false
+        }
+      }
+      return true
+    })
+
+    if (filteredAnuncios.length === 0) {
+      return {
+        kpis: {
+          stockTotalUsd: 0,
+          unidadesTotales: 0,
+          deptosUsd: 0,
+          deptosUnds: 0,
+          casasUsd: 0,
+          casasUnds: 0,
+        },
+        tipologias: [],
+        zonas: [],
+        serieMensual: [],
+      }
+    }
+
     let totalUsd = 0
     let deptosUsd = 0
     let deptosUnds = 0
@@ -42,7 +108,7 @@ export default function MarketplaceParticularesPanel() {
         .trim()
         .replace(/\b\w/g, (c) => c.toUpperCase())
 
-    for (const r of liveAnuncios) {
+    for (const r of filteredAnuncios) {
       const precio = Number(r.precio_usd ?? r.precio_sus ?? r.precio ?? 0)
       const tipoRaw = String(r.tipo_inmueble ?? r.tipo ?? '').toLowerCase()
       const isCasa = tipoRaw.includes('casa')
@@ -95,7 +161,8 @@ export default function MarketplaceParticularesPanel() {
       }
     }
 
-    const totalUnds = liveAnuncios.length
+    const totalUnds = filteredAnuncios.length
+    const minUndsForTipo = totalUnds >= 200 ? 5 : 1
     const totalZonificadas = Array.from(zonaMap.values()).reduce((s, v) => s + v.unds, 0) || totalUnds
     const zonasLive = Array.from(zonaMap.entries())
       .map(([zona, v]) => ({
@@ -108,7 +175,7 @@ export default function MarketplaceParticularesPanel() {
       .slice(0, 12)
 
     const tipologiasLive = Array.from(tipoMap.entries())
-      .filter(([, v]) => v.unds >= 5 && v.sups.length > 0 && v.m2s.length > 0)
+      .filter(([, v]) => v.unds >= minUndsForTipo && v.sups.length > 0 && v.m2s.length > 0)
       .map(([tipo, v]) => {
         const supsSorted = [...v.sups].sort((a, b) => a - b)
         const m2sSorted = [...v.m2s].sort((a, b) => a - b)
@@ -138,18 +205,18 @@ export default function MarketplaceParticularesPanel() {
 
     return {
       kpis: {
-        stockTotalUsd: Math.round(totalUsd / 1_000_000) || MARKETPLACE_DATA.kpis.stockTotalUsd,
-        unidadesTotales: totalUnds || MARKETPLACE_DATA.kpis.unidadesTotales,
-        deptosUsd: Math.round(deptosUsd / 1_000_000) || MARKETPLACE_DATA.kpis.deptosUsd,
-        deptosUnds: deptosUnds || MARKETPLACE_DATA.kpis.deptosUnds,
-        casasUsd: Math.round(casasUsd / 1_000_000) || MARKETPLACE_DATA.kpis.casasUsd,
-        casasUnds: casasUnds || MARKETPLACE_DATA.kpis.casasUnds,
+        stockTotalUsd: Math.round((totalUsd / 1_000_000) * 10) / 10,
+        unidadesTotales: totalUnds,
+        deptosUsd: Math.round((deptosUsd / 1_000_000) * 10) / 10,
+        deptosUnds,
+        casasUsd: Math.round((casasUsd / 1_000_000) * 10) / 10,
+        casasUnds,
       },
-      tipologias: tipologiasLive.length > 0 ? tipologiasLive : MARKETPLACE_DATA.tipologias,
-      zonas: zonasLive.length > 0 ? zonasLive : MARKETPLACE_DATA.zonas,
-      serieMensual: serieMensualLive.length > 1 ? serieMensualLive : MARKETPLACE_DATA.serieMensual,
+      tipologias: tipologiasLive,
+      zonas: zonasLive,
+      serieMensual: serieMensualLive.length > 0 ? serieMensualLive : MARKETPLACE_DATA.serieMensual,
     }
-  }, [liveAnuncios])
+  }, [liveAnuncios, ciudad, zonaFilter, subzonaFilter, tipoInmuebleFilter, tipologiaFilter])
 
   // Chart Option: Zonificación Barras Horizontales
   const getZonificacionChart = () => ({

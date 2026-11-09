@@ -3,11 +3,12 @@ import ReactECharts from 'echarts-for-react'
 import './CitrinoInstitutionalPanels.css'
 import { DEMANDA_DATA } from '../data/citrinoDataStudioData'
 import { useChartTheme } from '../lib/chartTheme'
-import { fetchDemandaLive } from '../lib/supabase'
+import { fetchDemandaLive, matchCiudad } from '../lib/supabase'
 import TopTabBar from './TopTabBar'
 
 interface Props {
   initialChapter?: '2.1' | '2.2' | '2.3'
+  ciudad?: string
 }
 
 function cleanSurveyLabel(raw: unknown): string {
@@ -43,11 +44,13 @@ function buildPctList<K extends string>(
     } as Record<K, string> & { pct: number }))
 }
 
-export default function AnalisisDemandaPanel({ initialChapter = '2.1' }: Props) {
+export default function AnalisisDemandaPanel({ initialChapter = '2.1', ciudad = 'SCZ' }: Props) {
   const ct = useChartTheme()
   const [activeChapter] = useState<'2.1' | '2.2' | '2.3'>(initialChapter)
   const [compTab, setCompTab] = useState<'composicion' | 'voluntad'>('composicion')
   const [liveData, setLiveData] = useState<Awaited<ReturnType<typeof fetchDemandaLive>> | null>(null)
+  const cityLabel =
+    ciudad === 'LPZ' ? 'La Paz' : ciudad === 'CBB' ? 'Cochabamba' : ciudad === 'SCZ' ? 'Santa Cruz' : 'Bolivia'
 
   useEffect(() => {
     let cancelled = false
@@ -74,9 +77,10 @@ export default function AnalisisDemandaPanel({ initialChapter = '2.1' }: Props) 
   const [vivPillCasa, setVivPillCasa] = useState<'por_que' | 'aspectos' | 'detalles'>('por_que')
   const [vivPillDepto, setVivPillDepto] = useState<'por_que' | 'aspectos' | 'detalles'>('por_que')
 
-  const { general, inversion, viviendaPropia } = useMemo(() => {
+  const { general, inversion, viviendaPropia, noCityRows } = useMemo(() => {
     if (!liveData || !liveData.hasLiveRows) {
       return {
+        noCityRows: false,
         general: DEMANDA_DATA.general,
         inversion: {
           ...DEMANDA_DATA.inversion,
@@ -96,15 +100,29 @@ export default function AnalisisDemandaPanel({ initialChapter = '2.1' }: Props) 
       }
     }
 
+    const encByCity =
+      ciudad && ciudad !== 'ALL'
+        ? liveData.encuestados.filter((e: any) => matchCiudad(e.ciudad, ciudad))
+        : liveData.encuestados
+    const hasCityRows = encByCity.length > 0
+    const activeEncuestados = hasCityRows ? encByCity : liveData.encuestados
+    const allowedEncIds = new Set(activeEncuestados.map((e: any) => e.encuestado_id))
+
+    const perfilRows = liveData.perfilIntencion.filter((r: any) => allowedEncIds.has(r.encuestado_id))
+    const invRows = liveData.inversion.filter((r: any) => allowedEncIds.has(r.encuestado_id))
+    const allowedInvIds = new Set(invRows.map((r: any) => r.inversion_id))
+    const vivRows = liveData.vivienda.filter((r: any) => allowedEncIds.has(r.encuestado_id))
+    const allowedVivIds = new Set(vivRows.map((r: any) => r.vivienda_id))
+
     // 2.1 Voluntad comparativa por año (enc_encuestados.anio_encuesta + enc_perfil_intencion.mudarse_o_inversion_q12)
     const encYearMap = new Map<any, string>()
-    for (const e of liveData.encuestados) {
+    for (const e of activeEncuestados) {
       if (e.encuestado_id != null && e.anio_encuesta != null) {
         encYearMap.set(e.encuestado_id, String(e.anio_encuesta))
       }
     }
     const volByYear = new Map<string, { mudarse: number; inversion: number; total: number }>()
-    for (const p of liveData.perfilIntencion) {
+    for (const p of perfilRows) {
       const ano = encYearMap.get(p.encuestado_id) ?? '2026'
       const rawVal = String(p.mudarse_o_inversion_q12 ?? '').toLowerCase()
       if (!rawVal) continue
@@ -127,66 +145,110 @@ export default function AnalisisDemandaPanel({ initialChapter = '2.1' }: Props) 
         inversion: Math.round((v.inversion / v.total) * 1000) / 10,
       }))
 
-    const ingresosLive = buildPctList(liveData.perfilIntencion, 'ingresos_rango_q7', 'rango', 8)
-    const cuotaLive = buildPctList(liveData.perfilIntencion, 'cuota_rango_q8', 'rango', 8)
-    const aporteLive = buildPctList(liveData.perfilIntencion, 'ahorro_rango_q9', 'rango', 6)
+    const ingresosLive = buildPctList(perfilRows, 'ingresos_rango_q7', 'rango', 8)
+    const cuotaLive = buildPctList(perfilRows, 'cuota_rango_q8', 'rango', 8)
+    const aporteLive = buildPctList(perfilRows, 'ahorro_rango_q9', 'rango', 6)
 
     // 2.2 Compra como inversión
-    const motivadoresLive = buildPctList(liveData.inversion, 'motivador_inversion_q13', 'motivo', 6)
-    const invDec1Rows = (liveData.inversionAspectosDecision ?? []).filter((r: any) => Number(r.orden) === 1)
-    const invDec2Rows = (liveData.inversionAspectosDecision ?? []).filter((r: any) => Number(r.orden) === 2)
+    const motivadoresLive = buildPctList(invRows, 'motivador_inversion_q13', 'motivo', 6)
+    const invDecAll = (liveData.inversionAspectosDecision ?? []).filter(
+      (r: any) => !r.inversion_id || allowedInvIds.has(r.inversion_id)
+    )
+    const invDec1Rows = invDecAll.filter((r: any) => Number(r.orden) === 1)
+    const invDec2Rows = invDecAll.filter((r: any) => Number(r.orden) === 2)
     const decision1FromTable = buildPctList(invDec1Rows, 'aspecto_q17_q18', 'factor', 6)
     const decision2FromTable = buildPctList(invDec2Rows, 'aspecto_q17_q18', 'factor', 6)
     const decision1Live =
       decision1FromTable.length > 0
         ? decision1FromTable
-        : buildPctList(liveData.inversion, 'opcion_invertir_q14', 'factor', 6)
+        : buildPctList(invRows, 'opcion_invertir_q14', 'factor', 6)
     const decision2Live =
       decision2FromTable.length > 0
         ? decision2FromTable
-        : buildPctList(liveData.inversion, 'que_haria_con_inversion_q19', 'factor', 6)
+        : buildPctList(invRows, 'que_haria_con_inversion_q19', 'factor', 6)
 
-    const valorInvLive = buildPctList(liveData.inversion, 'valor_rango_q23', 'rango', 6)
-    const zonasInvFromTable = buildPctList(liveData.inversionZonas ?? [], 'zona_q20_q21', 'zona', 8)
-    const factoresInvFromTable = buildPctList(liveData.inversionFactoresZona ?? [], 'factor_zona_q22', 'factor', 7)
+    const valorInvLive = buildPctList(invRows, 'valor_rango_q23', 'rango', 6)
+    const zonasInvFromTable = buildPctList(
+      (liveData.inversionZonas ?? []).filter((r: any) => !r.inversion_id || allowedInvIds.has(r.inversion_id)),
+      'zona_q20_q21',
+      'zona',
+      8
+    )
+    const factoresInvFromTable = buildPctList(
+      (liveData.inversionFactoresZona ?? []).filter((r: any) => !r.inversion_id || allowedInvIds.has(r.inversion_id)),
+      'factor_zona_q22',
+      'factor',
+      7
+    )
     const factoresInvLive =
       factoresInvFromTable.length > 0
         ? factoresInvFromTable
-        : buildPctList(liveData.inversion, 'alternativa_inversion_q24', 'factor', 7)
-    const prefAmenidadesInvLive = buildPctList(liveData.inversion, 'factor_importante_areas_q16', 'concepto', 5)
-    const amenidadesInvListLive = buildPctList(liveData.inversionAmenidades ?? [], 'amenidad_q15', 'amenidad', 8)
+        : buildPctList(invRows, 'alternativa_inversion_q24', 'factor', 7)
+    const prefAmenidadesInvLive = buildPctList(invRows, 'factor_importante_areas_q16', 'concepto', 5)
+    const amenidadesInvListLive = buildPctList(
+      (liveData.inversionAmenidades ?? []).filter((r: any) => !r.inversion_id || allowedInvIds.has(r.inversion_id)),
+      'amenidad_q15',
+      'amenidad',
+      8
+    )
 
     // 2.3 Compra vivienda propia
-    const tipologiaVivLive = buildPctList(liveData.vivienda, 'opcion_comprar_vivienda_q25', 'tipo', 6)
-    const presupuestoVivLive = buildPctList(liveData.vivienda, 'valor_rango_q33', 'rango', 6)
-    const decisionVivFromTable = buildPctList(liveData.viviendaAspectosDecision ?? [], 'aspecto_q28_q29', 'factor', 6)
+    const tipologiaVivLive = buildPctList(vivRows, 'opcion_comprar_vivienda_q25', 'tipo', 6)
+    const presupuestoVivLive = buildPctList(vivRows, 'valor_rango_q33', 'rango', 6)
+    const decisionVivFromTable = buildPctList(
+      (liveData.viviendaAspectosDecision ?? []).filter((r: any) => !r.vivienda_id || allowedVivIds.has(r.vivienda_id)),
+      'aspecto_q28_q29',
+      'factor',
+      6
+    )
     const decisionVivLive =
       decisionVivFromTable.length > 0
         ? decisionVivFromTable
-        : buildPctList(liveData.vivienda, 'tiempo_mudarse_q34', 'factor', 6)
-    const zonasVivLive = buildPctList(liveData.viviendaZonas, 'zona_q30_q31', 'zona', 8)
-    const factoresVivFromTable = buildPctList(liveData.viviendaFactoresZona ?? [], 'factor_zona_q32', 'factor', 7)
-    const factoresAmenidadesVivLive = buildPctList(liveData.vivienda, 'factor_importante_areas_q27', 'factor', 5)
-    const amenidadesVivLive = buildPctList(liveData.viviendaAmenidades, 'amenidad_q26', 'amenidad', 8)
+        : buildPctList(vivRows, 'tiempo_mudarse_q34', 'factor', 6)
+    const zonasVivLive = buildPctList(
+      liveData.viviendaZonas.filter((r: any) => !r.vivienda_id || allowedVivIds.has(r.vivienda_id)),
+      'zona_q30_q31',
+      'zona',
+      8
+    )
+    const factoresVivFromTable = buildPctList(
+      (liveData.viviendaFactoresZona ?? []).filter((r: any) => !r.vivienda_id || allowedVivIds.has(r.vivienda_id)),
+      'factor_zona_q32',
+      'factor',
+      7
+    )
+    const factoresAmenidadesVivLive = buildPctList(vivRows, 'factor_importante_areas_q27', 'factor', 5)
+    const amenidadesVivLive = buildPctList(
+      liveData.viviendaAmenidades.filter((r: any) => !r.vivienda_id || allowedVivIds.has(r.vivienda_id)),
+      'amenidad_q26',
+      'amenidad',
+      8
+    )
 
-    // 2.3 Casa: ¿Por qué casa? (enc_vivienda_casa_aspectos.aspecto_q36) + Aspectos (dormitorios_q37) + Detalles (m2_terreno_rango_q39)
+    // 2.3 Casa y Depto
+    const detCasaRows = (liveData.viviendaDetalleCasa ?? []).filter(
+      (r: any) => !r.vivienda_id || allowedVivIds.has(r.vivienda_id)
+    )
+    const detDeptoRows = (liveData.viviendaDetalleDepto ?? []).filter(
+      (r: any) => !r.vivienda_id || allowedVivIds.has(r.vivienda_id)
+    )
     const porQueCasaFromTable = buildPctList(liveData.viviendaCasaAspectos ?? [], 'aspecto_q36', 'motivo', 6)
-    const casaDormsLive = buildPctList(liveData.viviendaDetalleCasa ?? [], 'dormitorios_q37', 'motivo', 6)
-    const casaTerrenoLive = buildPctList(liveData.viviendaDetalleCasa ?? [], 'm2_terreno_rango_q39', 'motivo', 7)
-    const casaConstruidosLive = buildPctList(liveData.viviendaDetalleCasa ?? [], 'm2_construidos_rango_q40', 'motivo', 8)
+    const casaDormsLive = buildPctList(detCasaRows, 'dormitorios_q37', 'motivo', 6)
+    const casaTerrenoLive = buildPctList(detCasaRows, 'm2_terreno_rango_q39', 'motivo', 7)
+    const casaConstruidosLive = buildPctList(detCasaRows, 'm2_construidos_rango_q40', 'motivo', 8)
 
-    // 2.3 Depto: ¿Por qué depto? (enc_vivienda_depto_aspectos.aspecto_q42) + Aspectos (dormitorios_q43) + Detalles (m2_construidos_rango_q45)
     const aspectosDeptoLive = buildPctList(liveData.viviendaDeptoAspectos, 'aspecto_q42', 'motivo', 6)
-    const deptoDormsRaw = buildPctList(liveData.viviendaDetalleDepto ?? [], 'dormitorios_q43', 'motivo', 6).map((d) => ({
+    const deptoDormsRaw = buildPctList(detDeptoRows, 'dormitorios_q43', 'motivo', 6).map((d) => ({
       motivo: /^\d+$/.test(d.motivo) ? `${d.motivo} dormitorios` : d.motivo,
       pct: d.pct,
     }))
-    const deptoSupLive = buildPctList(liveData.viviendaDetalleDepto ?? [], 'm2_construidos_rango_q45', 'motivo', 7)
+    const deptoSupLive = buildPctList(detDeptoRows, 'm2_construidos_rango_q45', 'motivo', 7)
 
     return {
+      noCityRows: Boolean(ciudad && ciudad !== 'ALL' && !hasCityRows),
       general: {
         ...DEMANDA_DATA.general,
-        muestra: liveData.encuestados.length || DEMANDA_DATA.general.muestra,
+        muestra: activeEncuestados.length || DEMANDA_DATA.general.muestra,
         voluntadComparativa: voluntadLive.length > 0 ? voluntadLive : DEMANDA_DATA.general.voluntadComparativa,
         ingresos: ingresosLive.length > 0 ? ingresosLive : DEMANDA_DATA.general.ingresos,
         cuotaMensual: cuotaLive.length > 0 ? cuotaLive : DEMANDA_DATA.general.cuotaMensual,
@@ -194,7 +256,7 @@ export default function AnalisisDemandaPanel({ initialChapter = '2.1' }: Props) 
       },
       inversion: {
         ...DEMANDA_DATA.inversion,
-        muestra: liveData.inversion.length || DEMANDA_DATA.inversion.muestra,
+        muestra: invRows.length || DEMANDA_DATA.inversion.muestra,
         motivadores: motivadoresLive.length > 0 ? motivadoresLive : DEMANDA_DATA.inversion.motivadores,
         decision1: decision1Live.length > 0 ? decision1Live : DEMANDA_DATA.inversion.decision1,
         decision2: decision2Live.length > 0 ? decision2Live : DEMANDA_DATA.inversion.decision2,
@@ -212,7 +274,7 @@ export default function AnalisisDemandaPanel({ initialChapter = '2.1' }: Props) 
       },
       viviendaPropia: {
         ...DEMANDA_DATA.viviendaPropia,
-        muestra: liveData.vivienda.length || DEMANDA_DATA.viviendaPropia.muestra,
+        muestra: vivRows.length || DEMANDA_DATA.viviendaPropia.muestra,
         tipologia: tipologiaVivLive.length > 0 ? tipologiaVivLive : DEMANDA_DATA.viviendaPropia.tipologia,
         presupuesto: presupuestoVivLive.length > 0 ? presupuestoVivLive : DEMANDA_DATA.viviendaPropia.presupuesto,
         decision: decisionVivLive.length > 0 ? decisionVivLive : DEMANDA_DATA.viviendaPropia.decision,
@@ -241,7 +303,7 @@ export default function AnalisisDemandaPanel({ initialChapter = '2.1' }: Props) 
         deptoSuperficie: deptoSupLive.length > 0 ? deptoSupLive : DEMANDA_DATA.viviendaPropia.porQueDepto,
       },
     }
-  }, [liveData])
+  }, [liveData, ciudad])
 
   // Charts
   const getPieSimple = (data: { name: string; value: number }[], colors?: string[]) => ({
@@ -351,6 +413,22 @@ export default function AnalisisDemandaPanel({ initialChapter = '2.1' }: Props) 
             { label: 'Preferencia Departamento', active: vivSubTab === 'depto', onClick: () => setVivSubTab('depto') },
           ]}
         />
+      )}
+
+      {noCityRows && (
+        <div
+          style={{
+            marginBottom: 14,
+            padding: '10px 14px',
+            borderRadius: 6,
+            background: 'rgba(245, 158, 11, 0.12)',
+            border: '1px solid rgba(245, 158, 11, 0.35)',
+            color: 'var(--text-secondary)',
+            fontSize: 'var(--fs-cuerpo)',
+          }}
+        >
+          <b>Nota de cobertura ({cityLabel}):</b> En <code>citrino_db</code> las encuestas de demanda (`enc_encuestados`) solo tienen registros para <b>Santa Cruz</b> (0 encuestas cargadas para {cityLabel}). Se muestra el estudio disponible de Santa Cruz.
+        </div>
       )}
 
       {/* ── 2.1 COMPOSICIÓN ECONÓMICA ── */}

@@ -3,12 +3,17 @@ import ReactECharts from 'echarts-for-react'
 import './CitrinoInstitutionalPanels.css'
 import { BIENES_ADJUDICADOS_DATA } from '../data/citrinoDataStudioData'
 import { useChartTheme } from '../lib/chartTheme'
-import { fetchBienesAdjudicadosLive } from '../lib/supabase'
+import { fetchBienesAdjudicadosLive, matchCiudad } from '../lib/supabase'
 import TopTabBar from './TopTabBar'
 
 type SubTab = 'remates' | 'adjudicados'
 
-export default function BienesAdjudicadosPanel() {
+interface Props {
+  ciudad?: string
+  tipoInmuebleFilter?: string
+}
+
+export default function BienesAdjudicadosPanel({ ciudad = 'SCZ', tipoInmuebleFilter = 'ALL' }: Props) {
   const ct = useChartTheme()
   const [activeSubTab, setActiveSubTab] = useState<SubTab>('remates')
   // Sub-pill auditado de Data Studio: Mensual vs Anual
@@ -30,9 +35,21 @@ export default function BienesAdjudicadosPanel() {
   const { rematesMensuales, adjudicadosAsfiAnual, adjudicadosAsfiMensual } = useMemo(() => {
     if (!liveData) return BIENES_ADJUDICADOS_DATA
 
-    // 1. Remates judiciales (11.575 registros con fecha_snapshot, precio_usd, precio_original_usd, rebaja)
+    // 1. Remates judiciales (11.575 registros con departamento, fecha_snapshot, precio_usd, precio_original_usd, rebaja)
+    const filteredRemates = liveData.remates.filter((r: any) => {
+      if (ciudad && ciudad !== 'ALL') {
+        if (!matchCiudad(r.departamento ?? r.ciudad, ciudad)) return false
+      }
+      if (tipoInmuebleFilter && tipoInmuebleFilter !== 'ALL') {
+        const fTipo = tipoInmuebleFilter.trim().toLowerCase()
+        const rTipo = String(r.tipo_inmueble ?? '').trim().toLowerCase()
+        if (!rTipo.includes(fTipo) && !fTipo.includes(rTipo)) return false
+      }
+      return true
+    })
+
     const rematesMap = new Map<string, { usd: number; descuentos: number[] }>()
-    for (const r of liveData.remates) {
+    for (const r of filteredRemates) {
       const mes = String(r.fecha_snapshot ?? r.periodo ?? r.fecha ?? '').slice(0, 7)
       const precio = Number(r.precio_usd ?? r.volumen_usd ?? 0)
       const orig = Number(r.precio_original_usd ?? 0)
@@ -88,7 +105,7 @@ export default function BienesAdjudicadosPanel() {
       .filter((a: any) => String(a.fecha) >= '2022-12-01')
       .map((a: any) => {
         const rawBs = Number(a.monto_bs ?? 0)
-        const millonesBs = rawBs > 100_000 ? Math.round(rawBs / 1_000_000) : Math.round(rawBs)
+        const millonesBs = rawBs > 100_000 ? Math.round(rawBs / 1000_000) : Math.round(rawBs)
         return {
           periodo: String(a.fecha).slice(0, 7),
           valorBs: millonesBs,
@@ -101,7 +118,7 @@ export default function BienesAdjudicadosPanel() {
       adjudicadosAsfiAnual: adjAnualLive.length > 0 ? adjAnualLive : BIENES_ADJUDICADOS_DATA.adjudicadosAsfiAnual,
       adjudicadosAsfiMensual: adjMensualLive.length > 0 ? adjMensualLive : BIENES_ADJUDICADOS_DATA.adjudicadosAsfiMensual,
     }
-  }, [liveData])
+  }, [liveData, ciudad, tipoInmuebleFilter])
 
   const latestAdjBs = adjudicadosAsfiAnual[adjudicadosAsfiAnual.length - 1]?.valorBs ?? 1288
   const latestRemateUsd = rematesMensuales[rematesMensuales.length - 1]?.volumenUsd ?? 79

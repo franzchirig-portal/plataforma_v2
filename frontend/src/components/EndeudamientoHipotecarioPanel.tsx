@@ -3,11 +3,12 @@ import ReactECharts from 'echarts-for-react'
 import './CitrinoInstitutionalPanels.css'
 import { ENDEUDAMIENTO_DATA } from '../data/citrinoDataStudioData'
 import { useChartTheme } from '../lib/chartTheme'
-import { fetchEndeudamientoLive } from '../lib/supabase'
+import { fetchEndeudamientoLive, matchCiudad } from '../lib/supabase'
 import TopTabBar from './TopTabBar'
 
 interface Props {
   initialChapter?: '4.1' | '4.2' | '4.3'
+  ciudad?: string
 }
 
 function cleanLabel(raw: unknown): string {
@@ -43,10 +44,12 @@ function buildFreqList<K extends string>(
     } as Record<K, string> & { pct: number }))
 }
 
-export default function EndeudamientoHipotecarioPanel({ initialChapter = '4.1' }: Props) {
+export default function EndeudamientoHipotecarioPanel({ initialChapter = '4.1', ciudad = 'SCZ' }: Props) {
   const ct = useChartTheme()
   const [activeChapter] = useState<'4.1' | '4.2' | '4.3'>(initialChapter)
   const [liveData, setLiveData] = useState<Awaited<ReturnType<typeof fetchEndeudamientoLive>> | null>(null)
+  const cityLabel =
+    ciudad === 'LPZ' ? 'La Paz' : ciudad === 'CBB' ? 'Cochabamba' : ciudad === 'SCZ' ? 'Santa Cruz' : 'Bolivia'
 
   useEffect(() => {
     let cancelled = false
@@ -74,6 +77,7 @@ export default function EndeudamientoHipotecarioPanel({ initialChapter = '4.1' }
   const [futuroSubPill, setFuturoSubPill] = useState<'expectativa' | 'precios'>('expectativa')
 
   const {
+    noCityRows,
     zonasCredito,
     tiposFinanciacion,
     caracteristicasHogar,
@@ -88,31 +92,43 @@ export default function EndeudamientoHipotecarioPanel({ initialChapter = '4.1' }
     percepcionFuturoExpectativa,
     percepcionFuturoPrecios12Meses,
   } = useMemo(() => {
-    if (!liveData || !liveData.hasLiveRows) return ENDEUDAMIENTO_DATA
+    if (!liveData || !liveData.hasLiveRows) return { ...ENDEUDAMIENTO_DATA, noCityRows: false }
 
-    const zonasLive = buildFreqList(liveData.perfilConsumidor, 'zona_vivienda_q13', 'zona', 20)
-    const finLive = buildFreqList(liveData.hipotecario, 'tipo_financiamiento_q14', 'tipo', 8)
-    const valorCompraLive = buildFreqList(liveData.hipotecario, 'monto_compra_usd_q19', 'rango', 10)
-    const tipoVivLive = buildFreqList(liveData.perfilConsumidor, 'tipo_vivienda_simplificado_q10_1', 'tipo', 5)
-    const dormsLive = buildFreqList(liveData.perfilConsumidor, 'dormitorios_rango_q11', 'dorms', 6)
-    const tamanoFamLive = buildFreqList(liveData.perfilConsumidor, 'tamano_familia_q1_1', 'tamano', 5)
-    const bancosLive = buildFreqList(liveData.hipotecario, 'institucion_financiera_q15', 'banco', 14)
-    const nivelDeudaLive = buildFreqList(liveData.hipotecario, 'nivel_deuda_nd', 'rango', 6)
-    const aporteLive = buildFreqList(liveData.hipotecario, 'pct_aporte_propio_q17', 'rango', 8)
-    const nseLive = buildFreqList(liveData.encuestados, 'nse', 'estrato', 6)
-    const ingresoFamLive = buildFreqList(liveData.perfilConsumidor, 'ingresos_hogar_bs_q4', 'rango', 10)
+    const encByCity =
+      ciudad && ciudad !== 'ALL'
+        ? liveData.encuestados.filter((e: any) => matchCiudad(e.ciudad, ciudad))
+        : liveData.encuestados
+    const hasCityRows = encByCity.length > 0
+    const activeEncuestados = hasCityRows ? encByCity : liveData.encuestados
+    const allowedEncIds = new Set(activeEncuestados.map((e: any) => e.encuestado_id))
+
+    const activePerfil = liveData.perfilConsumidor.filter((r: any) => allowedEncIds.has(r.encuestado_id))
+    const activeHipotecario = liveData.hipotecario.filter((r: any) => allowedEncIds.has(r.encuestado_id))
+    const activePercepcion = (liveData.percepcionMercado ?? []).filter((r: any) => allowedEncIds.has(r.encuestado_id))
+
+    const zonasLive = buildFreqList(activePerfil, 'zona_vivienda_q13', 'zona', 20)
+    const finLive = buildFreqList(activeHipotecario, 'tipo_financiamiento_q14', 'tipo', 8)
+    const valorCompraLive = buildFreqList(activeHipotecario, 'monto_compra_usd_q19', 'rango', 10)
+    const tipoVivLive = buildFreqList(activePerfil, 'tipo_vivienda_simplificado_q10_1', 'tipo', 5)
+    const dormsLive = buildFreqList(activePerfil, 'dormitorios_rango_q11', 'dorms', 6)
+    const tamanoFamLive = buildFreqList(activePerfil, 'tamano_familia_q1_1', 'tamano', 5)
+    const bancosLive = buildFreqList(activeHipotecario, 'institucion_financiera_q15', 'banco', 14)
+    const nivelDeudaLive = buildFreqList(activeHipotecario, 'nivel_deuda_nd', 'rango', 6)
+    const aporteLive = buildFreqList(activeHipotecario, 'pct_aporte_propio_q17', 'rango', 8)
+    const nseLive = buildFreqList(activeEncuestados, 'nse', 'estrato', 6)
+    const ingresoFamLive = buildFreqList(activePerfil, 'ingresos_hogar_bs_q4', 'rango', 10)
 
     // Mapa encuestado_id -> año de encuesta (2022..2026)
     const encYearMap = new Map<any, string>()
-    for (const e of liveData.encuestados) {
+    for (const e of activeEncuestados) {
       if (e.encuestado_id != null && e.anio_encuesta != null) {
         encYearMap.set(e.encuestado_id, String(e.anio_encuesta))
       }
     }
 
     // 4.1 Situación laboral (origen_ingresos_q5 y emocion_ambiente_laboral_q6)
-    const perf2026 = liveData.perfilConsumidor.filter((r: any) => encYearMap.get(r.encuestado_id) === '2026')
-    const baseLaboralRows = perf2026.length > 0 ? perf2026 : liveData.perfilConsumidor
+    const perf2026 = activePerfil.filter((r: any) => encYearMap.get(r.encuestado_id) === '2026')
+    const baseLaboralRows = perf2026.length > 0 ? perf2026 : activePerfil
     const fuenteLive = buildFreqList(baseLaboralRows, 'origen_ingresos_q5', 'fuente', 6).map((f) => ({
       fuente: f.fuente,
       y2023: f.pct,
@@ -131,7 +147,7 @@ export default function EndeudamientoHipotecarioPanel({ initialChapter = '4.1' }
     // 4.1 Evolutivo ingresos (reduccion_ingresos_12m_q8 cruzado por año 2024, 2025, 2026)
     const redRawByLabel = new Map<string, { orderKey: string; y2024: number; y2025: number; y2026: number }>()
     const redTotals = { '2024': 0, '2025': 0, '2026': 0 }
-    for (const r of liveData.perfilConsumidor) {
+    for (const r of activePerfil) {
       const raw = String(r.reduccion_ingresos_12m_q8 ?? '').trim()
       const ano = encYearMap.get(r.encuestado_id)
       if (!raw || raw.toLowerCase() === 'null' || (ano !== '2024' && ano !== '2025' && ano !== '2026')) continue
@@ -160,7 +176,7 @@ export default function EndeudamientoHipotecarioPanel({ initialChapter = '4.1' }
 
     // 4.2 Estado del prestatario: ¿Difirió o reprogramó en los últimos 12 meses? (difirio_12m_q24 por año)
     const difByYear = new Map<string, { no: number; si: number; total: number }>()
-    for (const h of liveData.hipotecario) {
+    for (const h of activeHipotecario) {
       const ano = encYearMap.get(h.encuestado_id)
       const val = String(h.difirio_12m_q24 ?? '').trim().toLowerCase()
       if (!ano || !val || val === 'null') continue
@@ -184,11 +200,11 @@ export default function EndeudamientoHipotecarioPanel({ initialChapter = '4.1' }
       }))
 
     // 4.2 Evolutivo del endeudamiento (dificultad_pago_simplificado_q25_1 y probabilidad_default_q26)
-    const dificultadLive = buildFreqList(liveData.hipotecario, 'dificultad_pago_simplificado_q25_1', 'nivel', 6)
-    const defaultLive = buildFreqList(liveData.hipotecario, 'probabilidad_default_q26', 'nivel', 6)
+    const dificultadLive = buildFreqList(activeHipotecario, 'dificultad_pago_simplificado_q25_1', 'nivel', 6)
+    const defaultLive = buildFreqList(activeHipotecario, 'probabilidad_default_q26', 'nivel', 6)
 
     // 4.3 Perspectivas del comprador (enc_credito_percepcion_mercado: 796 filas)
-    const percRows = liveData.percepcionMercado ?? []
+    const percRows = activePercepcion
     let percPasadoLive: typeof ENDEUDAMIENTO_DATA.percepcionPasadoPrecios = []
     let percFuturoExpLive: typeof ENDEUDAMIENTO_DATA.percepcionFuturoExpectativa = []
     let percFuturoPreciosLive: typeof ENDEUDAMIENTO_DATA.percepcionFuturoPrecios12Meses = []
@@ -237,6 +253,7 @@ export default function EndeudamientoHipotecarioPanel({ initialChapter = '4.1' }
 
     return {
       ...ENDEUDAMIENTO_DATA,
+      noCityRows: Boolean(ciudad && ciudad !== 'ALL' && !hasCityRows),
       zonasCredito: zonasLive.length > 0 ? zonasLive : ENDEUDAMIENTO_DATA.zonasCredito,
       tiposFinanciacion: finLive.length > 0 ? finLive : ENDEUDAMIENTO_DATA.tiposFinanciacion,
       caracteristicasHogar: {
@@ -269,7 +286,7 @@ export default function EndeudamientoHipotecarioPanel({ initialChapter = '4.1' }
       percepcionFuturoPrecios12Meses:
         percFuturoPreciosLive.length > 0 ? percFuturoPreciosLive : ENDEUDAMIENTO_DATA.percepcionFuturoPrecios12Meses,
     }
-  }, [liveData])
+  }, [liveData, ciudad])
 
   // Charts
   const getBarH = (categories: string[], values: number[], color = '#38bdf8') => ({
@@ -344,6 +361,22 @@ export default function EndeudamientoHipotecarioPanel({ initialChapter = '4.1' }
             { label: 'Percepción del Futuro', active: perspectivasSubTab === 'futuro', onClick: () => setPerspectivasSubTab('futuro') },
           ]}
         />
+      )}
+
+      {noCityRows && (
+        <div
+          style={{
+            marginBottom: 14,
+            padding: '10px 14px',
+            borderRadius: 6,
+            background: 'rgba(245, 158, 11, 0.12)',
+            border: '1px solid rgba(245, 158, 11, 0.35)',
+            color: 'var(--text-secondary)',
+            fontSize: 'var(--fs-cuerpo)',
+          }}
+        >
+          <b>Nota de cobertura ({cityLabel}):</b> En <code>citrino_db</code> las encuestas de endeudamiento hipotecario (`enc_credito_encuestados`) solo tienen registros para <b>Santa Cruz</b> (0 encuestas cargadas para {cityLabel}). Se muestra el estudio disponible de Santa Cruz.
+        </div>
       )}
 
       {/* ── 4.1 PERFIL DEL CONSUMIDOR (n=796) ── */}

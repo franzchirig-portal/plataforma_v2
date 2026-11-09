@@ -3,13 +3,19 @@ import ReactECharts from 'echarts-for-react'
 import './CitrinoInstitutionalPanels.css'
 import { CICLO_INMOBILIARIO_DATA } from '../data/citrinoDataStudioData'
 import { useChartTheme } from '../lib/chartTheme'
-import { fetchCicloInmobiliarioLive } from '../lib/supabase'
+import { fetchCicloInmobiliarioLive, matchCiudad } from '../lib/supabase'
 import TopTabBar from './TopTabBar'
 
-export default function CicloInmobiliarioPanel() {
+interface Props {
+  ciudad?: string
+}
+
+export default function CicloInmobiliarioPanel({ ciudad = 'SCZ' }: Props) {
   const ct = useChartTheme()
   const [activeSubTab, setActiveSubTab] = useState<'reloj' | 'alquileres'>('reloj')
   const [liveData, setLiveData] = useState<Awaited<ReturnType<typeof fetchCicloInmobiliarioLive>> | null>(null)
+  const cityLabel =
+    ciudad === 'LPZ' ? 'La Paz' : ciudad === 'CBB' ? 'Cochabamba' : ciudad === 'SCZ' ? 'Santa Cruz' : 'Bolivia'
 
   useEffect(() => {
     let cancelled = false
@@ -26,9 +32,10 @@ export default function CicloInmobiliarioPanel() {
   const { tasaEquilibrio, faseActual, fases, serieHistoricaOcupacion } = useMemo(() => {
     if (!liveData || !liveData.hasLiveRows) return CICLO_INMOBILIARIO_DATA
 
-    // Agrupar ind_alquileres (315 filas: fecha, valor_promedio_alquiler, var_anual, ciudad) por año
+    // Agrupar ind_alquileres (315 filas: fecha, valor_promedio_alquiler, var_anual, ciudad) filtrado por ciudad
     const alqPorAno = new Map<string, number[]>()
     for (const r of liveData.alquileres) {
+      if (ciudad && ciudad !== 'ALL' && !matchCiudad(r.ciudad, ciudad)) continue
       const ano = String(r.fecha ?? '').slice(0, 4)
       const varAnualRaw = r.var_anual
       if (!/^\d{4}$/.test(ano) || varAnualRaw == null || isNaN(Number(varAnualRaw))) continue
@@ -65,7 +72,7 @@ export default function CicloInmobiliarioPanel() {
       serieHistoricaOcupacion:
         serieCombinada.length > 0 ? serieCombinada : CICLO_INMOBILIARIO_DATA.serieHistoricaOcupacion,
     }
-  }, [liveData])
+  }, [liveData, ciudad])
 
   // Chart Option: Gauge Reloj del Ciclo Inmobiliario
   const getClockGaugeChart = () => ({
@@ -255,7 +262,7 @@ export default function CicloInmobiliarioPanel() {
       {activeSubTab === 'alquileres' && (
         <div className="citrino-card-box">
           <div className="citrino-card-header">
-            <h3 className="citrino-card-title">Variación anual del precio real de alquiler (2002 - 2026)</h3>
+            <h3 className="citrino-card-title">Variación anual del precio real de alquiler — {cityLabel} (2002 - 2026)</h3>
             <span className="citrino-card-hint">Cambio de un año a otro, descontando la inflación</span>
           </div>
           <ReactECharts option={getAlquileresChart()} style={{ height: 350 }} />
