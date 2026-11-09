@@ -187,29 +187,21 @@ export default function EndeudamientoHipotecarioPanel({ initialChapter = '4.1' }
     const dificultadLive = buildFreqList(liveData.hipotecario, 'dificultad_pago_simplificado_q25_1', 'nivel', 6)
     const defaultLive = buildFreqList(liveData.hipotecario, 'probabilidad_default_q26', 'nivel', 6)
 
-    // 4.3 Perspectivas del comprador (enc_credito_percepcion_mercado si tiene filas habilitadas)
+    // 4.3 Perspectivas del comprador (enc_credito_percepcion_mercado: 796 filas)
     const percRows = liveData.percepcionMercado ?? []
     let percPasadoLive: typeof ENDEUDAMIENTO_DATA.percepcionPasadoPrecios = []
     let percFuturoExpLive: typeof ENDEUDAMIENTO_DATA.percepcionFuturoExpectativa = []
     let percFuturoPreciosLive: typeof ENDEUDAMIENTO_DATA.percepcionFuturoPrecios12Meses = []
 
     if (percRows.length > 0) {
-      const sampleKeys = Object.keys(percRows[0] ?? {}).filter(
-        (k) => !['percepcion_id', 'encuestado_id', 'created_at', 'updated_at'].includes(k)
-      )
-      const colPasado = sampleKeys.find((k) => /pasado|ultimos|q32|q27/i.test(k))
-      const colFuturoPrecios = sampleKeys.find((k) => k !== colPasado && /futuro|proximos|q33|q28/i.test(k))
-      const colExpectativa = sampleKeys.find((k) => k !== colPasado && k !== colFuturoPrecios)
+      percFuturoExpLive = buildFreqList(percRows, 'expectativa_2026_2027_q38', 'concepto', 6)
 
-      if (colExpectativa) {
-        percFuturoExpLive = buildFreqList(percRows, colExpectativa, 'concepto', 6)
-      }
       const buildYearTrend = (col: string) => {
         const byAno = new Map<string, { b: number; i: number; s: number; total: number }>()
         for (const r of percRows) {
           const ano = encYearMap.get(r.encuestado_id)
           const v = String(r[col] ?? '').toLowerCase()
-          if (!ano || !v) continue
+          if (!ano || !v || v === 'null') continue
           const c = byAno.get(ano) ?? { b: 0, i: 0, s: 0, total: 0 }
           if (v.includes('baj')) {
             c.b += 1
@@ -227,22 +219,20 @@ export default function EndeudamientoHipotecarioPanel({ initialChapter = '4.1' }
           .filter(([, v]) => v.total > 0)
           .sort((a, b) => a[0].localeCompare(b[0]))
       }
-      if (colPasado) {
-        percPasadoLive = buildYearTrend(colPasado).map(([ano, v]) => ({
-          ano,
-          bajo: Math.round((v.b / v.total) * 1000) / 10,
-          igual: Math.round((v.i / v.total) * 1000) / 10,
-          subio: Math.round((v.s / v.total) * 1000) / 10,
-        }))
-      }
-      if (colFuturoPrecios) {
-        percFuturoPreciosLive = buildYearTrend(colFuturoPrecios).map(([ano, v]) => ({
-          ano,
-          bajara: Math.round((v.b / v.total) * 1000) / 10,
-          igual: Math.round((v.i / v.total) * 1000) / 10,
-          subira: Math.round((v.s / v.total) * 1000) / 10,
-        }))
-      }
+
+      percPasadoLive = buildYearTrend('precio_12m_pasado_q32').map(([ano, v]) => ({
+        ano,
+        bajo: Math.round((v.b / v.total) * 1000) / 10,
+        igual: Math.round((v.i / v.total) * 1000) / 10,
+        subio: Math.round((v.s / v.total) * 1000) / 10,
+      }))
+
+      percFuturoPreciosLive = buildYearTrend('precio_12m_futuro_q35').map(([ano, v]) => ({
+        ano,
+        bajara: Math.round((v.b / v.total) * 1000) / 10,
+        igual: Math.round((v.i / v.total) * 1000) / 10,
+        subira: Math.round((v.s / v.total) * 1000) / 10,
+      }))
     }
 
     return {
