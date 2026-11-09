@@ -60,6 +60,8 @@ export interface AvgTipologia {
   avg_construccion_m2: number | null
   avg_sus_m2: number | null
   avg_bs_m2: number | null
+  avg_usd_m2?: number | null
+  avg_tc_oficial?: number | null
 }
 
 export interface CondicionFinanciera {
@@ -518,4 +520,163 @@ export async function fetchIndicadorIdsForTipologia(tipologia: string): Promise<
     return new Set()
   }
 }
+
+let _condCache: CondicionFinanciera[] | null = null
+let _condTime = 0
+
+/** Returns all rows from oferta_condiciones_financieras with 60s cache */
+export async function fetchAllCondicionesFinancieras(): Promise<CondicionFinanciera[]> {
+  if (_condCache && Date.now() - _condTime < 60_000) return _condCache
+  try {
+    _condCache = await fetchAllFromTable<CondicionFinanciera>('oferta_condiciones_financieras')
+    _condTime = Date.now()
+    return _condCache
+  } catch (err) {
+    console.warn('fetchAllCondicionesFinancieras error:', err)
+    return []
+  }
+}
+
+// ─── Conexiones a tablas de Citrino para Capítulos 1.3 a 5.1 ─────────────────
+const _citrinoTableCache = new Map<string, { data: any[]; time: number }>()
+
+export async function fetchCitrinoTable<T = any>(table: string): Promise<T[]> {
+  const cached = _citrinoTableCache.get(table)
+  if (cached && Date.now() - cached.time < 60_000) return cached.data as T[]
+  try {
+    const rows = await fetchAllFromTable<T>(table)
+    _citrinoTableCache.set(table, { data: rows, time: Date.now() })
+    return rows
+  } catch (err) {
+    console.warn(`Error consultando ${table}:`, err)
+    return []
+  }
+}
+
+export async function fetchMarketplaceLive() {
+  const [ofertaInmuebles, anuncios, rentabilidad, tcDiario] = await Promise.all([
+    fetchCitrinoTable('ind_oferta_inmuebles'),
+    fetchCitrinoTable('anu_anuncios'),
+    fetchCitrinoTable('anu_anuncio_rentabilidad'),
+    fetchCitrinoTable('anu_tc_diario'),
+  ])
+  const rows = ofertaInmuebles.length > 0 ? ofertaInmuebles : anuncios
+  return {
+    anuncios: rows,
+    ofertaInmuebles,
+    rentabilidad,
+    tcDiario,
+    hasLiveRows: rows.length > 0 || rentabilidad.length > 0,
+  }
+}
+
+export async function fetchBienesAdjudicadosLive() {
+  const [adjudicados, remates] = await Promise.all([
+    fetchCitrinoTable('ind_bienes_adjudicados'),
+    fetchCitrinoTable('ind_remates_judiciales'),
+  ])
+  return { adjudicados, remates, hasLiveRows: adjudicados.length > 0 || remates.length > 0 }
+}
+
+export async function fetchDemandaLive() {
+  const [
+    encuestados,
+    perfilIntencion,
+    inversion,
+    vivienda,
+    viviendaZonas,
+    viviendaAmenidades,
+    viviendaDeptoAspectos,
+    viviendaDetalleCasa,
+    viviendaDetalleDepto,
+  ] = await Promise.all([
+    fetchCitrinoTable('enc_encuestados'),
+    fetchCitrinoTable('enc_perfil_intencion'),
+    fetchCitrinoTable('enc_inversion'),
+    fetchCitrinoTable('enc_vivienda'),
+    fetchCitrinoTable('enc_vivienda_zonas'),
+    fetchCitrinoTable('enc_vivienda_amenidades'),
+    fetchCitrinoTable('enc_vivienda_depto_aspectos'),
+    fetchCitrinoTable('enc_vivienda_detalle_casa'),
+    fetchCitrinoTable('enc_vivienda_detalle_depto'),
+  ])
+  const hasLiveRows =
+    encuestados.length > 0 ||
+    perfilIntencion.length > 0 ||
+    inversion.length > 0 ||
+    vivienda.length > 0
+  return {
+    encuestados,
+    perfilIntencion,
+    inversion,
+    vivienda,
+    viviendaZonas,
+    viviendaAmenidades,
+    viviendaDeptoAspectos,
+    viviendaDetalleCasa,
+    viviendaDetalleDepto,
+    hasLiveRows,
+  }
+}
+
+export async function fetchSistemaFinancieroLive() {
+  const [
+    consolidadoCarteras,
+    consolidadoHipotecaria,
+    consolidadoConstruccion,
+    carteraConstruccion,
+    moraHipotecariaBancos,
+  ] = await Promise.all([
+    fetchCitrinoTable('ind_consolidado_carteras'),
+    fetchCitrinoTable('ind_consolidado_hipotecaria_vivienda'),
+    fetchCitrinoTable('ind_consolidado_credito_construccion'),
+    fetchCitrinoTable('ind_cartera_construccion'),
+    fetchCitrinoTable('ind_mora_hipotecaria_bancos'),
+  ])
+  const hasLiveRows =
+    consolidadoCarteras.length > 0 ||
+    consolidadoHipotecaria.length > 0 ||
+    consolidadoConstruccion.length > 0 ||
+    carteraConstruccion.length > 0 ||
+    moraHipotecariaBancos.length > 0
+  return {
+    consolidadoCarteras,
+    consolidadoHipotecaria,
+    consolidadoConstruccion,
+    carteraConstruccion,
+    moraHipotecariaBancos,
+    hasLiveRows,
+  }
+}
+
+export async function fetchEndeudamientoLive() {
+  const [encuestados, perfilConsumidor, hipotecario, creditosAdicionales] = await Promise.all([
+    fetchCitrinoTable('enc_credito_encuestados'),
+    fetchCitrinoTable('enc_credito_perfil_consumidor'),
+    fetchCitrinoTable('enc_credito_hipotecario'),
+    fetchCitrinoTable('enc_credito_creditos_adicionales'),
+  ])
+  const hasLiveRows =
+    encuestados.length > 0 ||
+    perfilConsumidor.length > 0 ||
+    hipotecario.length > 0 ||
+    creditosAdicionales.length > 0
+  return { encuestados, perfilConsumidor, hipotecario, creditosAdicionales, hasLiveRows }
+}
+
+export async function fetchCicloInmobiliarioLive() {
+  const [alquileres, ofertaInmuebles, ipc, preciosLatam] = await Promise.all([
+    fetchCitrinoTable('ind_alquileres'),
+    fetchCitrinoTable('ind_oferta_inmuebles'),
+    fetchCitrinoTable('ind_ipc'),
+    fetchCitrinoTable('ind_precios_latam'),
+  ])
+  const hasLiveRows =
+    alquileres.length > 0 ||
+    ofertaInmuebles.length > 0 ||
+    ipc.length > 0 ||
+    preciosLatam.length > 0
+  return { alquileres, ofertaInmuebles, ipc, preciosLatam, hasLiveRows }
+}
+
 
