@@ -16,10 +16,9 @@ tags:
   - bolivia
 ---
 
-# Skill: Pipeline Google Sheets → Supabase (modelo Diamond)
+# Skill: Pipeline Google Sheets → Supabase `citrino_db` (modelo Diamond)
 
-Documento autocontenido para trabajar en `pipeline/`. La visión general del
-proyecto está en el `README.md` de la raíz.
+Documento autocontenido para trabajar en `pipeline/`. La base de datos destino de toda la plataforma es el proyecto **`citrino_db`** en Supabase (`https://ixistkrftmebvefnqqkq.supabase.co`), donde conviven las 6 tablas `oferta_*` (sincronizadas por este pipeline) junto con las 27 tablas `anu_*`, `enc_*` e `ind_*` de los capítulos 1.3 a 5.1.
 
 ---
 

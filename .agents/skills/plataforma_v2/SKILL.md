@@ -61,18 +61,18 @@ Nota: el código tiene pestañas internas adicionales (Stock en USD, Meses de St
 
 | Capítulo | Componente | Fuente de datos |
 |---|---|---|
-| 1.2 Evolución de la Oferta Nueva | `EvolutivoOfertaPanel` | Archivo fijo |
-| 1.3 Oferta de Particulares (Marketplace) | `MarketplaceParticularesPanel` | Archivo fijo |
-| 1.4 Bienes Adjudicados y Remates | `BienesAdjudicadosPanel` | Archivo fijo |
-| 2.1 Composición Económica y Voluntad de Compra | `AnalisisDemandaPanel` | Archivo fijo |
-| 2.2 Compra como Inversión | `AnalisisDemandaPanel` | Archivo fijo |
-| 2.3 Compra Vivienda Propia | `AnalisisDemandaPanel` | Archivo fijo |
-| 3.1 Financiamiento al Sector Inmobiliario | `SistemaFinancieroPanel` | Archivo fijo |
-| 3.2 Evolución de la Mora del Inmobiliario | `SistemaFinancieroPanel` | Archivo fijo |
-| 4.1 Perfil del Consumidor de Crédito | `EndeudamientoHipotecarioPanel` | Archivo fijo |
-| 4.2 Estado de la Cartera Hipotecaria | `EndeudamientoHipotecarioPanel` | Archivo fijo |
-| 4.3 Perspectivas del Comprador | `EndeudamientoHipotecarioPanel` | Archivo fijo |
-| 5.1 Ciclo Inmobiliario Físico | `CicloInmobiliarioPanel` | Archivo fijo |
+| 1.2 Evolución de la Oferta Nueva | `EvolutivoOfertaPanel` | Supabase (`oferta_proyectos`, `oferta_indicadores_censo`, `oferta_avg_tipologias`, `oferta_condiciones_financieras`) |
+| 1.3 Oferta de Particulares (Marketplace) | `MarketplaceParticularesPanel` | Supabase (`ind_oferta_inmuebles` — 6.761 anuncios, `anu_*`) |
+| 1.4 Bienes Adjudicados y Remates | `BienesAdjudicadosPanel` | Supabase (`ind_bienes_adjudicados` — 158 cortes, `ind_remates_judiciales` — 11.575 remates) |
+| 2.1 Composición Económica y Voluntad de Compra | `AnalisisDemandaPanel` | Supabase (`enc_encuestados` — 300 hogares, `enc_perfil_intencion` — 300 filas) |
+| 2.2 Compra como Inversión | `AnalisisDemandaPanel` | Supabase (`enc_inversion` — 153 encuestados) |
+| 2.3 Compra Vivienda Propia | `AnalisisDemandaPanel` | Supabase (`enc_vivienda` — 147 filas y 5 tablas `enc_vivienda_*`) |
+| 3.1 Financiamiento al Sector Inmobiliario | `SistemaFinancieroPanel` | Supabase (`ind_consolidado_hipotecaria_vivienda` — 422 filas, `ind_consolidado_credito_construccion` — 160 filas) |
+| 3.2 Evolución de la Mora del Inmobiliario | `SistemaFinancieroPanel` | Supabase (`ind_mora_hipotecaria_bancos` — 1.722 filas, `ind_cartera_construccion` — 196 filas) |
+| 4.1 Perfil del Consumidor de Crédito | `EndeudamientoHipotecarioPanel` | Supabase (`enc_credito_encuestados` y `enc_credito_perfil_consumidor` — 796 prestatarios) |
+| 4.2 Estado de la Cartera Hipotecaria | `EndeudamientoHipotecarioPanel` | Supabase (`enc_credito_hipotecario` — 796 filas, `enc_credito_creditos_adicionales` — 490 filas) |
+| 4.3 Perspectivas del Comprador | `EndeudamientoHipotecarioPanel` | Supabase (`enc_credito_*` con respaldo en archivo fijo para preguntas de percepción) |
+| 5.1 Ciclo Inmobiliario Físico | `CicloInmobiliarioPanel` | Supabase (`ind_alquileres` — 315 cortes, `ind_ipc` — 105 cortes) |
 
 Cada uno de estos paneles muestra sus pestañas arriba con el componente `TopTabBar` (ver la skill `crear-panel-pestanas`).
 
@@ -81,21 +81,33 @@ Cada uno de estos paneles muestra sus pestañas arriba con el componente `TopTab
 - **Hipotecario:** `HipotecarioPanel`. Hoy es un aviso de "Próximamente", sin datos.
 - **Dossier de capítulo:** `ChapterDossierPanel`. Texto fijo por capítulo, guardado en `CHAPTER_REGISTRY` dentro del mismo archivo.
 
-## 4. De dónde sale cada dato
+## 4. De dónde sale cada dato (Base de datos `citrino_db`)
 
-- **Base de datos (Supabase):** seis tablas `oferta_*` cargadas por el pipeline:
-  - `oferta_proyectos`
-  - `oferta_indicadores_censo`
-  - `oferta_tipologias`
-  - `oferta_avg_tipologias`
-  - `oferta_condiciones_financieras`
-  - `oferta_amenidades`
+Toda la plataforma se conecta al proyecto de Supabase **`citrino_db`** (`https://ixistkrftmebvefnqqkq.supabase.co`), que contiene **33 tablas** organizadas en cuatro grupos:
 
-  Todas las consultas están en `frontend/src/lib/supabase.ts`. Ahí también están los tipos y los cálculos de métricas.
-- **Archivo fijo:** `frontend/src/data/citrinoDataStudioData.ts`. Datos de los capítulos 1.2 a 5.1. No se actualizan solos: cambiarlos es editar ese archivo.
-- **Asistente AI:** responde con reglas programadas que consultan los datos de Supabase. En el código no hay conexión a un modelo de IA externo.
+1. **Oferta Nueva — 6 tablas `oferta_*`** (sincronizadas desde Google Sheets por `pipeline/sync.py`, alimentan los Capítulos 1.1 y 1.2):
+   - `oferta_proyectos`
+   - `oferta_indicadores_censo`
+   - `oferta_tipologias`
+   - `oferta_avg_tipologias`
+   - `oferta_condiciones_financieras`
+   - `oferta_amenidades`
+2. **Oferta de Particulares — 3 tablas `anu_*` + `ind_oferta_inmuebles`** (alimentan el Capítulo 1.3):
+   - `ind_oferta_inmuebles` (6.761 anuncios de reventa/particulares)
+   - `anu_anuncios`, `anu_anuncio_rentabilidad`, `anu_tc_diario`
+3. **Indicadores Macroeconómicos, ASFI y Ciclo — 11 tablas `ind_*`** (alimentan los Capítulos 1.4, 3.1, 3.2 y 5.1):
+   - `ind_bienes_adjudicados`, `ind_remates_judiciales` (Cap. 1.4)
+   - `ind_consolidado_carteras`, `ind_consolidado_hipotecaria_vivienda`, `ind_consolidado_credito_construccion`, `ind_cartera_construccion`, `ind_mora_hipotecaria_bancos` (Cap. 3.1 y 3.2)
+   - `ind_alquileres`, `ind_ipc`, `ind_precios_latam` (Cap. 5.1)
+4. **Encuestas de Demanda y Endeudamiento Hipotecario — 13 tablas `enc_*`** (alimentan los Capítulos 2.1–2.3 y 4.1–4.3):
+   - Demanda (300 hogares): `enc_encuestados`, `enc_perfil_intencion`, `enc_inversion`, `enc_vivienda`, `enc_vivienda_zonas`, `enc_vivienda_amenidades`, `enc_vivienda_depto_aspectos`, `enc_vivienda_detalle_casa`, `enc_vivienda_detalle_depto`
+   - Crédito Hipotecario (796 prestatarios): `enc_credito_encuestados`, `enc_credito_perfil_consumidor`, `enc_credito_hipotecario`, `enc_credito_creditos_adicionales`
 
-Los nombres y el orden de carga de las tablas están en `pipeline/config.py` (`DIAMOND_TABLES`) y en `supabase/00*.sql`.
+- **Capa de consulta:** Todas las consultas a `citrino_db` están en `frontend/src/lib/supabase.ts` (`fetchIndicadores`, `fetchAllAvgTipologias`, `fetchAllCondicionesFinancieras`, `fetchMarketplaceLive`, `fetchBienesAdjudicadosLive`, `fetchDemandaLive`, `fetchSistemaFinancieroLive`, `fetchEndeudamientoLive`, `fetchCicloInmobiliarioLive`).
+- **Archivo de respaldo:** `frontend/src/data/citrinoDataStudioData.ts` sirve únicamente como respaldo estático en caso de que alguna sub-pregunta histórica no tenga filas en `citrino_db`.
+- **Asistente AI:** responde con reglas programadas que consultan los datos de `citrino_db` en Supabase. En el código no hay conexión a un modelo de IA externo.
+
+Las políticas de lectura pública (`anon`) para las 33 tablas de `citrino_db` están en `supabase/002_rls_public_read.sql`.
 
 ## 5. Tecnologías
 
@@ -106,17 +118,17 @@ Los nombres y el orden de carga de las tablas están en `pipeline/config.py` (`D
 
 ## 6. Pendientes conocidos
 
-- Dashboard del capítulo 1.1 y Mapa, Tipologías, Análisis de Producto y Comparación todavía usan palabras técnicas en pantalla.
-- Hipotecario sin datos.
-- Capítulo 3.1, pestaña "La Construcción y su Financiamiento": sin serie histórica cargada.
+- Dashboard del capítulo 1.1 y Mapa, Tipologías, Análisis de Producto y Comparación todavía usan algunas palabras técnicas en pantalla.
+- Hipotecario (`HipotecarioPanel`) sin datos.
 - Bolivianos (Bs) en el selector de moneda: sin datos.
+- Tablas `anu_anuncios`, `anu_anuncio_rentabilidad`, `anu_tc_diario` e `ind_precios_latam` creadas en `citrino_db` pero actualmente con 0 filas (Cap. 1.3 usa `ind_oferta_inmuebles` que sí tiene 6.761 filas).
 
 ## 7. Dónde mirar antes de cambiar algo
 
 | Quiero cambiar... | Mirar |
 |---|---|
-| Un número que sale de Supabase | `frontend/src/lib/supabase.ts` |
-| Un dato fijo de un capítulo 1.2 a 5.1 | `frontend/src/data/citrinoDataStudioData.ts` |
+| Un número o consulta que sale de `citrino_db` (Supabase) | `frontend/src/lib/supabase.ts` |
+| Un dato de respaldo estático | `frontend/src/data/citrinoDataStudioData.ts` |
 | El contenido de un panel | `frontend/src/components/<Nombre>Panel.tsx` |
 | Qué capítulo abre qué panel | `frontend/src/App.tsx` (bloque de `activeChapter`) |
 | Los títulos del menú izquierdo | `frontend/src/components/LeftAnalyticsBar.tsx` |
